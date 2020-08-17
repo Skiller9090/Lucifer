@@ -34,34 +34,38 @@ id          - Displays current shell's id
 exit        - Exits the program, can also use quit to do the same
 name        - Shows name of current shell"""
         self.name = "Shell " if not self.is_main else "Main Shell"
+        self.alias = {
+            "help": self.help,
+            "set": self.command_set,
+            "show": self.show,
+            "quit": self.luciferManager.end,
+            "exit": self.luciferManager.end,
+            "id": self.print_id,
+            "spawn_shell": self.spawn_shell,
+            "open_shell": self.open_shell,
+            "close": self.background_shell,
+            "show_shells": self.show_shells,
+            "name": self.print_name,
+            "set_name": self.set_name,
+            "set_name_id": self.set_name_id,
+            "clear": self.clear_shell,
+            "use": self.use,
+            "run": self.run_module,
+            "exploit": self.run_module
+
+        }
+        self.luciferManager.shell_recur += 1
 
     def getIn(self):
         self.shell_in = input(f"{self.program_name}|" +
                               f"{self.module if '.py' not in self.module else self.module.replace('.py', '')}" +
                               f"|{self.id}> ")
 
-    def print_id(self):
+    def print_id(self, com_args: list):
         print(f"Shell ID: {self.id}")
 
-    def print_name(self):
+    def print_name(self, com_args: list):
         print(f"Shell Name: {self.name}")
-
-    def set_name(self, name: str):
-        self.name = name
-
-    def set_name_id(self, ID: int, name: str):
-        if ID == 0:
-            self.luciferManager.main_shell.name = name
-            print(f"{ID} => {name}")
-        else:
-            for index, shell in enumerate(self.luciferManager.alternative_shells):
-                if shell.id == ID:
-                    self.luciferManager.alternative_shells[index].name = name
-                    print(f"{ID} => {name}")
-                    break
-            else:
-                print("Not a valid ID")
-        return
 
     def parseShellIn(self):
         com_args = self.shell_in.split(" ")
@@ -70,106 +74,12 @@ name        - Shows name of current shell"""
         if len(com_args) == 0:
             return
         com = com_args[0].lower().rstrip()
-        if com == "help" or com == "h":
-            self.help()
-            return
-        elif com == "set":
-            com_args.pop(0)
-            com_args = " ".join(com_args)
-            self.command_set(com_args)
-            return
-        elif com == "show":
-            if len(com_args) > 1:
-                if com_args[1].lower().strip() == "options" or com_args[1].lower().strip() == "vars":
-                    self.show_options()
-                    return
-                else:
-                    print("Please enter a valid argument: options or modules")
-            else:
-                print("Please specify options or modules to show!")
-        elif com == "quit" or com == "exit":
-            print("Thank you for using Lucifer, see you next time!")
-            exit(0)
-        elif com == "id":
-            self.print_id()
-            return
-        elif com == "spawn_shell":
-            self.spawn_shell()
-            return
-        elif com == "open_shell":
-            if len(com_args) > 1:
-                openid = com_args[1].rstrip()
-                if check_int(openid):
-                    openid = int(openid)
-                    if openid == 0:
-                        self.luciferManager.main_shell.spawn()
-                        return
-                    else:
-                        found = False
-                        for index, shell in enumerate(self.luciferManager.alternative_shells):
-                            if shell.id == openid:
-                                self.luciferManager.alternative_shells[index].spawn()
-                                return
-                        else:
-                            print("Please specify a valid ID")
-                            return
-                else:
-                    print("Please specify a valid ID")
-                    return
-            else:
-                print("Please specify a valid ID")
-                return
-        elif com == "close":
-            return 7
-        elif com == "show_shells":
-            print("Main Shell => 0")
-            for shell in self.luciferManager.alternative_shells:
-                print(f"{shell.name} => {shell.id}")
-            return
-        elif com == "name":
-            self.print_name()
-            return
-        elif com == "set_name":
-            if len(com_args) > 1:
-                com_args.pop(0)
-                self.set_name(" ".join(com_args))
-                return
-        elif com == "set_name_id":
-            if len(com_args) > 1:
-                ID = com_args[1].rstrip()
-                if check_int(ID):
-                    for i in range(2):
-                        com_args.pop(0)
-                    self.set_name_id(int(ID), " ".join(com_args))
-                    return
-                else:
-                    print("Not a valid ID")
-                    return
-            else:
-                print("Please add a valid ID")
-                return
-        elif com == "clear":
-            print(self.luciferManager.colorama.ansi.clear_screen())
-            return
-        elif com == "use":
-            if len(com_args) > 1:
-                module_path = ""
-                if len(com_args) == 2:
-                    module_path = re.split(r"\\|/|,", com_args[1].rstrip())
-                else:
-                    com_args.pop(0)
-                    module_path = re.split(r"\\| |/|,", " ".join(com_args).rstrip())
-                if module_path != "" or module_path != []:
-                    while "" in module_path:
-                        module_path.remove("")
-                    self.use_module(module_path)
-            else:
-                print("Please add valid module path")
-        elif com == "run" or com == "exploit":
-            self.run_module()
+        if com in self.alias.keys():
+            return_value = self.alias[com](com_args)
+            return return_value
         return
 
-    def help(self):
+    def help(self, com_args):
         print(self.help_menu)
 
     def spawn(self):
@@ -179,8 +89,10 @@ name        - Shows name of current shell"""
             if signal == 7:
                 break
 
-    def command_set(self, var_string: str):
-        vsl = var_string.split(" ")
+    def command_set(self, com_args: list):
+        com_args.pop(0)
+        com_args = " ".join(com_args)
+        vsl = com_args.split(" ")
         var = vsl.pop(0).rstrip()
         if var != "":
             var_string = " ".join(vsl)
@@ -189,14 +101,26 @@ name        - Shows name of current shell"""
         else:
             print("Please specify a variable to set")
 
-    def spawn_shell(self):
+    def spawn_shell(self, com_args: list):
         self.luciferManager.alternative_shells.append(Shell(self.luciferManager.next_shell_id, self.luciferManager))
         self.luciferManager.next_shell_id += 1
         self.luciferManager.alternative_shells[-1].name += str(self.luciferManager.next_shell_id - 1)
         print(f"Opened New Shell With ID: {self.luciferManager.next_shell_id - 1}")
 
+    def show(self, com_args: list):
+        if len(com_args) > 1:
+            if com_args[1].lower().strip() == "options" or com_args[1].lower().strip() == "vars":
+                self.show_options()
+                return
+            else:
+                print("Please enter a valid argument: options or modules")
+        else:
+            print("Please specify options or modules to show!")
+        return
+
     def show_options(self):
         print(self.vars)
+        return
 
     def use_module(self, mod_path: list):
         if self.module_obj is not None:
@@ -235,12 +159,12 @@ name        - Shows name of current shell"""
                          self.module.replace(".py", "").replace("/", ".")).split(".")
             pkg = to_import.pop(-1)
             to_import = ".".join(to_import)
-            imported_module = importlib.import_module(to_import+"."+pkg)
+            imported_module = importlib.import_module(to_import + "." + pkg)
             self.module_obj = imported_module.Module(self.luciferManager, ShellRun=True)
             self.loaded_modules[self.module] = self.module_obj
         return
 
-    def run_module(self):
+    def run_module(self, com_args: list):
         try:
             if self.module_obj is not None:
                 self.module_obj.run()
@@ -250,8 +174,92 @@ name        - Shows name of current shell"""
                 return
         except IncompatibleSystemError as e:
             print(e)
-# help
-# show <options/modules>
-# use <module>
-# set <var> <string>
-# reset
+
+    def open_shell(self, com_args: list):
+        if len(com_args) > 1:
+            openid = com_args[1].rstrip()
+            if check_int(openid):
+                openid = int(openid)
+                if openid == 0:
+                    self.luciferManager.main_shell.spawn()
+                    return
+                else:
+                    found = False
+                    for index, shell in enumerate(self.luciferManager.alternative_shells):
+                        if shell.id == openid:
+                            self.luciferManager.alternative_shells[index].spawn()
+                            return
+                    else:
+                        print("Please specify a valid ID")
+                        return
+            else:
+                print("Please specify a valid ID")
+                return
+        else:
+            print("Please specify a valid ID")
+            return
+
+    def show_shells(self, com_args: list):
+        print(f"{self.luciferManager.main_shell.name} => {self.luciferManager.main_shell.id}")
+        for shell in self.luciferManager.alternative_shells:
+            print(f"{shell.name} => {shell.id}")
+        return
+
+    def set_name(self, com_args: list):
+        print(com_args)
+        if len(com_args) > 1:
+            com_args.pop(0)
+            self.name = " ".join(com_args)
+        return
+
+    def set_name_id(self, com_args: list):
+        if len(com_args) > 1:
+            ID = com_args[1].rstrip()
+            if check_int(ID):
+                for i in range(2):
+                    com_args.pop(0)
+                name = " ".join(com_args)
+                ID = int(ID)
+                if ID == 0:
+                    self.luciferManager.main_shell.name = name
+                    print(f"{ID} => {name}")
+                else:
+                    for index, shell in enumerate(self.luciferManager.alternative_shells):
+                        if shell.id == ID:
+                            self.luciferManager.alternative_shells[index].name = name
+                            print(f"{ID} => {name}")
+                            break
+                    else:
+                        print("Not a valid ID")
+                return
+            else:
+                print("Not a valid ID")
+                return
+        else:
+            print("Please add a valid ID")
+            return
+
+    def clear_shell(self, com_args: list):
+        print(self.luciferManager.colorama.ansi.clear_screen())
+
+    def use(self, com_args: list):
+        if len(com_args) > 1:
+            if len(com_args) == 2:
+                module_path = re.split(r"\\|/|,", com_args[1].rstrip())
+            else:
+                com_args.pop(0)
+                module_path = re.split(r"\\| |/|,", " ".join(com_args).rstrip())
+            if module_path:
+                while "" in module_path:
+                    module_path.remove("")
+                self.use_module(module_path)
+        else:
+            print("Please add valid module path")
+        return
+
+    def background_shell(self, com_args: list):
+        if self.luciferManager.shell_recur == 1:
+            self.luciferManager.end()
+        else:
+            self.luciferManager.shell_recur -= 1
+        return 7
