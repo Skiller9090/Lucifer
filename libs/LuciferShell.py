@@ -1,4 +1,4 @@
-from .utils import check_int, clear_screen
+from .utils import check_int
 from .LuciferErrors import IncompatibleSystemError
 import re
 import os
@@ -151,7 +151,7 @@ name        - Shows name of current shell"""
         elif com == "clear":
             print(self.luciferManager.colorama.ansi.clear_screen())
             return
-        if com == "use":
+        elif com == "use":
             if len(com_args) > 1:
                 module_path = ""
                 if len(com_args) == 2:
@@ -165,7 +165,7 @@ name        - Shows name of current shell"""
                     self.use_module(module_path)
             else:
                 print("Please add valid module path")
-        if com == "run" or com == "exploit":
+        elif com == "run" or com == "exploit":
             self.run_module()
         return
 
