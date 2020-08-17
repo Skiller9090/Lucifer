@@ -1,4 +1,5 @@
 from .utils import check_int, clear_screen
+from .LuciferErrors import IncompatibleSystemError
 import re
 import os
 import importlib
@@ -235,17 +236,20 @@ name        - Shows name of current shell"""
             pkg = to_import.pop(-1)
             to_import = ".".join(to_import)
             imported_module = importlib.import_module(to_import+"."+pkg)
-            self.module_obj = imported_module.Module(self.luciferManager)
+            self.module_obj = imported_module.Module(self.luciferManager, ShellRun=True)
             self.loaded_modules[self.module] = self.module_obj
         return
 
     def run_module(self):
-        if self.module_obj is not None:
-            self.module_obj.run()
-            return
-        else:
-            print("Please Select A Module First!")
-            return
+        try:
+            if self.module_obj is not None:
+                self.module_obj.run()
+                return
+            else:
+                print("Please Select A Module First!")
+                return
+        except IncompatibleSystemError as e:
+            print(e)
 # help
 # show <options/modules>
 # use <module>
