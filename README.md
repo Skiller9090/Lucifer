@@ -1,6 +1,6 @@
-###Lucifer
+# Lucifer
 
-##Commands:
+## Commands
 
 | Command | Description |
 | --- | --- |
