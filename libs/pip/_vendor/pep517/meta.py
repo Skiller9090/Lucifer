@@ -1,10 +1,10 @@
 """Build metadata for a project using PEP 517 hooks.
 """
 import argparse
+import functools
 import logging
 import os
 import shutil
-import functools
 
 try:
     import importlib.metadata as imp_meta

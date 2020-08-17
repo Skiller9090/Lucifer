@@ -1,3 +1,6 @@
+from . import termcolor
+from . import colorama
+
 
 class LuciferManager:
     def __init__(self):
@@ -5,3 +8,5 @@ class LuciferManager:
         self.alternative_shells = []
         self.gui = False
         self.next_shell_id = 0
+        self.colorama = colorama
+        self.termcolor = termcolor

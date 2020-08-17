@@ -10,7 +10,6 @@ from ._typing import TYPE_CHECKING
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, Dict, Tuple, Type
 
-
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 
@@ -27,6 +26,7 @@ def with_metaclass(meta, *bases):
     """
     Create a base class with a metaclass.
     """
+
     # This requires a bit of explanation: the basic idea is to make a dummy
     # metaclass for one level of class instantiation that replaces itself with
     # the actual metaclass.

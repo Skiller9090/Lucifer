@@ -3,12 +3,12 @@ from __future__ import print_function
 
 import json
 import platform
-import sys
 import ssl
+import sys
 
+from pip._vendor import chardet
 from pip._vendor import idna
 from pip._vendor import urllib3
-from pip._vendor import chardet
 
 from . import __version__ as requests_version
 

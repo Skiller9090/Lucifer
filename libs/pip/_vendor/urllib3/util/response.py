@@ -1,7 +1,7 @@
 from __future__ import absolute_import
-from ..packages.six.moves import http_client as httplib
 
 from ..exceptions import HeaderParsingError
+from ..packages.six.moves import http_client as httplib
 
 
 def is_fp_closed(obj):

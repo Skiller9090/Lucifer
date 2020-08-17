@@ -19,8 +19,6 @@ import sys
 from collections import defaultdict
 from itertools import chain
 
-from pip._vendor.packaging import specifiers
-
 from pip._internal.exceptions import (
     BestVersionAlreadyInstalled,
     DistributionNotFound,
@@ -39,6 +37,7 @@ from pip._internal.utils.packaging import (
     get_requires_python,
 )
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.packaging import specifiers
 
 if MYPY_CHECK_RUNNING:
     from typing import DefaultDict, List, Optional, Set, Tuple
@@ -58,9 +57,9 @@ logger = logging.getLogger(__name__)
 
 
 def _check_dist_requires_python(
-    dist,  # type: pkg_resources.Distribution
-    version_info,  # type: Tuple[int, int, int]
-    ignore_requires_python=False,  # type: bool
+        dist,  # type: pkg_resources.Distribution
+        version_info,  # type: Tuple[int, int, int]
+        ignore_requires_python=False,  # type: bool
 ):
     # type: (...) -> None
     """
@@ -113,18 +112,18 @@ class Resolver(BaseResolver):
     _allowed_strategies = {"eager", "only-if-needed", "to-satisfy-only"}
 
     def __init__(
-        self,
-        preparer,  # type: RequirementPreparer
-        finder,  # type: PackageFinder
-        wheel_cache,  # type: Optional[WheelCache]
-        make_install_req,  # type: InstallRequirementProvider
-        use_user_site,  # type: bool
-        ignore_dependencies,  # type: bool
-        ignore_installed,  # type: bool
-        ignore_requires_python,  # type: bool
-        force_reinstall,  # type: bool
-        upgrade_strategy,  # type: str
-        py_version_info=None,  # type: Optional[Tuple[int, ...]]
+            self,
+            preparer,  # type: RequirementPreparer
+            finder,  # type: PackageFinder
+            wheel_cache,  # type: Optional[WheelCache]
+            make_install_req,  # type: InstallRequirementProvider
+            use_user_site,  # type: bool
+            ignore_dependencies,  # type: bool
+            ignore_installed,  # type: bool
+            ignore_requires_python,  # type: bool
+            force_reinstall,  # type: bool
+            upgrade_strategy,  # type: str
+            py_version_info=None,  # type: Optional[Tuple[int, ...]]
     ):
         # type: (...) -> None
         super(Resolver, self).__init__()
@@ -352,10 +351,10 @@ class Resolver(BaseResolver):
 
         if req.satisfied_by:
             should_modify = (
-                self.upgrade_strategy != "to-satisfy-only" or
-                self.force_reinstall or
-                self.ignore_installed or
-                req.link.scheme == 'file'
+                    self.upgrade_strategy != "to-satisfy-only" or
+                    self.force_reinstall or
+                    self.ignore_installed or
+                    req.link.scheme == 'file'
             )
             if should_modify:
                 self._set_req_to_reinstall(req)
@@ -368,9 +367,9 @@ class Resolver(BaseResolver):
         return abstract_dist
 
     def _resolve_one(
-        self,
-        requirement_set,  # type: RequirementSet
-        req_to_install,  # type: InstallRequirement
+            self,
+            requirement_set,  # type: RequirementSet
+            req_to_install,  # type: InstallRequirement
     ):
         # type: (...) -> List[InstallRequirement]
         """Prepare a single requirements file.

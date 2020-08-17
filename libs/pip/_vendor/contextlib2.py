@@ -14,7 +14,6 @@ __all__ = ["contextmanager", "closing", "nullcontext",
 # Backwards compatibility
 __all__ += ["ContextStack"]
 
-
 # Backport abc.ABC
 if sys.version_info[:2] >= (3, 4):
     _abc_ABC = abc.ABC
@@ -107,6 +106,7 @@ class ContextDecorator(object):
         def inner(*args, **kwds):
             with self._recreate_cm():
                 return func(*args, **kwds)
+
         return inner
 
 
@@ -210,9 +210,11 @@ def contextmanager(func):
             <cleanup>
 
     """
+
     @wraps(func)
     def helper(*args, **kwds):
         return _GeneratorContextManager(func, args, kwds)
+
     return helper
 
 
@@ -233,6 +235,7 @@ class closing(object):
             f.close()
 
     """
+
     def __init__(self, thing):
         self.thing = thing
 
@@ -244,7 +247,6 @@ class closing(object):
 
 
 class _RedirectStream(object):
-
     _stream = None
 
     def __init__(self, new_target):
@@ -330,7 +332,9 @@ if _HAVE_EXCEPTION_CHAINING:
             # Change the end of the chain to point to the exception
             # we expect it to reference
             new_exc.__context__ = old_exc
+
         return _fix_exception_context
+
 
     def _reraise_with_existing_context(exc_details):
         try:
@@ -345,6 +349,7 @@ else:
     # No exception context in Python 2
     def _make_context_fixer(frame_exc):
         return lambda new_exc, old_exc: None
+
 
     # Use 3 argument raise in Python 2,
     # but use exec to avoid SyntaxError in Python 3
@@ -380,6 +385,7 @@ class ExitStack(object):
             # in the list raise an exception
 
     """
+
     def __init__(self):
         self._exit_callbacks = deque()
 
@@ -392,8 +398,10 @@ class ExitStack(object):
 
     def _push_cm_exit(self, cm, cm_exit):
         """Helper to correctly register callbacks to __exit__ methods"""
+
         def _exit_wrapper(*exc_details):
             return cm_exit(cm, *exc_details)
+
         _exit_wrapper.__self__ = cm
         self.push(_exit_wrapper)
 
@@ -415,20 +423,22 @@ class ExitStack(object):
             self._exit_callbacks.append(exit)
         else:
             self._push_cm_exit(exit, exit_method)
-        return exit # Allow use as a decorator
+        return exit  # Allow use as a decorator
 
     def callback(self, callback, *args, **kwds):
         """Registers an arbitrary callback and arguments.
 
         Cannot suppress exceptions.
         """
+
         def _exit_wrapper(exc_type, exc, tb):
             callback(*args, **kwds)
+
         # We changed the signature, so using @wraps is not appropriate, but
         # setting __wrapped__ may still help with introspection
         _exit_wrapper.__wrapped__ = callback
         self.push(_exit_wrapper)
-        return callback # Allow use as a decorator
+        return callback  # Allow use as a decorator
 
     def enter_context(self, cm):
         """Enters the supplied context manager

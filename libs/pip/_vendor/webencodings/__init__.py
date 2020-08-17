@@ -18,9 +18,7 @@ import codecs
 
 from .labels import LABELS
 
-
 VERSION = '0.5.1'
-
 
 # Some names in Encoding are not valid Python aliases. Remap these.
 PYTHON_NAMES = {
@@ -121,6 +119,7 @@ class Encoding(object):
         See :func:`codecs.register`.
 
     """
+
     def __init__(self, name, codec_info):
         self.name = name
         self.codec_info = codec_info
@@ -280,6 +279,7 @@ class IncrementalDecoder(object):
     :raises: :exc:`~exceptions.LookupError` for an unknown encoding label.
 
     """
+
     def __init__(self, fallback_encoding, errors='replace'):
         # Fail early if `encoding` is an invalid label.
         self._fallback_encoding = _get_encoding(fallback_encoding)
@@ -337,6 +337,7 @@ class IncrementalEncoder(object):
         :returns: A byte string.
 
     """
+
     def __init__(self, encoding=UTF8, errors='strict'):
         encoding = _get_encoding(encoding)
         self.encode = encoding.codec_info.incrementalencoder(errors).encode

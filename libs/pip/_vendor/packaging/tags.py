@@ -42,7 +42,6 @@ if TYPE_CHECKING:  # pragma: no cover
     MacVersion = Tuple[int, int]
     GlibcVersion = Tuple[int, int]
 
-
 logger = logging.getLogger(__name__)
 
 INTERPRETER_SHORT_NAMES = {
@@ -52,7 +51,6 @@ INTERPRETER_SHORT_NAMES = {
     "ironpython": "ip",
     "jython": "jy",
 }  # type: Dict[str, str]
-
 
 _32_BIT_INTERPRETER = sys.maxsize <= 2 ** 32
 
@@ -94,9 +92,9 @@ class Tag(object):
             return NotImplemented
 
         return (
-            (self.platform == other.platform)
-            and (self.abi == other.abi)
-            and (self.interpreter == other.interpreter)
+                (self.platform == other.platform)
+                and (self.abi == other.abi)
+                and (self.interpreter == other.interpreter)
         )
 
     def __hash__(self):
@@ -191,7 +189,7 @@ def _cpython_abis(py_version, warn=False):
         if py_version < (3, 3):
             unicode_size = _get_config_var("Py_UNICODE_SIZE", warn)
             if unicode_size == 4 or (
-                unicode_size is None and sys.maxunicode == 0x10FFFF
+                    unicode_size is None and sys.maxunicode == 0x10FFFF
             ):
                 ucs4 = "u"
     elif debug:
@@ -208,10 +206,10 @@ def _cpython_abis(py_version, warn=False):
 
 
 def cpython_tags(
-    python_version=None,  # type: Optional[PythonVersion]
-    abis=None,  # type: Optional[Iterable[str]]
-    platforms=None,  # type: Optional[Iterable[str]]
-    **kwargs  # type: bool
+        python_version=None,  # type: Optional[PythonVersion]
+        abis=None,  # type: Optional[Iterable[str]]
+        platforms=None,  # type: Optional[Iterable[str]]
+        **kwargs  # type: bool
 ):
     # type: (...) -> Iterator[Tag]
     """
@@ -275,10 +273,10 @@ def _generic_abi():
 
 
 def generic_tags(
-    interpreter=None,  # type: Optional[str]
-    abis=None,  # type: Optional[Iterable[str]]
-    platforms=None,  # type: Optional[Iterable[str]]
-    **kwargs  # type: bool
+        interpreter=None,  # type: Optional[str]
+        abis=None,  # type: Optional[Iterable[str]]
+        platforms=None,  # type: Optional[Iterable[str]]
+        **kwargs  # type: bool
 ):
     # type: (...) -> Iterator[Tag]
     """
@@ -322,9 +320,9 @@ def _py_interpreter_range(py_version):
 
 
 def compatible_tags(
-    python_version=None,  # type: Optional[PythonVersion]
-    interpreter=None,  # type: Optional[str]
-    platforms=None,  # type: Optional[Iterable[str]]
+        python_version=None,  # type: Optional[PythonVersion]
+        interpreter=None,  # type: Optional[str]
+        platforms=None,  # type: Optional[Iterable[str]]
 ):
     # type: (...) -> Iterator[Tag]
     """
@@ -511,8 +509,8 @@ def _check_glibc_version(version_str, required_major, minimum_minor):
         )
         return False
     return (
-        int(m.group("major")) == required_major
-        and int(m.group("minor")) >= minimum_minor
+            int(m.group("major")) == required_major
+            and int(m.group("minor")) >= minimum_minor
     )
 
 
@@ -614,11 +612,11 @@ def _is_linux_armhf():
     result &= elf_header.e_ident_data == elf_header.ELFDATA2LSB
     result &= elf_header.e_machine == elf_header.EM_ARM
     result &= (
-        elf_header.e_flags & elf_header.EF_ARM_ABIMASK
-    ) == elf_header.EF_ARM_ABI_VER5
+                      elf_header.e_flags & elf_header.EF_ARM_ABIMASK
+              ) == elf_header.EF_ARM_ABI_VER5
     result &= (
-        elf_header.e_flags & elf_header.EF_ARM_ABI_FLOAT_HARD
-    ) == elf_header.EF_ARM_ABI_FLOAT_HARD
+                      elf_header.e_flags & elf_header.EF_ARM_ABI_FLOAT_HARD
+              ) == elf_header.EF_ARM_ABI_FLOAT_HARD
     return result
 
 

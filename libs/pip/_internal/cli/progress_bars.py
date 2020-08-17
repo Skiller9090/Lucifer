@@ -4,14 +4,13 @@ import itertools
 import sys
 from signal import SIGINT, default_int_handler, signal
 
-from pip._vendor import six
-from pip._vendor.progress.bar import Bar, FillingCirclesBar, IncrementalBar
-from pip._vendor.progress.spinner import Spinner
-
 from pip._internal.utils.compat import WINDOWS
 from pip._internal.utils.logging import get_indentation
 from pip._internal.utils.misc import format_size
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor import six
+from pip._vendor.progress.bar import Bar, FillingCirclesBar, IncrementalBar
+from pip._vendor.progress.spinner import Spinner
 
 if MYPY_CHECK_RUNNING:
     from typing import Any, Dict, List
@@ -124,7 +123,6 @@ class SilentBar(Bar):
 
 
 class BlueEmojiBar(IncrementalBar):
-
     suffix = "%(percent)d%%"
     bar_prefix = " "
     bar_suffix = " "
@@ -141,7 +139,7 @@ class DownloadProgressMixin(object):
             **kwargs
         )
         self.message = (" " * (
-            get_indentation() + 2
+                get_indentation() + 2
         )) + self.message  # type: str
 
     @property
@@ -206,7 +204,6 @@ class WindowsMixin(object):
 
 class BaseDownloadProgressBar(WindowsMixin, InterruptibleMixin,
                               DownloadProgressMixin):
-
     file = sys.stdout
     message = "%(percent)d%%"
     suffix = "%(downloaded)s %(download_speed)s %(pretty_eta)s"
@@ -238,7 +235,6 @@ class DownloadBlueEmojiProgressBar(BaseDownloadProgressBar,
 
 class DownloadProgressSpinner(WindowsMixin, InterruptibleMixin,
                               DownloadProgressMixin, Spinner):
-
     file = sys.stdout
     suffix = "%(downloaded)s %(download_speed)s"
 

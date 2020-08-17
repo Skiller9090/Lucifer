@@ -1,10 +1,10 @@
 from __future__ import absolute_import
+
 import re
 from collections import namedtuple
 
 from ..exceptions import LocationParseError
 from ..packages import six
-
 
 url_attrs = ["scheme", "auth", "host", "port", "path", "query", "fragment"]
 
@@ -89,14 +89,14 @@ class Url(namedtuple("Url", url_attrs)):
     __slots__ = ()
 
     def __new__(
-        cls,
-        scheme=None,
-        auth=None,
-        host=None,
-        port=None,
-        path=None,
-        query=None,
-        fragment=None,
+            cls,
+            scheme=None,
+            auth=None,
+            host=None,
+            port=None,
+            path=None,
+            query=None,
+            fragment=None,
     ):
         if path and not path.startswith("/"):
             path = "/" + path
@@ -204,7 +204,7 @@ def split_first(s, delims):
     if min_idx is None or min_idx < 0:
         return s, "", None
 
-    return s[:min_idx], s[min_idx + 1 :], min_delim
+    return s[:min_idx], s[min_idx + 1:], min_delim
 
 
 def _encode_invalid_chars(component, allowed_chars, encoding="utf-8"):
@@ -229,10 +229,10 @@ def _encode_invalid_chars(component, allowed_chars, encoding="utf-8"):
 
     for i in range(0, len(uri_bytes)):
         # Will return a single character bytestring on both Python 2 & 3
-        byte = uri_bytes[i : i + 1]
+        byte = uri_bytes[i: i + 1]
         byte_ord = ord(byte)
         if (is_percent_encoded and byte == b"%") or (
-            byte_ord < 128 and byte.decode() in allowed_chars
+                byte_ord < 128 and byte.decode() in allowed_chars
         ):
             encoded_component += byte
             continue

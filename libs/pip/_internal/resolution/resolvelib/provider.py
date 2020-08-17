@@ -1,7 +1,6 @@
+from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._vendor.packaging.specifiers import SpecifierSet
 from pip._vendor.resolvelib.providers import AbstractProvider
-
-from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -17,6 +16,7 @@ if MYPY_CHECK_RUNNING:
 
     from .base import Requirement, Candidate
     from .factory import Factory
+
 
 # Notes on the relationship between the provider, the factory, and the
 # candidate and requirement classes.
@@ -39,12 +39,12 @@ if MYPY_CHECK_RUNNING:
 
 class PipProvider(AbstractProvider):
     def __init__(
-        self,
-        factory,  # type: Factory
-        constraints,  # type: Dict[str, SpecifierSet]
-        ignore_dependencies,  # type: bool
-        upgrade_strategy,  # type: str
-        user_requested,  # type: Set[str]
+            self,
+            factory,  # type: Factory
+            constraints,  # type: Dict[str, SpecifierSet]
+            ignore_dependencies,  # type: bool
+            upgrade_strategy,  # type: str
+            user_requested,  # type: Set[str]
     ):
         # type: (...) -> None
         self._factory = factory
@@ -120,10 +120,10 @@ class PipProvider(AbstractProvider):
         return dependency.name
 
     def get_preference(
-        self,
-        resolution,  # type: Optional[Candidate]
-        candidates,  # type: Sequence[Candidate]
-        information  # type: Sequence[Tuple[Requirement, Candidate]]
+            self,
+            resolution,  # type: Optional[Candidate]
+            candidates,  # type: Sequence[Candidate]
+            information  # type: Sequence[Tuple[Requirement, Candidate]]
     ):
         # type: (...) -> Any
         # Use the "usual" value for now

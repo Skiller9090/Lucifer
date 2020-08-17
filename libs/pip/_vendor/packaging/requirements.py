@@ -3,12 +3,12 @@
 # for complete details.
 from __future__ import absolute_import, division, print_function
 
-import string
 import re
+import string
 
-from pip._vendor.pyparsing import stringStart, stringEnd, originalTextFor, ParseException
-from pip._vendor.pyparsing import ZeroOrMore, Word, Optional, Regex, Combine
 from pip._vendor.pyparsing import Literal as L  # noqa
+from pip._vendor.pyparsing import ZeroOrMore, Word, Optional, Regex, Combine
+from pip._vendor.pyparsing import stringStart, stringEnd, originalTextFor, ParseException
 from pip._vendor.six.moves.urllib import parse as urlparse
 
 from ._typing import TYPE_CHECKING
@@ -63,7 +63,7 @@ VERSION_SPEC.setParseAction(lambda s, l, t: t[1])
 
 MARKER_EXPR = originalTextFor(MARKER_EXPR())("marker")
 MARKER_EXPR.setParseAction(
-    lambda s, l, t: Marker(s[t._original_start : t._original_end])
+    lambda s, l, t: Marker(s[t._original_start: t._original_end])
 )
 MARKER_SEPARATOR = SEMICOLON
 MARKER = MARKER_SEPARATOR + MARKER_EXPR
@@ -99,7 +99,7 @@ class Requirement(object):
         except ParseException as e:
             raise InvalidRequirement(
                 'Parse error at "{0!r}": {1}'.format(
-                    requirement_string[e.loc : e.loc + 8], e.msg
+                    requirement_string[e.loc: e.loc + 8], e.msg
                 )
             )
 
@@ -110,7 +110,7 @@ class Requirement(object):
                 if urlparse.urlunparse(parsed_url) != req.url:
                     raise InvalidRequirement("Invalid URL given")
             elif not (parsed_url.scheme and parsed_url.netloc) or (
-                not parsed_url.scheme and not parsed_url.netloc
+                    not parsed_url.scheme and not parsed_url.netloc
             ):
                 raise InvalidRequirement("Invalid URL: {0}".format(req.url))
             self.url = req.url

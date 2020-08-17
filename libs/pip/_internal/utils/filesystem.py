@@ -9,17 +9,17 @@ import sys
 from contextlib import contextmanager
 from tempfile import NamedTemporaryFile
 
+from pip._internal.utils.compat import get_path_uid
+from pip._internal.utils.misc import format_size
+from pip._internal.utils.typing import MYPY_CHECK_RUNNING, cast
 # NOTE: retrying is not annotated in typeshed as on 2017-07-17, which is
 #       why we ignore the type on this import.
 from pip._vendor.retrying import retry  # type: ignore
 from pip._vendor.six import PY2
 
-from pip._internal.utils.compat import get_path_uid
-from pip._internal.utils.misc import format_size
-from pip._internal.utils.typing import MYPY_CHECK_RUNNING, cast
-
 if MYPY_CHECK_RUNNING:
     from typing import Any, BinaryIO, Iterator, List, Union
+
 
     class NamedTemporaryFileResult(BinaryIO):
         @property
@@ -98,11 +98,11 @@ def adjacent_tmp_file(path, **kwargs):
     the way the temporary file will be opened.
     """
     with NamedTemporaryFile(
-        delete=False,
-        dir=os.path.dirname(path),
-        prefix=os.path.basename(path),
-        suffix='.tmp',
-        **kwargs
+            delete=False,
+            dir=os.path.dirname(path),
+            prefix=os.path.basename(path),
+            suffix='.tmp',
+            **kwargs
     ) as f:
         result = cast('NamedTemporaryFileResult', f)
         try:

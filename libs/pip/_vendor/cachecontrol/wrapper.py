@@ -3,16 +3,15 @@ from .cache import DictCache
 
 
 def CacheControl(
-    sess,
-    cache=None,
-    cache_etags=True,
-    serializer=None,
-    heuristic=None,
-    controller_class=None,
-    adapter_class=None,
-    cacheable_methods=None,
+        sess,
+        cache=None,
+        cache_etags=True,
+        serializer=None,
+        heuristic=None,
+        controller_class=None,
+        adapter_class=None,
+        cacheable_methods=None,
 ):
-
     cache = DictCache() if cache is None else cache
     adapter_class = adapter_class or CacheControlAdapter
     adapter = adapter_class(

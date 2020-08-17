@@ -3,18 +3,16 @@ from __future__ import absolute_import
 import logging
 from email.parser import FeedParser
 
-from pip._vendor import pkg_resources
-from pip._vendor.packaging import specifiers, version
-
 from pip._internal.exceptions import NoneMetadataError
 from pip._internal.utils.misc import display_path
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor import pkg_resources
+from pip._vendor.packaging import specifiers, version
 
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Tuple
     from email.message import Message
     from pip._vendor.pkg_resources import Distribution
-
 
 logger = logging.getLogger(__name__)
 

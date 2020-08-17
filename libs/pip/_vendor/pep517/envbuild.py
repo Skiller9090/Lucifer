@@ -1,14 +1,15 @@
 """Build wheels/sdists by installing build deps to a temporary environment.
 """
 
-import os
 import logging
-from pip._vendor import toml
+import os
 import shutil
-from subprocess import check_call
 import sys
+from subprocess import check_call
 from sysconfig import get_paths
 from tempfile import mkdtemp
+
+from pip._vendor import toml
 
 from .wrappers import Pep517HookCaller, LoggerWrapper
 
@@ -80,10 +81,10 @@ class BuildEnvironment(object):
             lib_dirs = install_dirs['purelib']
         else:
             lib_dirs = install_dirs['purelib'] + os.pathsep + \
-                install_dirs['platlib']
+                       install_dirs['platlib']
         if self.save_pythonpath:
             os.environ['PYTHONPATH'] = lib_dirs + os.pathsep + \
-                self.save_pythonpath
+                                       self.save_pythonpath
         else:
             os.environ['PYTHONPATH'] = lib_dirs
 
@@ -95,8 +96,8 @@ class BuildEnvironment(object):
             return
         log.info('Calling pip to install %s', reqs)
         cmd = [
-            sys.executable, '-m', 'pip', 'install', '--ignore-installed',
-            '--prefix', self.path] + list(reqs)
+                  sys.executable, '-m', 'pip', 'install', '--ignore-installed',
+                  '--prefix', self.path] + list(reqs)
         check_call(
             cmd,
             stdout=LoggerWrapper(log, logging.INFO),
@@ -105,9 +106,9 @@ class BuildEnvironment(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         needs_cleanup = (
-            self._cleanup and
-            self.path is not None and
-            os.path.isdir(self.path)
+                self._cleanup and
+                self.path is not None and
+                os.path.isdir(self.path)
         )
         if needs_cleanup:
             shutil.rmtree(self.path)

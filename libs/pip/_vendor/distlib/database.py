@@ -19,17 +19,15 @@ import zipimport
 
 from . import DistlibException, resources
 from .compat import StringIO
-from .version import get_scheme, UnsupportedVersionError
 from .metadata import (Metadata, METADATA_FILENAME, WHEEL_METADATA_FILENAME,
                        LEGACY_METADATA_FILENAME)
 from .util import (parse_requirement, cached_property, parse_name_and_version,
                    read_exports, write_exports, CSVReader, CSVWriter)
-
+from .version import get_scheme, UnsupportedVersionError
 
 __all__ = ['Distribution', 'BaseInstalledDistribution',
            'InstalledDistribution', 'EggInfoDistribution',
            'DistributionPath']
-
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +44,7 @@ class _Cache(object):
     """
     A simple cache mapping names and .dist-info paths to distributions
     """
+
     def __init__(self):
         """
         Initialise an instance. There is normally one for each DistributionPath.
@@ -76,6 +75,7 @@ class DistributionPath(object):
     """
     Represents a set of distributions installed on a path (typically sys.path).
     """
+
     def __init__(self, path=None, include_egg=False):
         """
         Create an instance from a path, optionally including legacy (distutils/
@@ -110,7 +110,6 @@ class DistributionPath(object):
         """
         self._cache.clear()
         self._cache_egg.clear()
-
 
     def _yield_distributions(self):
         """
@@ -151,7 +150,7 @@ class DistributionPath(object):
                     yield new_dist_class(r.path, metadata=metadata,
                                          env=self)
                 elif self._include_egg and entry.endswith(('.egg-info',
-                                                          '.egg')):
+                                                           '.egg')):
                     logger.debug('Found %s', r.path)
                     seen.add(r.path)
                     yield old_dist_class(r.path, self)
@@ -265,7 +264,7 @@ class DistributionPath(object):
                 matcher = self._scheme.matcher('%s (%s)' % (name, version))
             except ValueError:
                 raise DistlibException('invalid name or version: %r, %r' %
-                                      (name, version))
+                                       (name, version))
 
         for dist in self.get_distributions():
             # We hit a problem on Travis where enum34 was installed and doesn't
@@ -340,12 +339,12 @@ class Distribution(object):
         """
         self.metadata = metadata
         self.name = metadata.name
-        self.key = self.name.lower()    # for case-insensitive comparisons
+        self.key = self.name.lower()  # for case-insensitive comparisons
         self.version = metadata.version
         self.locator = None
         self.digest = None
-        self.extras = None      # additional features requested
-        self.context = None     # environment marker overrides
+        self.extras = None  # additional features requested
+        self.context = None  # environment marker overrides
         self.download_urls = set()
         self.digests = {}
 
@@ -356,7 +355,7 @@ class Distribution(object):
         """
         return self.metadata.source_url
 
-    download_url = source_url   # Backward compatibility
+    download_url = source_url  # Backward compatibility
 
     @property
     def name_and_version(self):
@@ -424,7 +423,7 @@ class Distribution(object):
             name = req.split()[0]
             matcher = scheme.matcher(name)
 
-        name = matcher.key   # case-insensitive
+        name = matcher.key  # case-insensitive
 
         result = False
         for p in self.provides:
@@ -564,7 +563,7 @@ class InstalledDistribution(BaseInstalledDistribution):
 
         r = finder.find('REQUESTED')
         self.requested = r is not None
-        p  = os.path.join(path, 'top_level.txt')
+        p = os.path.join(path, 'top_level.txt')
         if os.path.exists(p):
             with open(p, 'rb') as f:
                 data = f.read().decode('utf-8')
@@ -589,12 +588,12 @@ class InstalledDistribution(BaseInstalledDistribution):
         with contextlib.closing(r.as_stream()) as stream:
             with CSVReader(stream=stream) as record_reader:
                 # Base location is parent dir of .dist-info dir
-                #base_location = os.path.dirname(self.path)
-                #base_location = os.path.abspath(base_location)
+                # base_location = os.path.dirname(self.path)
+                # base_location = os.path.abspath(base_location)
                 for row in record_reader:
                     missing = [None for i in range(len(row), 3)]
                     path, checksum, size = row + missing
-                    #if not os.path.isabs(path):
+                    # if not os.path.isabs(path):
                     #    path = path.replace('/', os.sep)
                     #    path = os.path.join(base_location, path)
                     results.append((path, checksum, size))
@@ -784,7 +783,7 @@ class InstalledDistribution(BaseInstalledDistribution):
         for key in ('prefix', 'lib', 'headers', 'scripts', 'data'):
             path = paths[key]
             if os.path.isdir(paths[key]):
-                lines.append('%s=%s' % (key,  path))
+                lines.append('%s=%s' % (key, path))
         for ns in paths.get('namespace', ()):
             lines.append('namespace=%s' % ns)
 
@@ -860,13 +859,13 @@ class EggInfoDistribution(BaseInstalledDistribution):
     if the given path happens to be a directory, the metadata is read from the
     file ``PKG-INFO`` under that directory."""
 
-    requested = True    # as we have no way of knowing, assume it was
+    requested = True  # as we have no way of knowing, assume it was
     shared_locations = {}
 
     def __init__(self, path, env=None):
         def set_name_and_version(s, n, v):
             s.name = n
-            s.key = n.lower()   # for case-insensitive comparisons
+            s.key = n.lower()  # for case-insensitive comparisons
             s.version = v
 
         self.path = path
@@ -1032,7 +1031,7 @@ class EggInfoDistribution(BaseInstalledDistribution):
                         logger.warning('Non-existent file: %s', p)
                         if p.endswith(('.pyc', '.pyo')):
                             continue
-                        #otherwise fall through and fail
+                        # otherwise fall through and fail
                     if not os.path.isdir(p):
                         result.append((p, _md5(p), _size(p)))
             result.append((record_path, None, None))
@@ -1074,6 +1073,7 @@ class EggInfoDistribution(BaseInstalledDistribution):
     # See http://docs.python.org/reference/datamodel#object.__hash__
     __hash__ = object.__hash__
 
+
 new_dist_class = InstalledDistribution
 old_dist_class = EggInfoDistribution
 
@@ -1107,7 +1107,7 @@ class DependencyGraph(object):
         """
         self.adjacency_list[distribution] = []
         self.reverse_list[distribution] = []
-        #self.missing[distribution] = []
+        # self.missing[distribution] = []
 
     def add_edge(self, x, y, label=None):
         """Add an edge from distribution *x* to distribution *y* with the given
@@ -1257,7 +1257,7 @@ def make_graph(dists, scheme='default'):
                 name = req.split()[0]
                 matcher = scheme.matcher(name)
 
-            name = matcher.key   # case-insensitive
+            name = matcher.key  # case-insensitive
 
             matched = False
             if name in provided:

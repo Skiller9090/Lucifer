@@ -63,10 +63,10 @@ still considered an implementation detail.)
 """
 
 __version__ = '1.4.0'  # we use our own version number independant of the
-                       # one in stdlib and we release this on pypi.
+# one in stdlib and we release this on pypi.
 
 __external_lib__ = True  # to make sure the tests really test THIS lib,
-                         # not the builtin one in Python stdlib
+# not the builtin one in Python stdlib
 
 __all__ = [
     'ArgumentParser',
@@ -86,7 +86,6 @@ __all__ = [
     'SUPPRESS',
     'ZERO_OR_MORE',
 ]
-
 
 import copy as _copy
 import os as _os
@@ -131,6 +130,7 @@ ONE_OR_MORE = '+'
 PARSER = 'A...'
 REMAINDER = '...'
 _UNRECOGNIZED_ARGS_ATTR = '_unrecognized_args'
+
 
 # =============================
 # Utility functions and classes
@@ -592,7 +592,8 @@ class HelpFormatter(object):
             if isinstance(result, tuple):
                 return result
             else:
-                return (result, ) * tuple_size
+                return (result,) * tuple_size
+
         return format
 
     def _format_args(self, action, default_metavar):
@@ -645,7 +646,7 @@ class HelpFormatter(object):
     def _fill_text(self, text, width, indent):
         text = self._whitespace_matcher.sub(' ', text).strip()
         return _textwrap.fill(text, width, initial_indent=indent,
-                                           subsequent_indent=indent)
+                              subsequent_indent=indent)
 
     def _get_help_string(self, action):
         return action.help
@@ -698,7 +699,7 @@ def _get_action_name(argument):
     if argument is None:
         return None
     elif argument.option_strings:
-        return  '/'.join(argument.option_strings)
+        return '/'.join(argument.option_strings)
     elif argument.metavar not in (None, SUPPRESS):
         return argument.metavar
     elif argument.dest not in (None, SUPPRESS):
@@ -1048,7 +1049,6 @@ class _VersionAction(Action):
 
 
 class _SubParsersAction(Action):
-
     class _ChoicesPseudoAction(Action):
 
         def __init__(self, name, aliases, help):
@@ -1057,7 +1057,7 @@ class _SubParsersAction(Action):
                 metavar += ' (%s)' % ', '.join(aliases)
             sup = super(_SubParsersAction._ChoicesPseudoAction, self)
             sup.__init__(option_strings=[], dest=dest, help=help,
-                        metavar=metavar)
+                         metavar=metavar)
 
     def __init__(self,
                  option_strings,
@@ -1179,6 +1179,7 @@ class FileType(object):
         args_str = ', '.join([repr(arg) for arg in args if arg is not None])
         return '%s(%s)' % (type(self).__name__, args_str)
 
+
 # ===========================
 # Optional and Positional Parsing
 # ===========================
@@ -1284,7 +1285,6 @@ class _ActionsContainer(object):
             if action.dest == dest and action.default is not None:
                 return action.default
         return self._defaults.get(dest, None)
-
 
     # =======================
     # Adding argument actions
@@ -1622,6 +1622,7 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
         # register types
         def identity(string):
             return string
+
         self.register('type', None, identity)
 
         # add help and version arguments if necessary
@@ -1632,12 +1633,12 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
             default_prefix = prefix_chars[0]
         if self.add_help:
             self.add_argument(
-                default_prefix+'h', default_prefix*2+'help',
+                default_prefix + 'h', default_prefix * 2 + 'help',
                 action='help', default=SUPPRESS,
                 help=_('show this help message and exit'))
         if self.version:
             self.add_argument(
-                default_prefix+'v', default_prefix*2+'version',
+                default_prefix + 'v', default_prefix * 2 + 'version',
                 action='version', default=SUPPRESS,
                 version=self.version,
                 help=_("show program's version number and exit"))
@@ -2105,7 +2106,7 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
         # if multiple actions match, the option string was ambiguous
         if len(option_tuples) > 1:
             options = ', '.join([option_string
-                for action, option_string, explicit_arg in option_tuples])
+                                 for action, option_string, explicit_arg in option_tuples])
             tup = arg_string, options
             self.error(_('ambiguous option: %s could match %s') % tup)
 

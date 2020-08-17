@@ -10,9 +10,8 @@ from __future__ import absolute_import
 
 import os
 
-from pip._vendor import appdirs as _appdirs
-
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor import appdirs as _appdirs
 
 if MYPY_CHECK_RUNNING:
     from typing import List

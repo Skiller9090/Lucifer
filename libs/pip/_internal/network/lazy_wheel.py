@@ -7,9 +7,6 @@ from contextlib import contextmanager
 from tempfile import NamedTemporaryFile
 from zipfile import BadZipfile, ZipFile
 
-from pip._vendor.requests.models import CONTENT_CHUNK_SIZE
-from pip._vendor.six.moves import range
-
 from pip._internal.network.utils import (
     HEADERS,
     raise_for_status,
@@ -17,6 +14,8 @@ from pip._internal.network.utils import (
 )
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.wheel import pkg_resources_distribution_for_wheel
+from pip._vendor.requests.models import CONTENT_CHUNK_SIZE
+from pip._vendor.six.moves import range
 
 if MYPY_CHECK_RUNNING:
     from typing import Any, Dict, Iterator, List, Optional, Tuple
@@ -110,8 +109,8 @@ class LazyZipOverHTTP(object):
         size bytes may be returned if EOF is reached.
         """
         start, length = self.tell(), self._length
-        stop = start + size if 0 <= size <= length-start else length
-        self._download(start, stop-1)
+        stop = start + size if 0 <= size <= length - start else length
+        self._download(start, stop - 1)
         return self._file.read(size)
 
     def readable(self):
@@ -207,11 +206,11 @@ class LazyZipOverHTTP(object):
             right (int): Index after last overlapping downloaded data
         """
         lslice, rslice = self._left[left:right], self._right[left:right]
-        i = start = min([start]+lslice[:1])
-        end = max([end]+rslice[-1:])
+        i = start = min([start] + lslice[:1])
+        end = max([end] + rslice[-1:])
         for j, k in zip(lslice, rslice):
             if j > i:
-                yield i, j-1
+                yield i, j - 1
             i = k + 1
         if i <= end:
             yield i, end

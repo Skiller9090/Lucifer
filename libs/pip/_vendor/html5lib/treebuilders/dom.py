@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, unicode_literals
 
-
 try:
     from collections.abc import MutableMapping
 except ImportError:  # Python 2.7
@@ -59,7 +58,7 @@ def getDomBuilder(DomImplementation):
             self.element = element
 
         namespace = property(lambda self: hasattr(self.element, "namespaceURI") and
-                             self.element.namespaceURI or None)
+                                          self.element.namespaceURI or None)
 
         def appendChild(self, node):
             node.parent = self
@@ -104,6 +103,7 @@ def getDomBuilder(DomImplementation):
                     else:
                         self.element.setAttribute(
                             name, value)
+
         attributes = property(getAttributes, setAttributes)
 
         def cloneNode(self):
@@ -228,6 +228,7 @@ def getDomBuilder(DomImplementation):
             indent += 2
             for child in element.childNodes:
                 serializeElement(child, indent)
+
         serializeElement(element, 0)
 
         return "\n".join(rv)

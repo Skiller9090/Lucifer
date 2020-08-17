@@ -20,7 +20,6 @@ if MYPY_CHECK_RUNNING:
     from pip._internal.build_env import BuildEnvironment
     from pip._internal.models.scheme import Scheme
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -31,20 +30,20 @@ class LegacyInstallFailure(Exception):
 
 
 def install(
-    install_options,  # type: List[str]
-    global_options,  # type: Sequence[str]
-    root,  # type: Optional[str]
-    home,  # type: Optional[str]
-    prefix,  # type: Optional[str]
-    use_user_site,  # type: bool
-    pycompile,  # type: bool
-    scheme,  # type: Scheme
-    setup_py_path,  # type: str
-    isolated,  # type: bool
-    req_name,  # type: str
-    build_env,  # type: BuildEnvironment
-    unpacked_source_directory,  # type: str
-    req_description,  # type: str
+        install_options,  # type: List[str]
+        global_options,  # type: Sequence[str]
+        root,  # type: Optional[str]
+        home,  # type: Optional[str]
+        prefix,  # type: Optional[str]
+        use_user_site,  # type: bool
+        pycompile,  # type: bool
+        scheme,  # type: Scheme
+        setup_py_path,  # type: str
+        isolated,  # type: bool
+        req_name,  # type: str
+        build_env,  # type: BuildEnvironment
+        unpacked_source_directory,  # type: str
+        req_description,  # type: str
 ):
     # type: (...) -> bool
 

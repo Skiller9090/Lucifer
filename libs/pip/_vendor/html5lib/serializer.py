@@ -1,14 +1,14 @@
 from __future__ import absolute_import, division, unicode_literals
-from pip._vendor.six import text_type
 
 import re
-
 from codecs import register_error, xmlcharrefreplace_errors
-
-from .constants import voidElements, booleanAttributes, spaceCharacters
-from .constants import rcdataElements, entities, xmlEntities
-from . import treewalkers, _utils
 from xml.sax.saxutils import escape
+
+from pip._vendor.six import text_type
+
+from . import treewalkers, _utils
+from .constants import rcdataElements, entities, xmlEntities
+from .constants import voidElements, booleanAttributes, spaceCharacters
 
 _quoteAttributeSpecChars = "".join(spaceCharacters) + "\"'=<>`"
 _quoteAttributeSpec = re.compile("[" + _quoteAttributeSpecChars + "]")
@@ -20,7 +20,6 @@ _quoteAttributeLegacy = re.compile("[" + _quoteAttributeSpecChars +
                                    "\u2001\u2002\u2003\u2004\u2005\u2006\u2007"
                                    "\u2008\u2009\u200a\u2028\u2029\u202f\u205f"
                                    "\u3000]")
-
 
 _encode_entity_map = {}
 _is_ucs4 = len("\U0010FFFF") == 1
@@ -102,7 +101,6 @@ def serialize(input, tree="etree", encoding=None, **serializer_opts):
 
 
 class HTMLSerializer(object):
-
     # attribute quoting options
     quote_attr_values = "legacy"  # be secure by default
     quote_char = '"'
@@ -222,14 +220,14 @@ class HTMLSerializer(object):
         self.strict = False
 
     def encode(self, string):
-        assert(isinstance(string, text_type))
+        assert (isinstance(string, text_type))
         if self.encoding:
             return string.encode(self.encoding, "htmlentityreplace")
         else:
             return string
 
     def encodeStrict(self, string):
-        assert(isinstance(string, text_type))
+        assert (isinstance(string, text_type))
         if self.encoding:
             return string.encode(self.encoding, "strict")
         else:
@@ -306,8 +304,8 @@ class HTMLSerializer(object):
 
                     yield self.encodeStrict(k)
                     if not self.minimize_boolean_attributes or \
-                        (k not in booleanAttributes.get(name, tuple()) and
-                         k not in booleanAttributes.get("", tuple())):
+                            (k not in booleanAttributes.get(name, tuple()) and
+                             k not in booleanAttributes.get("", tuple())):
                         yield self.encodeStrict("=")
                         if self.quote_attr_values == "always" or len(v) == 0:
                             quote_attr = True

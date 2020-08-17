@@ -18,7 +18,6 @@ from . import DistlibException
 from .compat import fsdecode
 from .util import convert_path
 
-
 __all__ = ['Manifest']
 
 logger = logging.getLogger(__name__)
@@ -33,6 +32,7 @@ _COMMENTED_LINE = re.compile('#.*?(?=\n)|\n(?=$)', re.M | re.S)
 # to be brought in for Python 3.6 onwards.
 #
 _PYTHON_VERSION = sys.version_info[:2]
+
 
 class Manifest(object):
     """A list of files built by on exploring the filesystem and filtered by
@@ -113,7 +113,7 @@ class Manifest(object):
                 assert parent not in ('', '/')
                 add_dir(dirs, parent)
 
-        result = set(self.files)    # make a copy!
+        result = set(self.files)  # make a copy!
         if wantdirs:
             dirs = set()
             for f in result:
@@ -155,7 +155,7 @@ class Manifest(object):
         elif action == 'exclude':
             for pattern in patterns:
                 found = self._exclude_pattern(pattern, anchor=True)
-                #if not found:
+                # if not found:
                 #    logger.warning('no previously-included files '
                 #                   'found matching %r', pattern)
 
@@ -168,7 +168,7 @@ class Manifest(object):
         elif action == 'global-exclude':
             for pattern in patterns:
                 found = self._exclude_pattern(pattern, anchor=False)
-                #if not found:
+                # if not found:
                 #    logger.warning('no previously-included files '
                 #                   'matching %r found anywhere in '
                 #                   'distribution', pattern)
@@ -182,7 +182,7 @@ class Manifest(object):
         elif action == 'recursive-exclude':
             for pattern in patterns:
                 found = self._exclude_pattern(pattern, prefix=thedir)
-                #if not found:
+                # if not found:
                 #    logger.warning('no previously-included files '
                 #                   'matching %r found under directory %r',
                 #                   pattern, thedir)
@@ -196,7 +196,7 @@ class Manifest(object):
             if not self._exclude_pattern(None, prefix=dirpattern):
                 logger.warning('no previously-included directories found '
                                'matching %r', dirpattern)
-        else:   # pragma: no cover
+        else:  # pragma: no cover
             # This should never happen, as it should be caught in
             # _parse_template_line
             raise DistlibException(

@@ -9,9 +9,9 @@ Compatibility code to be able to use `cookielib.CookieJar` with requests.
 requests.utils imports from here, so be careful with imports.
 """
 
+import calendar
 import copy
 import time
-import calendar
 
 from ._internal_utils import to_native_string
 from .compat import cookielib, urlparse, urlunparse, Morsel, MutableMapping
@@ -306,8 +306,8 @@ class RequestsCookieJar(cookielib.CookieJar, MutableMapping):
         dictionary = {}
         for cookie in iter(self):
             if (
-                (domain is None or cookie.domain == domain) and
-                (path is None or cookie.path == path)
+                    (domain is None or cookie.domain == domain) and
+                    (path is None or cookie.path == path)
             ):
                 dictionary[cookie.name] = cookie.value
         return dictionary

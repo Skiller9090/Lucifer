@@ -6,7 +6,6 @@ from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 if MYPY_CHECK_RUNNING:
     from typing import Dict, List
 
-
 _options = [
     ("exec-prefix=", None, ""),
     ("home=", None, ""),
@@ -21,7 +20,6 @@ _options = [
     ("root=", None, ""),
     ("user", None, ""),
 ]
-
 
 # typeshed doesn't permit Tuple[str, None, str], see python/typeshed#3469.
 _distutils_getopt = FancyGetopt(_options)  # type: ignore

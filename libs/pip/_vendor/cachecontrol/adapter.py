@@ -1,11 +1,11 @@
-import types
 import functools
+import types
 import zlib
 
 from pip._vendor.requests.adapters import HTTPAdapter
 
-from .controller import CacheController
 from .cache import DictCache
+from .controller import CacheController
 from .filewrapper import CallbackFileWrapper
 
 
@@ -13,15 +13,15 @@ class CacheControlAdapter(HTTPAdapter):
     invalidating_methods = {"PUT", "DELETE"}
 
     def __init__(
-        self,
-        cache=None,
-        cache_etags=True,
-        controller_class=None,
-        serializer=None,
-        heuristic=None,
-        cacheable_methods=None,
-        *args,
-        **kw
+            self,
+            cache=None,
+            cache_etags=True,
+            controller_class=None,
+            serializer=None,
+            heuristic=None,
+            cacheable_methods=None,
+            *args,
+            **kw
     ):
         super(CacheControlAdapter, self).__init__(*args, **kw)
         self.cache = DictCache() if cache is None else cache
@@ -55,7 +55,7 @@ class CacheControlAdapter(HTTPAdapter):
         return resp
 
     def build_response(
-        self, request, response, from_cache=False, cacheable_methods=None
+            self, request, response, from_cache=False, cacheable_methods=None
     ):
         """
         Build a response by making a request or using the cache.

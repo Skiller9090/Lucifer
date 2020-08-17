@@ -18,19 +18,6 @@ from base64 import urlsafe_b64encode
 from itertools import chain, starmap
 from zipfile import ZipFile
 
-from pip._vendor import pkg_resources
-from pip._vendor.distlib.scripts import ScriptMaker
-from pip._vendor.distlib.util import get_export_entry
-from pip._vendor.six import (
-    PY2,
-    ensure_str,
-    ensure_text,
-    itervalues,
-    reraise,
-    text_type,
-)
-from pip._vendor.six.moves import filterfalse, map
-
 from pip._internal.exceptions import InstallationError
 from pip._internal.locations import get_major_minor_version
 from pip._internal.models.direct_url import DIRECT_URL_METADATA_NAME, DirectUrl
@@ -53,6 +40,18 @@ from pip._internal.utils.wheel import (
     parse_wheel,
     pkg_resources_distribution_for_wheel,
 )
+from pip._vendor import pkg_resources
+from pip._vendor.distlib.scripts import ScriptMaker
+from pip._vendor.distlib.util import get_export_entry
+from pip._vendor.six import (
+    PY2,
+    ensure_str,
+    ensure_text,
+    itervalues,
+    reraise,
+    text_type,
+)
+from pip._vendor.six.moves import filterfalse, map
 
 # Use the custom cast function at runtime to make cast work,
 # and import typing.cast when performing pre-commit and type
@@ -65,7 +64,6 @@ else:
         Any,
         Callable,
         Dict,
-        IO,
         Iterable,
         Iterator,
         List,
@@ -87,6 +85,7 @@ else:
     RecordPath = NewType('RecordPath', text_type)
     InstalledCSVRow = Tuple[RecordPath, str, Union[int, str]]
 
+
     class File(Protocol):
         src_record_path = None  # type: RecordPath
         dest_path = None  # type: text_type
@@ -95,7 +94,6 @@ else:
         def save(self):
             # type: () -> None
             pass
-
 
 logger = logging.getLogger(__name__)
 
@@ -217,7 +215,7 @@ def message_about_scripts_not_on_PATH(scripts):
 
         msg_lines.append(
             "The {} installed in '{}' which is not on PATH."
-            .format(start_text, parent_dir)
+                .format(start_text, parent_dir)
         )
 
     last_line_fmt = (
@@ -294,11 +292,11 @@ def _parse_record_path(record_column):
 
 
 def get_csv_rows_for_installed(
-    old_csv_rows,  # type: List[List[str]]
-    installed,  # type: Dict[RecordPath, RecordPath]
-    changed,  # type: Set[RecordPath]
-    generated,  # type: List[str]
-    lib_dir,  # type: str
+        old_csv_rows,  # type: List[List[str]]
+        installed,  # type: Dict[RecordPath, RecordPath]
+        changed,  # type: Set[RecordPath]
+        generated,  # type: List[str]
+        lib_dir,  # type: str
 ):
     # type: (...) -> List[InstalledCSVRow]
     """
@@ -488,14 +486,14 @@ class PipScriptMaker(ScriptMaker):
 
 
 def _install_wheel(
-    name,  # type: str
-    wheel_zip,  # type: ZipFile
-    wheel_path,  # type: str
-    scheme,  # type: Scheme
-    pycompile=True,  # type: bool
-    warn_script_location=True,  # type: bool
-    direct_url=None,  # type: Optional[DirectUrl]
-    requested=False,  # type: bool
+        name,  # type: str
+        wheel_zip,  # type: ZipFile
+        wheel_path,  # type: str
+        scheme,  # type: Scheme
+        pycompile=True,  # type: bool
+        warn_script_location=True,  # type: bool
+        direct_url=None,  # type: Optional[DirectUrl]
+        requested=False,  # type: bool
 ):
     # type: (...) -> None
     """Install a wheel.
@@ -611,9 +609,9 @@ def _install_wheel(
         # type: (RecordPath) -> bool
         parts = path.split("/", 2)
         return (
-            len(parts) > 2 and
-            parts[0].endswith(".data") and
-            parts[1] == "scripts"
+                len(parts) > 2 and
+                parts[0].endswith(".data") and
+                parts[1] == "scripts"
         )
 
     other_scheme_paths, script_scheme_paths = partition(
@@ -806,14 +804,14 @@ def req_error_context(req_description):
 
 
 def install_wheel(
-    name,  # type: str
-    wheel_path,  # type: str
-    scheme,  # type: Scheme
-    req_description,  # type: str
-    pycompile=True,  # type: bool
-    warn_script_location=True,  # type: bool
-    direct_url=None,  # type: Optional[DirectUrl]
-    requested=False,  # type: bool
+        name,  # type: str
+        wheel_path,  # type: str
+        scheme,  # type: Scheme
+        req_description,  # type: str
+        pycompile=True,  # type: bool
+        warn_script_location=True,  # type: bool
+        direct_url=None,  # type: Optional[DirectUrl]
+        requested=False,  # type: bool
 ):
     # type: (...) -> None
     with ZipFile(wheel_path, allowZip64=True) as z:
