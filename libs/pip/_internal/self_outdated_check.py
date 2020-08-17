@@ -7,6 +7,9 @@ import logging
 import os.path
 import sys
 
+from pip._vendor.packaging import version as packaging_version
+from pip._vendor.six import ensure_binary
+
 from pip._internal.index.collector import LinkCollector
 from pip._internal.index.package_finder import PackageFinder
 from pip._internal.models.selection_prefs import SelectionPreferences
@@ -22,8 +25,6 @@ from pip._internal.utils.misc import (
 )
 from pip._internal.utils.packaging import get_installer
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor.packaging import version as packaging_version
-from pip._vendor.six import ensure_binary
 
 if MYPY_CHECK_RUNNING:
     import optparse
@@ -31,7 +32,9 @@ if MYPY_CHECK_RUNNING:
 
     from pip._internal.network.session import PipSession
 
+
 SELFCHECK_DATE_FMT = "%Y-%m-%dT%H:%M:%SZ"
+
 
 logger = logging.getLogger(__name__)
 
@@ -175,9 +178,9 @@ def pip_self_version_check(session, options):
         remote_version = packaging_version.parse(pypi_version)
 
         local_version_is_older = (
-                pip_version < remote_version and
-                pip_version.base_version != remote_version.base_version and
-                was_installed_by_pip('pip')
+            pip_version < remote_version and
+            pip_version.base_version != remote_version.base_version and
+            was_installed_by_pip('pip')
         )
 
         # Determine if our pypi_version is older

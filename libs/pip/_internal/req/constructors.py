@@ -12,6 +12,11 @@ import logging
 import os
 import re
 
+from pip._vendor.packaging.markers import Marker
+from pip._vendor.packaging.requirements import InvalidRequirement, Requirement
+from pip._vendor.packaging.specifiers import Specifier
+from pip._vendor.pkg_resources import RequirementParseError, parse_requirements
+
 from pip._internal.exceptions import InstallationError
 from pip._internal.models.index import PyPI, TestPyPI
 from pip._internal.models.link import Link
@@ -24,16 +29,13 @@ from pip._internal.utils.misc import is_installable_dir, splitext
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.urls import path_to_url
 from pip._internal.vcs import is_url, vcs
-from pip._vendor.packaging.markers import Marker
-from pip._vendor.packaging.requirements import InvalidRequirement, Requirement
-from pip._vendor.packaging.specifiers import Specifier
-from pip._vendor.pkg_resources import RequirementParseError, parse_requirements
 
 if MYPY_CHECK_RUNNING:
     from typing import (
         Any, Dict, Optional, Set, Tuple, Union,
     )
     from pip._internal.req.req_file import ParsedRequirement
+
 
 __all__ = [
     "install_req_from_editable", "install_req_from_line",
@@ -136,7 +138,7 @@ def parse_editable(editable_req):
         backends = ", ".join([bends.name + '+URL' for bends in vcs.backends])
         error_message = "For --editable={}, " \
                         "only {} are currently supported".format(
-            editable_req, backends)
+                            editable_req, backends)
         raise InstallationError(error_message)
 
     package_name = Link(url).egg_fragment
@@ -183,9 +185,9 @@ class RequirementParts(object):
     def __init__(
             self,
             requirement,  # type: Optional[Requirement]
-            link,  # type: Optional[Link]
-            markers,  # type: Optional[Marker]
-            extras,  # type: Set[str]
+            link,         # type: Optional[Link]
+            markers,      # type: Optional[Marker]
+            extras,       # type: Set[str]
     ):
         self.requirement = requirement
         self.link = link
@@ -214,13 +216,13 @@ def parse_req_from_editable(editable_req):
 
 
 def install_req_from_editable(
-        editable_req,  # type: str
-        comes_from=None,  # type: Optional[Union[InstallRequirement, str]]
-        use_pep517=None,  # type: Optional[bool]
-        isolated=False,  # type: bool
-        options=None,  # type: Optional[Dict[str, Any]]
-        constraint=False,  # type: bool
-        user_supplied=False,  # type: bool
+    editable_req,  # type: str
+    comes_from=None,  # type: Optional[Union[InstallRequirement, str]]
+    use_pep517=None,  # type: Optional[bool]
+    isolated=False,  # type: bool
+    options=None,  # type: Optional[Dict[str, Any]]
+    constraint=False,  # type: bool
+    user_supplied=False,  # type: bool
 ):
     # type: (...) -> InstallRequirement
 
@@ -388,14 +390,14 @@ def parse_req_from_line(name, line_source):
 
 
 def install_req_from_line(
-        name,  # type: str
-        comes_from=None,  # type: Optional[Union[str, InstallRequirement]]
-        use_pep517=None,  # type: Optional[bool]
-        isolated=False,  # type: bool
-        options=None,  # type: Optional[Dict[str, Any]]
-        constraint=False,  # type: bool
-        line_source=None,  # type: Optional[str]
-        user_supplied=False,  # type: bool
+    name,  # type: str
+    comes_from=None,  # type: Optional[Union[str, InstallRequirement]]
+    use_pep517=None,  # type: Optional[bool]
+    isolated=False,  # type: bool
+    options=None,  # type: Optional[Dict[str, Any]]
+    constraint=False,  # type: bool
+    line_source=None,  # type: Optional[str]
+    user_supplied=False,  # type: bool
 ):
     # type: (...) -> InstallRequirement
     """Creates an InstallRequirement from a name, which might be a
@@ -419,11 +421,11 @@ def install_req_from_line(
 
 
 def install_req_from_req_string(
-        req_string,  # type: str
-        comes_from=None,  # type: Optional[InstallRequirement]
-        isolated=False,  # type: bool
-        use_pep517=None,  # type: Optional[bool]
-        user_supplied=False,  # type: bool
+    req_string,  # type: str
+    comes_from=None,  # type: Optional[InstallRequirement]
+    isolated=False,  # type: bool
+    use_pep517=None,  # type: Optional[bool]
+    user_supplied=False,  # type: bool
 ):
     # type: (...) -> InstallRequirement
     try:
@@ -454,10 +456,10 @@ def install_req_from_req_string(
 
 
 def install_req_from_parsed_requirement(
-        parsed_req,  # type: ParsedRequirement
-        isolated=False,  # type: bool
-        use_pep517=None,  # type: Optional[bool]
-        user_supplied=False,  # type: bool
+    parsed_req,  # type: ParsedRequirement
+    isolated=False,  # type: bool
+    use_pep517=None,  # type: Optional[bool]
+    user_supplied=False,  # type: bool
 ):
     # type: (...) -> InstallRequirement
     if parsed_req.is_editable:

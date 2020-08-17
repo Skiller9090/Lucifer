@@ -6,13 +6,12 @@
 #
 
 import gzip
+from io import BytesIO
 import json
 import logging
 import os
 import posixpath
 import re
-from io import BytesIO
-
 try:
     import threading
 except ImportError:  # pragma: no cover
@@ -21,12 +20,12 @@ import zlib
 
 from . import DistlibException
 from .compat import (urljoin, urlparse, urlunparse, url2pathname, pathname2url,
-                     queue, quote, unescape, build_opener,
+                     queue, quote, unescape, string_types, build_opener,
                      HTTPRedirectHandler as BaseRedirectHandler, text_type,
                      Request, HTTPError, URLError)
 from .database import Distribution, DistributionPath, make_dist
 from .metadata import Metadata, MetadataInvalidError
-from .util import (cached_property, ensure_slash,
+from .util import (cached_property, parse_credentials, ensure_slash,
                    split_filename, get_project_data, parse_requirement,
                    parse_name_and_version, ServerProxy, normalize_name)
 from .version import get_scheme, UnsupportedVersionError
@@ -38,7 +37,6 @@ HASHER_HASH = re.compile(r'^(\w+)=([a-f0-9]+)')
 CHARSET = re.compile(r';\s*charset\s*=\s*(.*)\s*$', re.I)
 HTML_CONTENT_TYPE = re.compile('text/html|application/x(ht)?ml')
 DEFAULT_INDEX = 'https://pypi.org/pypi'
-
 
 def get_all_distribution_names(url=None):
     """
@@ -54,12 +52,10 @@ def get_all_distribution_names(url=None):
     finally:
         client('close')()
 
-
 class RedirectHandler(BaseRedirectHandler):
     """
     A class to work around a bug in some Python 3.2.x releases.
     """
-
     # There's a bug in the base version for some 3.2.x
     # (e.g. 3.2.2 on Ubuntu Oneiric). If a Location header
     # returns e.g. /abc, it bails because it says the scheme ''
@@ -86,7 +82,6 @@ class RedirectHandler(BaseRedirectHandler):
                                                   headers)
 
     http_error_301 = http_error_303 = http_error_307 = http_error_302
-
 
 class Locator(object):
     """
@@ -241,7 +236,6 @@ class Locator(object):
         If it is, a dictionary is returned with keys "name", "version",
         "filename" and "url"; otherwise, None is returned.
         """
-
         def same_project(name1, name2):
             return normalize_name(name1) == normalize_name(name2)
 
@@ -299,7 +293,7 @@ class Locator(object):
                                 'filename': filename,
                                 'url': urlunparse((scheme, netloc, origpath,
                                                    params, query, '')),
-                                # 'packagetype': 'sdist',
+                                #'packagetype': 'sdist',
                             }
                             if pyver:  # pragma: no cover
                                 result['python-version'] = pyver
@@ -375,7 +369,7 @@ class Locator(object):
         self.matcher = matcher = scheme.matcher(r.requirement)
         logger.debug('matcher: %s (%s)', matcher, type(matcher).__name__)
         versions = self.get_project(r.name)
-        if len(versions) > 2:  # urls and digests keys are present
+        if len(versions) > 2:   # urls and digests keys are present
             # sometimes, versions are invalid
             slist = []
             vcls = matcher.version_class
@@ -393,7 +387,7 @@ class Locator(object):
                                          'version %s of %s', k, matcher.name)
                 except Exception:  # pragma: no cover
                     logger.warning('error matching %s with %r', matcher, k)
-                    pass  # slist.append(k)
+                    pass # slist.append(k)
             if len(slist) > 1:
                 slist = sorted(slist, key=scheme.key)
             if slist:
@@ -419,7 +413,6 @@ class PyPIRPCLocator(Locator):
     This locator uses XML-RPC to locate distributions. It therefore
     cannot be used with simple mirrors (that only mirror file content).
     """
-
     def __init__(self, url, **kwargs):
         """
         Initialise an instance.
@@ -463,13 +456,11 @@ class PyPIRPCLocator(Locator):
                     result['digests'][url] = digest
         return result
 
-
 class PyPIJSONLocator(Locator):
     """
     This locator uses PyPI's JSON interface. It's very limited in functionality
     and probably not worth using.
     """
-
     def __init__(self, url, **kwargs):
         super(PyPIJSONLocator, self).__init__(**kwargs)
         self.base_url = ensure_slash(url)
@@ -485,7 +476,7 @@ class PyPIJSONLocator(Locator):
         url = urljoin(self.base_url, '%s/json' % quote(name))
         try:
             resp = self.opener.open(url)
-            data = resp.read().decode()  # for now
+            data = resp.read().decode() # for now
             d = json.loads(data)
             md = Metadata(scheme=self.scheme)
             data = d['info']
@@ -507,7 +498,7 @@ class PyPIJSONLocator(Locator):
             # Now get other releases
             for version, infos in d['releases'].items():
                 if version == md.version:
-                    continue  # already done
+                    continue    # already done
                 omd = Metadata(scheme=self.scheme)
                 omd.name = md.name
                 omd.version = version
@@ -520,14 +511,14 @@ class PyPIJSONLocator(Locator):
                     odist.digests[url] = self._get_digest(info)
                     result['urls'].setdefault(version, set()).add(url)
                     result['digests'][url] = self._get_digest(info)
-        #            for info in urls:
-        #                md.source_url = info['url']
-        #                dist.digest = self._get_digest(info)
-        #                dist.locator = self
-        #                for info in urls:
-        #                    url = info['url']
-        #                    result['urls'].setdefault(md.version, set()).add(url)
-        #                    result['digests'][url] = self._get_digest(info)
+#            for info in urls:
+#                md.source_url = info['url']
+#                dist.digest = self._get_digest(info)
+#                dist.locator = self
+#                for info in urls:
+#                    url = info['url']
+#                    result['urls'].setdefault(md.version, set()).add(url)
+#                    result['digests'][url] = self._get_digest(info)
         except Exception as e:
             self.errors.put(text_type(e))
             logger.exception('JSON fetch failed: %s', e)
@@ -570,7 +561,6 @@ href\\s*=\\s*(?:"(?P<url1>[^"]*)"|'(?P<url2>[^']*)'|(?P<url3>[^>\\s\n]*))
         about their "rel" attribute, for determining which ones to treat as
         downloads and which ones to queue for further scraping.
         """
-
         def clean(url):
             "Tidy up an URL."
             scheme, netloc, path, params, query, frag = urlparse(url)
@@ -655,7 +645,7 @@ class SimpleScrapingLocator(Locator):
         # Note that you need two loops, since you can't say which
         # thread will get each sentinel
         for t in self._threads:
-            self._to_fetch.put(None)  # sentinel
+            self._to_fetch.put(None)    # sentinel
         for t in self._threads:
             t.join()
         self._threads = []
@@ -703,7 +693,7 @@ class SimpleScrapingLocator(Locator):
             info = self.convert_url_to_download_info(url, self.project_name)
         logger.debug('process_download: %s -> %s', url, info)
         if info:
-            with self._lock:  # needed because self.result is shared
+            with self._lock:    # needed because self.result is shared
                 self._update_version_data(self.result, info)
         return info
 
@@ -748,14 +738,14 @@ class SimpleScrapingLocator(Locator):
             try:
                 if url:
                     page = self.get_page(url)
-                    if page is None:  # e.g. after an error
+                    if page is None:    # e.g. after an error
                         continue
                     for link, rel in page.links:
                         if link not in self._seen:
                             try:
                                 self._seen.add(link)
                                 if (not self._process_download(link) and
-                                        self._should_queue(link, url, rel)):
+                                    self._should_queue(link, url, rel)):
                                     logger.debug('Queueing %s from %s', link, url)
                                     self._to_fetch.put(link)
                             except MetadataInvalidError:  # e.g. invalid versions
@@ -766,7 +756,7 @@ class SimpleScrapingLocator(Locator):
                 # always do this, to avoid hangs :-)
                 self._to_fetch.task_done()
             if not url:
-                # logger.debug('Sentinel seen, quitting.')
+                #logger.debug('Sentinel seen, quitting.')
                 break
 
     def get_page(self, url):
@@ -803,7 +793,7 @@ class SimpleScrapingLocator(Locator):
                         data = resp.read()
                         encoding = headers.get('Content-Encoding')
                         if encoding:
-                            decoder = self.decoders[encoding]  # fail if not found
+                            decoder = self.decoders[encoding]   # fail if not found
                             data = decoder(data)
                         encoding = 'utf-8'
                         m = CHARSET.search(content_type)
@@ -812,7 +802,7 @@ class SimpleScrapingLocator(Locator):
                         try:
                             data = data.decode(encoding)
                         except UnicodeError:  # pragma: no cover
-                            data = data.decode('latin-1')  # fallback
+                            data = data.decode('latin-1')    # fallback
                         result = Page(data, final_url)
                         self._page_cache[final_url] = result
                 except HTTPError as e:
@@ -825,7 +815,7 @@ class SimpleScrapingLocator(Locator):
                 except Exception as e:  # pragma: no cover
                     logger.exception('Fetch failed: %s: %s', url, e)
                 finally:
-                    self._page_cache[url] = result  # even if None (failure)
+                    self._page_cache[url] = result   # even if None (failure)
         return result
 
     _distname_re = re.compile('<a href=[^>]*>([^<]+)<')
@@ -841,7 +831,6 @@ class SimpleScrapingLocator(Locator):
         for match in self._distname_re.finditer(page.data):
             result.add(match.group(1))
         return result
-
 
 class DirectoryLocator(Locator):
     """
@@ -908,7 +897,6 @@ class DirectoryLocator(Locator):
                 break
         return result
 
-
 class JSONLocator(Locator):
     """
     This locator uses special extended metadata (not available on PyPI) and is
@@ -916,7 +904,6 @@ class JSONLocator(Locator):
     require archive downloads before dependencies can be determined! As you
     might imagine, that can be slow.
     """
-
     def get_distribution_names(self):
         """
         Return all the distribution names known to this locator.
@@ -948,13 +935,11 @@ class JSONLocator(Locator):
                 result['urls'].setdefault(dist.version, set()).add(info['url'])
         return result
 
-
 class DistPathLocator(Locator):
     """
     This locator finds installed distributions in a path. It can be useful for
     adding to an :class:`AggregatingLocator`.
     """
-
     def __init__(self, distpath, **kwargs):
         """
         Initialise an instance.
@@ -982,7 +967,6 @@ class AggregatingLocator(Locator):
     """
     This class allows you to chain and/or merge a list of locators.
     """
-
     def __init__(self, *locators, **kwargs):
         """
         Initialise an instance.
@@ -1071,16 +1055,15 @@ class AggregatingLocator(Locator):
 # We use a legacy scheme simply because most of the dists on PyPI use legacy
 # versions which don't conform to PEP 426 / PEP 440.
 default_locator = AggregatingLocator(
-    JSONLocator(),
-    SimpleScrapingLocator('https://pypi.org/simple/',
-                          timeout=3.0),
-    scheme='legacy')
+                    JSONLocator(),
+                    SimpleScrapingLocator('https://pypi.org/simple/',
+                                          timeout=3.0),
+                    scheme='legacy')
 
 locate = default_locator.locate
 
 NAME_VERSION_RE = re.compile(r'(?P<name>[\w-]+)\s*'
                              r'\(\s*(==\s*)?(?P<ver>[^)]+)\)$')
-
 
 class DependencyFinder(object):
     """
@@ -1153,7 +1136,7 @@ class DependencyFinder(object):
         :return: A set of distribution which can fulfill the requirement.
         """
         matcher = self.get_matcher(reqt)
-        name = matcher.key  # case-insensitive
+        name = matcher.key   # case-insensitive
         result = set()
         provided = self.provided
         if name in provided:
@@ -1260,11 +1243,11 @@ class DependencyFinder(object):
         install_dists = set([odist])
         while todo:
             dist = todo.pop()
-            name = dist.key  # case-insensitive
+            name = dist.key     # case-insensitive
             if name not in self.dists_by_name:
                 self.add_distribution(dist)
             else:
-                # import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 other = self.dists_by_name[name]
                 if other != dist:
                     self.try_to_replace(dist, other, problems)

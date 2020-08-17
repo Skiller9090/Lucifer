@@ -1,17 +1,17 @@
 from __future__ import absolute_import, division, unicode_literals
-
-import re
-from copy import copy
+# pylint:disable=protected-access
 
 from pip._vendor.six import text_type
+
+import re
+
+from copy import copy
 
 from . import base
 from .. import _ihatexml
 from .. import constants
-from .._utils import moduleFactoryFactory
 from ..constants import namespaces
-
-# pylint:disable=protected-access
+from .._utils import moduleFactoryFactory
 
 tag_regexp = re.compile("{([^}]*)}(.*)")
 
@@ -108,7 +108,7 @@ def getETreeBuilder(ElementTreeImplementation, fullTree=False):
             node.parent = None
 
         def insertText(self, data, insertBefore=None):
-            if not (len(self._element)):
+            if not(len(self._element)):
                 if not self._element.text:
                     self._element.text = ""
                 self._element.text += data
@@ -201,7 +201,7 @@ def getETreeBuilder(ElementTreeImplementation, fullTree=False):
         rv = []
 
         def serializeElement(element, indent=0):
-            if not (hasattr(element, "tag")):
+            if not(hasattr(element, "tag")):
                 element = element.getroot()
             if element.tag == "<!DOCTYPE>":
                 if element.get("publicId") or element.get("systemId"):
@@ -255,7 +255,6 @@ def getETreeBuilder(ElementTreeImplementation, fullTree=False):
                 serializeElement(child, indent)
             if element.tail:
                 rv.append("|%s\"%s\"" % (' ' * (indent - 2), element.tail))
-
         serializeElement(element, 0)
 
         return "\n".join(rv)
@@ -297,7 +296,7 @@ def getETreeBuilder(ElementTreeImplementation, fullTree=False):
                 else:
                     attr = " ".join(["%s=\"%s\"" % (
                         filter.fromXmlName(name), value)
-                                     for name, value in element.attrib.items()])
+                        for name, value in element.attrib.items()])
                     rv.append("<%s %s>" % (element.tag, attr))
                 if element.text:
                     rv.append(element.text)

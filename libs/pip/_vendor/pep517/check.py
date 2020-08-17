@@ -3,15 +3,14 @@
 import argparse
 import logging
 import os
+from os.path import isfile, join as pjoin
+from pip._vendor.toml import TomlDecodeError, load as toml_load
 import shutil
+from subprocess import CalledProcessError
 import sys
 import tarfile
-import zipfile
-from os.path import isfile, join as pjoin
-from subprocess import CalledProcessError
 from tempfile import mkdtemp
-
-from pip._vendor.toml import TomlDecodeError, load as toml_load
+import zipfile
 
 from .colorlog import enable_colourful_output
 from .envbuild import BuildEnvironment

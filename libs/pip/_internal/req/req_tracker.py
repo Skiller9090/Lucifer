@@ -6,9 +6,10 @@ import hashlib
 import logging
 import os
 
+from pip._vendor import contextlib2
+
 from pip._internal.utils.temp_dir import TempDirectory
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor import contextlib2
 
 if MYPY_CHECK_RUNNING:
     from types import TracebackType
@@ -76,10 +77,10 @@ class RequirementTracker(object):
         return self
 
     def __exit__(
-            self,
-            exc_type,  # type: Optional[Type[BaseException]]
-            exc_val,  # type: Optional[BaseException]
-            exc_tb  # type: Optional[TracebackType]
+        self,
+        exc_type,  # type: Optional[Type[BaseException]]
+        exc_val,  # type: Optional[BaseException]
+        exc_tb  # type: Optional[TracebackType]
     ):
         # type: (...) -> None
         self.cleanup()

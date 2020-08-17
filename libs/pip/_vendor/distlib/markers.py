@@ -13,20 +13,19 @@ Parser for the environment markers micro-language defined in PEP 508.
 # as ~= and === which aren't in Python, necessitating a different approach.
 
 import os
-import platform
 import sys
+import platform
+import re
 
-from .compat import string_types
+from .compat import python_implementation, urlparse, string_types
 from .util import in_venv, parse_marker
 
 __all__ = ['interpret']
-
 
 def _is_literal(o):
     if not isinstance(o, string_types) or not o:
         return False
     return o[0] in '\'"'
-
 
 class Evaluator(object):
     """
@@ -38,10 +37,10 @@ class Evaluator(object):
         '===': lambda x, y: x == y,
         '~=': lambda x, y: x == y or x > y,
         '!=': lambda x, y: x != y,
-        '<': lambda x, y: x < y,
-        '<=': lambda x, y: x == y or x < y,
-        '>': lambda x, y: x > y,
-        '>=': lambda x, y: x == y or x > y,
+        '<':  lambda x, y: x < y,
+        '<=':  lambda x, y: x == y or x < y,
+        '>':  lambda x, y: x > y,
+        '>=':  lambda x, y: x == y or x > y,
         'and': lambda x, y: x and y,
         'or': lambda x, y: x or y,
         'in': lambda x, y: x in y,
@@ -75,7 +74,6 @@ class Evaluator(object):
             result = self.operations[op](lhs, rhs)
         return result
 
-
 def default_context():
     def format_full_version(info):
         version = '%s.%s.%s' % (info.major, info.minor, info.micro)
@@ -107,12 +105,10 @@ def default_context():
     }
     return result
 
-
 DEFAULT_CONTEXT = default_context()
 del default_context
 
 evaluator = Evaluator()
-
 
 def interpret(marker, execution_context=None):
     """

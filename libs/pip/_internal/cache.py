@@ -6,14 +6,15 @@ import json
 import logging
 import os
 
+from pip._vendor.packaging.tags import interpreter_name, interpreter_version
+from pip._vendor.packaging.utils import canonicalize_name
+
 from pip._internal.exceptions import InvalidWheelFilename
 from pip._internal.models.link import Link
 from pip._internal.models.wheel import Wheel
 from pip._internal.utils.temp_dir import TempDirectory, tempdir_kinds
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.urls import path_to_url
-from pip._vendor.packaging.tags import interpreter_name, interpreter_version
-from pip._vendor.packaging.utils import canonicalize_name
 
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Set, List, Any, Dict
@@ -120,9 +121,9 @@ class Cache(object):
     def _get_candidates(self, link, canonical_package_name):
         # type: (Link, str) -> List[Any]
         can_not_cache = (
-                not self.cache_dir or
-                not canonical_package_name or
-                not link
+            not self.cache_dir or
+            not canonical_package_name or
+            not link
         )
         if can_not_cache:
             return []
@@ -156,10 +157,10 @@ class Cache(object):
         raise NotImplementedError()
 
     def get(
-            self,
-            link,  # type: Link
-            package_name,  # type: Optional[str]
-            supported_tags,  # type: List[Tag]
+        self,
+        link,            # type: Link
+        package_name,    # type: Optional[str]
+        supported_tags,  # type: List[Tag]
     ):
         # type: (...) -> Link
         """Returns a link to a cached item if it exists, otherwise returns the
@@ -206,10 +207,10 @@ class SimpleWheelCache(Cache):
         return os.path.join(self.cache_dir, "wheels", *parts)
 
     def get(
-            self,
-            link,  # type: Link
-            package_name,  # type: Optional[str]
-            supported_tags,  # type: List[Tag]
+        self,
+        link,            # type: Link
+        package_name,    # type: Optional[str]
+        supported_tags,  # type: List[Tag]
     ):
         # type: (...) -> Link
         candidates = []
@@ -219,7 +220,7 @@ class SimpleWheelCache(Cache):
 
         canonical_package_name = canonicalize_name(package_name)
         for wheel_name, wheel_dir in self._get_candidates(
-                link, canonical_package_name
+            link, canonical_package_name
         ):
             try:
                 wheel = Wheel(wheel_name)
@@ -268,9 +269,9 @@ class EphemWheelCache(SimpleWheelCache):
 
 class CacheEntry(object):
     def __init__(
-            self,
-            link,  # type: Link
-            persistent,  # type: bool
+        self,
+        link,  # type: Link
+        persistent,  # type: bool
     ):
         self.link = link
         self.persistent = persistent
@@ -304,10 +305,10 @@ class WheelCache(Cache):
         return self._ephem_cache.get_path_for_link(link)
 
     def get(
-            self,
-            link,  # type: Link
-            package_name,  # type: Optional[str]
-            supported_tags,  # type: List[Tag]
+        self,
+        link,            # type: Link
+        package_name,    # type: Optional[str]
+        supported_tags,  # type: List[Tag]
     ):
         # type: (...) -> Link
         cache_entry = self.get_cache_entry(link, package_name, supported_tags)
@@ -316,10 +317,10 @@ class WheelCache(Cache):
         return cache_entry.link
 
     def get_cache_entry(
-            self,
-            link,  # type: Link
-            package_name,  # type: Optional[str]
-            supported_tags,  # type: List[Tag]
+        self,
+        link,            # type: Link
+        package_name,    # type: Optional[str]
+        supported_tags,  # type: List[Tag]
     ):
         # type: (...) -> Optional[CacheEntry]
         """Returns a CacheEntry with a link to a cached item if it exists or

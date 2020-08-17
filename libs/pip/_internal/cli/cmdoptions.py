@@ -77,7 +77,6 @@ def check_install_build_global(options, check_options=None):
     def getname(n):
         # type: (str) -> Optional[Any]
         return getattr(check_options, n, None)
-
     names = ["build_options", "global_options", "install_options"]
     if any(map(getname, names)):
         control = options.format_control
@@ -104,8 +103,8 @@ def check_dist_restriction(options, check_target=False):
 
     binary_only = FormatControl(set(), {':all:'})
     sdist_dependencies_allowed = (
-            options.format_control != binary_only and
-            not options.ignore_dependencies
+        options.format_control != binary_only and
+        not options.ignore_dependencies
     )
 
     # Installations or downloads using dist restrictions must not combine
@@ -220,8 +219,8 @@ progress_bar = partial(
     choices=list(BAR_TYPES.keys()),
     default='on',
     help=(
-            'Specify type of progress to be displayed [' +
-            '|'.join(BAR_TYPES.keys()) + '] (default: %default)'
+        'Specify type of progress to be displayed [' +
+        '|'.join(BAR_TYPES.keys()) + '] (default: %default)'
     ),
 )  # type: Callable[..., Option]
 
@@ -385,7 +384,7 @@ def constraints():
         default=[],
         metavar='file',
         help='Constrain versions using the given constraints file. '
-             'This option can be used multiple times.'
+        'This option can be used multiple times.'
     )
 
 
@@ -398,7 +397,7 @@ def requirements():
         default=[],
         metavar='file',
         help='Install from the given requirements file. '
-             'This option can be used multiple times.'
+        'This option can be used multiple times.'
     )
 
 
@@ -431,8 +430,8 @@ src = partial(
     action='callback',
     callback=_handle_src,
     help='Directory to check out editable projects into. '
-         'The default in a virtualenv is "<venv path>/src". '
-         'The default for global installs is "<current dir>/src".'
+    'The default in a virtualenv is "<venv path>/src". '
+    'The default for global installs is "<current dir>/src".'
 )  # type: Callable[..., Option]
 
 
@@ -566,6 +565,7 @@ python_version = partial(
     """),
 )  # type: Callable[..., Option]
 
+
 implementation = partial(
     Option,
     '--implementation',
@@ -578,6 +578,7 @@ implementation = partial(
           "interpreter implementation is used.  Use 'py' to force "
           "implementation-agnostic wheels."),
 )  # type: Callable[..., Option]
+
 
 abi = partial(
     Option,
@@ -835,7 +836,7 @@ def _handle_merge_hash(option, opt_str, value, parser):
                      'abcde...'.format(opt_str))
     if algo not in STRONG_HASHES:
         parser.error('Allowed hash algorithms for {} are {}.'.format(  # noqa
-            opt_str, ', '.join(STRONG_HASHES)))
+                     opt_str, ', '.join(STRONG_HASHES)))
     parser.values.hashes.setdefault(algo, []).append(digest)
 
 
@@ -852,6 +853,7 @@ hash = partial(
          'hash before installing. Example: --hash=sha256:abcdef...',
 )  # type: Callable[..., Option]
 
+
 require_hashes = partial(
     Option,
     '--require-hashes',
@@ -862,6 +864,7 @@ require_hashes = partial(
          'repeatable installs. This option is implied when any package in a '
          'requirements file has a --hash option.',
 )  # type: Callable[..., Option]
+
 
 list_path = partial(
     PipOption,
@@ -890,6 +893,7 @@ no_python_version_warning = partial(
     default=False,
     help='Silence deprecation warnings for upcoming unsupported Pythons.',
 )  # type: Callable[..., Option]
+
 
 unstable_feature = partial(
     Option,
@@ -925,6 +929,7 @@ use_deprecated_feature = partial(
         'Enable deprecated functionality, that will be removed in the future.'
     ),
 )  # type: Callable[..., Option]
+
 
 ##########
 # groups #

@@ -44,14 +44,15 @@ if MYPY_CHECK_RUNNING:
         TempDirectoryTypeRegistry,
     )
 
+
 logger = logging.getLogger(__name__)
 
 
 class SessionCommandMixin(CommandContextMixIn):
+
     """
     A class mixin for command classes needing _build_session().
     """
-
     def __init__(self):
         # type: () -> None
         super(SessionCommandMixin, self).__init__()
@@ -124,6 +125,7 @@ class SessionCommandMixin(CommandContextMixIn):
 
 
 class IndexGroupCommand(Command, SessionCommandMixin):
+
     """
     Abstract base class for commands with the index_group options.
 
@@ -165,7 +167,6 @@ def with_cleanup(func):
     """Decorator for common logic related to managing temporary
     directories.
     """
-
     def configure_tempdir_registry(registry):
         # type: (TempDirectoryTypeRegistry) -> None
         for t in KEEPABLE_TEMPDIR_TYPES:
@@ -199,14 +200,14 @@ class RequirementCommand(IndexGroupCommand):
 
     @staticmethod
     def make_requirement_preparer(
-            temp_build_dir,  # type: TempDirectory
-            options,  # type: Values
-            req_tracker,  # type: RequirementTracker
-            session,  # type: PipSession
-            finder,  # type: PackageFinder
-            use_user_site,  # type: bool
-            download_dir=None,  # type: str
-            wheel_download_dir=None,  # type: str
+        temp_build_dir,           # type: TempDirectory
+        options,                  # type: Values
+        req_tracker,              # type: RequirementTracker
+        session,                  # type: PipSession
+        finder,                   # type: PackageFinder
+        use_user_site,            # type: bool
+        download_dir=None,        # type: str
+        wheel_download_dir=None,  # type: str
     ):
         # type: (...) -> RequirementPreparer
         """
@@ -232,17 +233,17 @@ class RequirementCommand(IndexGroupCommand):
 
     @staticmethod
     def make_resolver(
-            preparer,  # type: RequirementPreparer
-            finder,  # type: PackageFinder
-            options,  # type: Values
-            wheel_cache=None,  # type: Optional[WheelCache]
-            use_user_site=False,  # type: bool
-            ignore_installed=True,  # type: bool
-            ignore_requires_python=False,  # type: bool
-            force_reinstall=False,  # type: bool
-            upgrade_strategy="to-satisfy-only",  # type: str
-            use_pep517=None,  # type: Optional[bool]
-            py_version_info=None  # type: Optional[Tuple[int, ...]]
+        preparer,                            # type: RequirementPreparer
+        finder,                              # type: PackageFinder
+        options,                             # type: Values
+        wheel_cache=None,                    # type: Optional[WheelCache]
+        use_user_site=False,                 # type: bool
+        ignore_installed=True,               # type: bool
+        ignore_requires_python=False,        # type: bool
+        force_reinstall=False,               # type: bool
+        upgrade_strategy="to-satisfy-only",  # type: str
+        use_pep517=None,                     # type: Optional[bool]
+        py_version_info=None            # type: Optional[Tuple[int, ...]]
     ):
         # type: (...) -> BaseResolver
         """
@@ -288,11 +289,11 @@ class RequirementCommand(IndexGroupCommand):
         )
 
     def get_requirements(
-            self,
-            args,  # type: List[str]
-            options,  # type: Values
-            finder,  # type: PackageFinder
-            session,  # type: PipSession
+        self,
+        args,             # type: List[str]
+        options,          # type: Values
+        finder,           # type: PackageFinder
+        session,          # type: PipSession
     ):
         # type: (...) -> List[InstallRequirement]
         """
@@ -372,11 +373,11 @@ class RequirementCommand(IndexGroupCommand):
             logger.info(locations)
 
     def _build_package_finder(
-            self,
-            options,  # type: Values
-            session,  # type: PipSession
-            target_python=None,  # type: Optional[TargetPython]
-            ignore_requires_python=None,  # type: Optional[bool]
+        self,
+        options,               # type: Values
+        session,               # type: PipSession
+        target_python=None,    # type: Optional[TargetPython]
+        ignore_requires_python=None,  # type: Optional[bool]
     ):
         # type: (...) -> PackageFinder
         """

@@ -16,6 +16,8 @@ import logging
 import os
 import sys
 
+from pip._vendor.six.moves import configparser
+
 from pip._internal.exceptions import (
     ConfigurationError,
     ConfigurationFileCouldNotBeLoaded,
@@ -24,7 +26,6 @@ from pip._internal.utils import appdirs
 from pip._internal.utils.compat import WINDOWS, expanduser
 from pip._internal.utils.misc import ensure_dir, enum
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor.six.moves import configparser
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -61,12 +62,13 @@ def _disassemble_key(name):
 
 # The kinds of configurations there are.
 kinds = enum(
-    USER="user",  # User Specific
-    GLOBAL="global",  # System Wide
-    SITE="site",  # [Virtual] Environment Specific
-    ENV="env",  # from PIP_CONFIG_FILE
+    USER="user",        # User Specific
+    GLOBAL="global",    # System Wide
+    SITE="site",        # [Virtual] Environment Specific
+    ENV="env",          # from PIP_CONFIG_FILE
     ENV_VAR="env-var",  # from Environment Variables
 )
+
 
 CONFIG_BASENAME = 'pip.ini' if WINDOWS else 'pip.conf'
 
@@ -347,8 +349,8 @@ class Configuration(object):
         """Returns a generator with all environmental vars with prefix PIP_"""
         for key, val in os.environ.items():
             should_be_yielded = (
-                    key.startswith("PIP_") and
-                    key[4:].lower() not in self._ignore_env_names
+                key.startswith("PIP_") and
+                key[4:].lower() not in self._ignore_env_names
             )
             if should_be_yielded:
                 yield key[4:].lower(), val
@@ -376,7 +378,7 @@ class Configuration(object):
 
         # per-user configuration next
         should_load_user_config = not self.isolated and not (
-                config_file and os.path.exists(config_file)
+            config_file and os.path.exists(config_file)
         )
         if should_load_user_config:
             # The legacy config file is overridden by the new config file

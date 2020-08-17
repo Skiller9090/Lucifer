@@ -1,11 +1,10 @@
 from __future__ import absolute_import
-
-import email
-import logging
-import re
 import time
+import logging
 from collections import namedtuple
 from itertools import takewhile
+import email
+import re
 
 from ..exceptions import (
     ConnectTimeoutError,
@@ -18,7 +17,9 @@ from ..exceptions import (
 )
 from ..packages import six
 
+
 log = logging.getLogger(__name__)
+
 
 # Data structure for representing the metadata of requests that result in a retry.
 RequestHistory = namedtuple(
@@ -159,20 +160,20 @@ class Retry(object):
     BACKOFF_MAX = 120
 
     def __init__(
-            self,
-            total=10,
-            connect=None,
-            read=None,
-            redirect=None,
-            status=None,
-            method_whitelist=DEFAULT_METHOD_WHITELIST,
-            status_forcelist=None,
-            backoff_factor=0,
-            raise_on_redirect=True,
-            raise_on_status=True,
-            history=None,
-            respect_retry_after_header=True,
-            remove_headers_on_redirect=DEFAULT_REDIRECT_HEADERS_BLACKLIST,
+        self,
+        total=10,
+        connect=None,
+        read=None,
+        redirect=None,
+        status=None,
+        method_whitelist=DEFAULT_METHOD_WHITELIST,
+        status_forcelist=None,
+        backoff_factor=0,
+        raise_on_redirect=True,
+        raise_on_status=True,
+        history=None,
+        respect_retry_after_header=True,
+        remove_headers_on_redirect=DEFAULT_REDIRECT_HEADERS_BLACKLIST,
     ):
 
         self.total = total
@@ -339,10 +340,10 @@ class Retry(object):
             return True
 
         return (
-                self.total
-                and self.respect_retry_after_header
-                and has_retry_after
-                and (status_code in self.RETRY_AFTER_STATUS_CODES)
+            self.total
+            and self.respect_retry_after_header
+            and has_retry_after
+            and (status_code in self.RETRY_AFTER_STATUS_CODES)
         )
 
     def is_exhausted(self):
@@ -355,13 +356,13 @@ class Retry(object):
         return min(retry_counts) < 0
 
     def increment(
-            self,
-            method=None,
-            url=None,
-            response=None,
-            error=None,
-            _pool=None,
-            _stacktrace=None,
+        self,
+        method=None,
+        url=None,
+        response=None,
+        error=None,
+        _pool=None,
+        _stacktrace=None,
     ):
         """ Return a new Retry object with incremented retry counters.
 

@@ -4,6 +4,10 @@ import collections
 import logging
 import os
 
+from pip._vendor import six
+from pip._vendor.packaging.utils import canonicalize_name
+from pip._vendor.pkg_resources import RequirementParseError
+
 from pip._internal.exceptions import BadCommand, InstallationError
 from pip._internal.req.constructors import (
     install_req_from_editable,
@@ -19,9 +23,6 @@ from pip._internal.utils.misc import (
     get_installed_distributions,
 )
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor import six
-from pip._vendor.packaging.utils import canonicalize_name
-from pip._vendor.pkg_resources import RequirementParseError
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -34,19 +35,20 @@ if MYPY_CHECK_RUNNING:
 
     RequirementInfo = Tuple[Optional[Union[str, Requirement]], bool, List[str]]
 
+
 logger = logging.getLogger(__name__)
 
 
 def freeze(
-        requirement=None,  # type: Optional[List[str]]
-        find_links=None,  # type: Optional[List[str]]
-        local_only=False,  # type: bool
-        user_only=False,  # type: bool
-        paths=None,  # type: Optional[List[str]]
-        isolated=False,  # type: bool
-        wheel_cache=None,  # type: Optional[WheelCache]
-        exclude_editable=False,  # type: bool
-        skip=()  # type: Container[str]
+    requirement=None,  # type: Optional[List[str]]
+    find_links=None,  # type: Optional[List[str]]
+    local_only=False,  # type: bool
+    user_only=False,  # type: bool
+    paths=None,  # type: Optional[List[str]]
+    isolated=False,  # type: bool
+    wheel_cache=None,  # type: Optional[WheelCache]
+    exclude_editable=False,  # type: bool
+    skip=()  # type: Container[str]
 ):
     # type: (...) -> Iterator[str]
     find_links = find_links or []
@@ -92,14 +94,14 @@ def freeze(
                     if (not line.strip() or
                             line.strip().startswith('#') or
                             line.startswith((
-                                    '-r', '--requirement',
-                                    '-f', '--find-links',
-                                    '-i', '--index-url',
-                                    '--pre',
-                                    '--trusted-host',
-                                    '--process-dependency-links',
-                                    '--extra-index-url',
-                                    '--use-feature'))):
+                                '-r', '--requirement',
+                                '-f', '--find-links',
+                                '-i', '--index-url',
+                                '--pre',
+                                '--trusted-host',
+                                '--process-dependency-links',
+                                '--extra-index-url',
+                                '--use-feature'))):
                         line = line.rstrip()
                         if line not in emitted_options:
                             emitted_options.add(line)
@@ -149,7 +151,7 @@ def freeze(
                                 req_files[line_req.name].append(req_file_path)
                         else:
                             yield str(installations[
-                                          line_req_canonical_name]).rstrip()
+                                line_req_canonical_name]).rstrip()
                             del installations[line_req_canonical_name]
                             req_files[line_req.name].append(req_file_path)
 
@@ -160,7 +162,7 @@ def freeze(
                 logger.warning("Requirement %s included multiple times [%s]",
                                name, ', '.join(sorted(set(files))))
 
-        yield (
+        yield(
             '## The following requirements were added by '
             'pip freeze:'
         )

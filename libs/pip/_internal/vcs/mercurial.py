@@ -6,6 +6,8 @@ from __future__ import absolute_import
 import logging
 import os
 
+from pip._vendor.six.moves import configparser
+
 from pip._internal.exceptions import BadCommand, SubProcessError
 from pip._internal.utils.misc import display_path
 from pip._internal.utils.subprocess import make_command
@@ -17,11 +19,11 @@ from pip._internal.vcs.versioncontrol import (
     find_path_to_setup_from_repo_root,
     vcs,
 )
-from pip._vendor.six.moves import configparser
 
 if MYPY_CHECK_RUNNING:
     from pip._internal.utils.misc import HiddenText
     from pip._internal.vcs.versioncontrol import RevOptions
+
 
 logger = logging.getLogger(__name__)
 

@@ -1,15 +1,16 @@
 from __future__ import absolute_import
-
 import errno
+import warnings
 import hmac
 import sys
-import warnings
+
 from binascii import hexlify, unhexlify
 from hashlib import md5, sha1, sha256
 
 from .url import IPV4_RE, BRACELESS_IPV6_ADDRZ_RE
 from ..exceptions import SSLError, InsecurePlatformWarning, SNIMissingWarning
 from ..packages import six
+
 
 SSLContext = None
 HAS_SNI = False
@@ -54,11 +55,13 @@ except ImportError:
     except ImportError:
         PROTOCOL_SSLv23 = PROTOCOL_TLS = 2
 
+
 try:
     from ssl import OP_NO_SSLv2, OP_NO_SSLv3, OP_NO_COMPRESSION
 except ImportError:
     OP_NO_SSLv2, OP_NO_SSLv3 = 0x1000000, 0x2000000
     OP_NO_COMPRESSION = 0x20000
+
 
 # A secure default.
 # Sources for more information on TLS ciphers:
@@ -218,7 +221,7 @@ def resolve_ssl_version(candidate):
 
 
 def create_urllib3_context(
-        ssl_version=None, cert_reqs=None, options=None, ciphers=None
+    ssl_version=None, cert_reqs=None, options=None, ciphers=None
 ):
     """All arguments have the same meaning as ``ssl_wrap_socket``.
 
@@ -279,13 +282,13 @@ def create_urllib3_context(
     # verification is enabled to work around Python issue #37428
     # See: https://bugs.python.org/issue37428
     if (cert_reqs == ssl.CERT_REQUIRED or sys.version_info >= (3, 7, 4)) and getattr(
-            context, "post_handshake_auth", None
+        context, "post_handshake_auth", None
     ) is not None:
         context.post_handshake_auth = True
 
     context.verify_mode = cert_reqs
     if (
-            getattr(context, "check_hostname", None) is not None
+        getattr(context, "check_hostname", None) is not None
     ):  # Platform-specific: Python 3.2
         # We do our own verification, including fingerprints and alternative
         # hostnames. So disable it here
@@ -294,18 +297,18 @@ def create_urllib3_context(
 
 
 def ssl_wrap_socket(
-        sock,
-        keyfile=None,
-        certfile=None,
-        cert_reqs=None,
-        ca_certs=None,
-        server_hostname=None,
-        ssl_version=None,
-        ciphers=None,
-        ssl_context=None,
-        ca_cert_dir=None,
-        key_password=None,
-        ca_cert_data=None,
+    sock,
+    keyfile=None,
+    certfile=None,
+    cert_reqs=None,
+    ca_certs=None,
+    server_hostname=None,
+    ssl_version=None,
+    ciphers=None,
+    ssl_context=None,
+    ca_cert_dir=None,
+    key_password=None,
+    ca_cert_data=None,
 ):
     """
     All arguments except for server_hostname, ssl_context, and ca_cert_dir have
@@ -368,7 +371,7 @@ def ssl_wrap_socket(
     # We shouldn't warn the user if SNI isn't available but we would
     # not be using SNI anyways due to IP address for server_hostname.
     if (
-            server_hostname is not None and not is_ipaddress(server_hostname)
+        server_hostname is not None and not is_ipaddress(server_hostname)
     ) or IS_SECURETRANSPORT:
         if HAS_SNI and server_hostname is not None:
             return context.wrap_socket(sock, server_hostname=server_hostname)

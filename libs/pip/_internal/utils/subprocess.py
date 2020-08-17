@@ -4,13 +4,14 @@ import logging
 import os
 import subprocess
 
+from pip._vendor.six.moves import shlex_quote
+
 from pip._internal.cli.spinners import SpinnerInterface, open_spinner
 from pip._internal.exceptions import InstallationError
 from pip._internal.utils.compat import console_to_str, str_to_display
 from pip._internal.utils.logging import subprocess_logger
 from pip._internal.utils.misc import HiddenText, path_to_display
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor.six.moves import shlex_quote
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -18,6 +19,7 @@ if MYPY_CHECK_RUNNING:
     )
 
     CommandArgs = List[Union[str, HiddenText]]
+
 
 LOG_DIVIDER = '----------------------------------------'
 
@@ -67,10 +69,10 @@ def reveal_command_args(args):
 
 
 def make_subprocess_output_error(
-        cmd_args,  # type: Union[List[str], CommandArgs]
-        cwd,  # type: Optional[str]
-        lines,  # type: List[Text]
-        exit_status,  # type: int
+    cmd_args,     # type: Union[List[str], CommandArgs]
+    cwd,          # type: Optional[str]
+    lines,        # type: List[Text]
+    exit_status,  # type: int
 ):
     # type: (...) -> Text
     """
@@ -109,16 +111,16 @@ def make_subprocess_output_error(
 
 
 def call_subprocess(
-        cmd,  # type: Union[List[str], CommandArgs]
-        show_stdout=False,  # type: bool
-        cwd=None,  # type: Optional[str]
-        on_returncode='raise',  # type: str
-        extra_ok_returncodes=None,  # type: Optional[Iterable[int]]
-        command_desc=None,  # type: Optional[str]
-        extra_environ=None,  # type: Optional[Mapping[str, Any]]
-        unset_environ=None,  # type: Optional[Iterable[str]]
-        spinner=None,  # type: Optional[SpinnerInterface]
-        log_failed_cmd=True  # type: Optional[bool]
+    cmd,  # type: Union[List[str], CommandArgs]
+    show_stdout=False,  # type: bool
+    cwd=None,  # type: Optional[str]
+    on_returncode='raise',  # type: str
+    extra_ok_returncodes=None,  # type: Optional[Iterable[int]]
+    command_desc=None,  # type: Optional[str]
+    extra_environ=None,  # type: Optional[Mapping[str, Any]]
+    unset_environ=None,  # type: Optional[Iterable[str]]
+    spinner=None,  # type: Optional[SpinnerInterface]
+    log_failed_cmd=True  # type: Optional[bool]
 ):
     # type: (...) -> Text
     """
@@ -213,7 +215,7 @@ def call_subprocess(
         if proc.stdout:
             proc.stdout.close()
     proc_had_error = (
-            proc.returncode and proc.returncode not in extra_ok_returncodes
+        proc.returncode and proc.returncode not in extra_ok_returncodes
     )
     if use_spinner:
         assert spinner
@@ -249,7 +251,7 @@ def call_subprocess(
             pass
         else:
             raise ValueError('Invalid value: on_returncode={!r}'.format(
-                on_returncode))
+                             on_returncode))
     return ''.join(all_output)
 
 
@@ -262,9 +264,9 @@ def runner_with_spinner_message(message):
     """
 
     def runner(
-            cmd,  # type: List[str]
-            cwd=None,  # type: Optional[str]
-            extra_environ=None  # type: Optional[Mapping[str, Any]]
+        cmd,  # type: List[str]
+        cwd=None,  # type: Optional[str]
+        extra_environ=None  # type: Optional[Mapping[str, Any]]
     ):
         # type: (...) -> None
         with open_spinner(message) as spinner:

@@ -2,6 +2,8 @@ from __future__ import absolute_import
 
 import hashlib
 
+from pip._vendor.six import iteritems, iterkeys, itervalues
+
 from pip._internal.exceptions import (
     HashMismatch,
     HashMissing,
@@ -9,22 +11,22 @@ from pip._internal.exceptions import (
 )
 from pip._internal.utils.misc import read_chunks
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor.six import iteritems, iterkeys, itervalues
 
 if MYPY_CHECK_RUNNING:
     from typing import (
         Dict, List, BinaryIO, NoReturn, Iterator
     )
     from pip._vendor.six import PY3
-
     if PY3:
         from hashlib import _Hash
     else:
         from hashlib import _hash as _Hash
 
+
 # The recommended hash algo of the moment. Change this whenever the state of
 # the art changes; it won't hurt backward compatibility.
 FAVORITE_HASH = 'sha256'
+
 
 # Names of hashlib algorithms allowed by the --hash option and ``pip hash``
 # Currently, those are the ones at least as collision-resistant as sha256.
@@ -36,7 +38,6 @@ class Hashes(object):
     known-good values
 
     """
-
     def __init__(self, hashes=None):
         # type: (Dict[str, List[str]]) -> None
         """
@@ -63,9 +64,9 @@ class Hashes(object):
         return sum(len(digests) for digests in self._allowed.values())
 
     def is_hash_allowed(
-            self,
-            hash_name,  # type: str
-            hex_digest,  # type: str
+        self,
+        hash_name,   # type: str
+        hex_digest,  # type: str
     ):
         # type: (...) -> bool
         """Return whether the given hex digest is allowed."""
@@ -132,7 +133,6 @@ class MissingHashes(Hashes):
     exception showing it to the user.
 
     """
-
     def __init__(self):
         # type: () -> None
         """Don't offer the ``hashes`` kwarg."""

@@ -31,6 +31,7 @@ import types
 __author__ = "Benjamin Peterson <benjamin@python.org>"
 __version__ = "1.12.0"
 
+
 # Useful for very coarse version differentiation.
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
@@ -59,7 +60,6 @@ else:
         class X(object):
             def __len__(self):
                 return 1 << 31
-
 
         try:
             len(X())
@@ -158,6 +158,7 @@ class MovedAttribute(_LazyDescr):
 
 
 class _SixMetaPathImporter(object):
+
     """
     A meta path importer to import six.moves and its submodules.
 
@@ -224,6 +225,7 @@ _importer = _SixMetaPathImporter(__name__)
 
 
 class _MovedItems(_LazyModule):
+
     """Lazy loading of moved objects"""
 
     __path__ = []  # mark as package
@@ -320,6 +322,7 @@ _importer._add_module(moves, "moves")
 
 
 class Module_six_moves_urllib_parse(_LazyModule):
+
     """Lazy loading of moved objects in six.moves.urllib_parse"""
 
 
@@ -366,6 +369,7 @@ _importer._add_module(
 
 
 class Module_six_moves_urllib_error(_LazyModule):
+
     """Lazy loading of moved objects in six.moves.urllib_error"""
 
 
@@ -388,6 +392,7 @@ _importer._add_module(
 
 
 class Module_six_moves_urllib_request(_LazyModule):
+
     """Lazy loading of moved objects in six.moves.urllib_request"""
 
 
@@ -442,6 +447,7 @@ _importer._add_module(
 
 
 class Module_six_moves_urllib_response(_LazyModule):
+
     """Lazy loading of moved objects in six.moves.urllib_response"""
 
 
@@ -465,6 +471,7 @@ _importer._add_module(
 
 
 class Module_six_moves_urllib_robotparser(_LazyModule):
+
     """Lazy loading of moved objects in six.moves.urllib_robotparser"""
 
 
@@ -487,6 +494,7 @@ _importer._add_module(
 
 
 class Module_six_moves_urllib(types.ModuleType):
+
     """Create a six.moves.urllib namespace that resembles the Python 3 namespace"""
 
     __path__ = []  # mark as package
@@ -538,6 +546,7 @@ else:
     _func_defaults = "func_defaults"
     _func_globals = "func_globals"
 
+
 try:
     advance_iterator = next
 except NameError:
@@ -545,7 +554,9 @@ except NameError:
     def advance_iterator(it):
         return it.next()
 
+
 next = advance_iterator
+
 
 try:
     callable = callable
@@ -554,18 +565,16 @@ except NameError:
     def callable(obj):
         return any("__call__" in klass.__dict__ for klass in type(obj).__mro__)
 
+
 if PY3:
 
     def get_unbound_function(unbound):
         return unbound
 
-
     create_bound_method = types.MethodType
-
 
     def create_unbound_method(func, cls):
         return func
-
 
     Iterator = object
 else:
@@ -573,24 +582,21 @@ else:
     def get_unbound_function(unbound):
         return unbound.im_func
 
-
     def create_bound_method(func, obj):
         return types.MethodType(func, obj, obj.__class__)
 
-
     def create_unbound_method(func, cls):
         return types.MethodType(func, None, cls)
-
 
     class Iterator(object):
         def next(self):
             return type(self).__next__(self)
 
-
     callable = callable
 _add_doc(
     get_unbound_function, """Get the function out of a possibly unbound function"""
 )
+
 
 get_method_function = operator.attrgetter(_meth_func)
 get_method_self = operator.attrgetter(_meth_self)
@@ -599,23 +605,20 @@ get_function_code = operator.attrgetter(_func_code)
 get_function_defaults = operator.attrgetter(_func_defaults)
 get_function_globals = operator.attrgetter(_func_globals)
 
+
 if PY3:
 
     def iterkeys(d, **kw):
         return iter(d.keys(**kw))
 
-
     def itervalues(d, **kw):
         return iter(d.values(**kw))
-
 
     def iteritems(d, **kw):
         return iter(d.items(**kw))
 
-
     def iterlists(d, **kw):
         return iter(d.lists(**kw))
-
 
     viewkeys = operator.methodcaller("keys")
 
@@ -627,18 +630,14 @@ else:
     def iterkeys(d, **kw):
         return d.iterkeys(**kw)
 
-
     def itervalues(d, **kw):
         return d.itervalues(**kw)
-
 
     def iteritems(d, **kw):
         return d.iteritems(**kw)
 
-
     def iterlists(d, **kw):
         return d.iterlists(**kw)
-
 
     viewkeys = operator.methodcaller("viewkeys")
 
@@ -653,15 +652,14 @@ _add_doc(
     iterlists, "Return an iterator over the (key, [values]) pairs of a dictionary."
 )
 
+
 if PY3:
 
     def b(s):
         return s.encode("latin-1")
 
-
     def u(s):
         return s
-
 
     unichr = chr
     import struct
@@ -688,24 +686,19 @@ else:
     def b(s):
         return s
 
-
     # Workaround for standalone backslash
 
     def u(s):
         return unicode(s.replace(r"\\", r"\\\\"), "unicode_escape")
 
-
     unichr = unichr
     int2byte = chr
-
 
     def byte2int(bs):
         return ord(bs[0])
 
-
     def indexbytes(buf, i):
         return ord(buf[i])
-
 
     iterbytes = functools.partial(itertools.imap, ord)
     import StringIO
@@ -733,7 +726,6 @@ def assertRegex(self, *args, **kwargs):
 if PY3:
     exec_ = getattr(moves.builtins, "exec")
 
-
     def reraise(tp, value, tb=None):
         try:
             if value is None:
@@ -760,7 +752,6 @@ else:
             _locs_ = _globs_
         exec("""exec _code_ in _globs_, _locs_""")
 
-
     exec_(
         """def reraise(tp, value, tb=None):
     try:
@@ -769,6 +760,7 @@ else:
         tb = None
 """
     )
+
 
 if sys.version_info[:2] == (3, 2):
     exec_(
@@ -795,6 +787,7 @@ else:
     def raise_from(value, from_value):
         raise value
 
+
 print_ = getattr(moves.builtins, "print", None)
 if print_ is None:
 
@@ -809,9 +802,9 @@ if print_ is None:
                 data = str(data)
             # If the file has an encoding, encode unicode with it.
             if (
-                    isinstance(fp, file)
-                    and isinstance(data, unicode)
-                    and fp.encoding is not None
+                isinstance(fp, file)
+                and isinstance(data, unicode)
+                and fp.encoding is not None
             ):
                 errors = getattr(fp, "errors", None)
                 if errors is None:
@@ -855,9 +848,9 @@ if print_ is None:
             write(arg)
         write(end)
 
+
 if sys.version_info[:2] < (3, 3):
     _print = print_
-
 
     def print_(*args, **kwargs):
         fp = kwargs.get("file", sys.stdout)
@@ -866,14 +859,15 @@ if sys.version_info[:2] < (3, 3):
         if flush and fp is not None:
             fp.flush()
 
+
 _add_doc(reraise, """Reraise an exception.""")
 
 if sys.version_info[0:2] < (3, 4):
 
     def wraps(
-            wrapped,
-            assigned=functools.WRAPPER_ASSIGNMENTS,
-            updated=functools.WRAPPER_UPDATES,
+        wrapped,
+        assigned=functools.WRAPPER_ASSIGNMENTS,
+        updated=functools.WRAPPER_UPDATES,
     ):
         def wrapper(f):
             f = functools.wraps(wrapped, assigned, updated)(f)
@@ -889,7 +883,6 @@ else:
 
 def with_metaclass(meta, *bases):
     """Create a base class with a metaclass."""
-
     # This requires a bit of explanation: the basic idea is to make a dummy
     # metaclass for one level of class instantiation that replaces itself with
     # the actual metaclass.
@@ -1018,8 +1011,8 @@ if sys.meta_path:
         # the six meta path importer, since the other six instance will have
         # inserted an importer with different class.
         if (
-                type(importer).__name__ == "_SixMetaPathImporter"
-                and importer.name == __name__
+            type(importer).__name__ == "_SixMetaPathImporter"
+            and importer.name == __name__
         ):
             del sys.meta_path[i]
             break

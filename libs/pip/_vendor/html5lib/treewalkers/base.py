@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, unicode_literals
 
 from xml.dom import Node
-
 from ..constants import namespaces, voidElements, spaceCharacters
 
 __all__ = ["DOCUMENT", "DOCTYPE", "TEXT", "ELEMENT", "COMMENT", "ENTITY", "UNKNOWN",
@@ -25,7 +24,6 @@ class TreeWalker(object):
     token.
 
     """
-
     def __init__(self, tree):
         """Creates a TreeWalker
 

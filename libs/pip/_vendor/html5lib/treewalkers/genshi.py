@@ -5,6 +5,7 @@ from genshi.core import START, END, XML_NAMESPACE, DOCTYPE, TEXT
 from genshi.core import START_NS, END_NS, START_CDATA, END_CDATA, PI, COMMENT
 
 from . import base
+
 from ..constants import voidElements, namespaces
 
 

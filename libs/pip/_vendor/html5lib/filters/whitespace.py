@@ -4,7 +4,6 @@ import re
 
 from . import base
 from ..constants import rcdataElements, spaceCharacters
-
 spaceCharacters = "".join(spaceCharacters)
 
 SPACES_REGEX = re.compile("[%s]+" % spaceCharacters)

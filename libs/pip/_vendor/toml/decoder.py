@@ -1,8 +1,8 @@
 import datetime
 import io
+from os import linesep
 import re
 import sys
-from os import linesep
 
 from pip._vendor.toml.tz import TomlTz
 
@@ -42,6 +42,7 @@ try:
     FNFError = FileNotFoundError
 except NameError:
     FNFError = IOError
+
 
 TIME_RE = re.compile(r"([0-9]{2}):([0-9]{2}):([0-9]{2})(\.([0-9]{3,6}))?")
 

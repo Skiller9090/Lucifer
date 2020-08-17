@@ -10,6 +10,7 @@ import sys
 
 __all__ = ['cache_from_source', 'callable', 'fsencode']
 
+
 try:
     from imp import cache_from_source
 except ImportError:
@@ -17,14 +18,15 @@ except ImportError:
         ext = debug and 'c' or 'o'
         return py_file + ext
 
+
 try:
     callable = callable
 except NameError:
     from collections import Callable
 
-
     def callable(obj):
         return isinstance(obj, Callable)
+
 
 try:
     fsencode = os.fsencode

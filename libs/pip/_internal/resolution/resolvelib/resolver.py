@@ -1,6 +1,11 @@
 import functools
 import logging
 
+from pip._vendor import six
+from pip._vendor.packaging.utils import canonicalize_name
+from pip._vendor.resolvelib import BaseReporter, ResolutionImpossible
+from pip._vendor.resolvelib import Resolver as RLResolver
+
 from pip._internal.exceptions import InstallationError
 from pip._internal.req.req_install import check_invalid_constraint_type
 from pip._internal.req.req_set import RequirementSet
@@ -8,10 +13,6 @@ from pip._internal.resolution.base import BaseResolver
 from pip._internal.resolution.resolvelib.provider import PipProvider
 from pip._internal.utils.misc import dist_is_editable
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor import six
-from pip._vendor.packaging.utils import canonicalize_name
-from pip._vendor.resolvelib import BaseReporter, ResolutionImpossible
-from pip._vendor.resolvelib import Resolver as RLResolver
 
 from .factory import Factory
 
@@ -28,6 +29,7 @@ if MYPY_CHECK_RUNNING:
     from pip._internal.req.req_install import InstallRequirement
     from pip._internal.resolution.base import InstallRequirementProvider
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -35,19 +37,19 @@ class Resolver(BaseResolver):
     _allowed_strategies = {"eager", "only-if-needed", "to-satisfy-only"}
 
     def __init__(
-            self,
-            preparer,  # type: RequirementPreparer
-            finder,  # type: PackageFinder
-            wheel_cache,  # type: Optional[WheelCache]
-            make_install_req,  # type: InstallRequirementProvider
-            use_user_site,  # type: bool
-            ignore_dependencies,  # type: bool
-            ignore_installed,  # type: bool
-            ignore_requires_python,  # type: bool
-            force_reinstall,  # type: bool
-            upgrade_strategy,  # type: str
-            py_version_info=None,  # type: Optional[Tuple[int, ...]]
-            lazy_wheel=False,  # type: bool
+        self,
+        preparer,  # type: RequirementPreparer
+        finder,  # type: PackageFinder
+        wheel_cache,  # type: Optional[WheelCache]
+        make_install_req,  # type: InstallRequirementProvider
+        use_user_site,  # type: bool
+        ignore_dependencies,  # type: bool
+        ignore_installed,  # type: bool
+        ignore_requires_python,  # type: bool
+        force_reinstall,  # type: bool
+        upgrade_strategy,  # type: str
+        py_version_info=None,  # type: Optional[Tuple[int, ...]]
+        lazy_wheel=False,  # type: bool
     ):
         super(Resolver, self).__init__()
         if lazy_wheel:
@@ -88,7 +90,8 @@ class Resolver(BaseResolver):
                 problem = check_invalid_constraint_type(req)
                 if problem:
                     raise InstallationError(problem)
-
+                if not req.match_markers():
+                    continue
                 name = canonicalize_name(req.name)
                 if name in constraints:
                     constraints[name] = constraints[name] & req.specifier
@@ -242,8 +245,8 @@ def get_topological_weights(graph):
 
 
 def _req_set_item_sorter(
-        item,  # type: Tuple[str, InstallRequirement]
-        weights,  # type: Dict[Optional[str], int]
+    item,     # type: Tuple[str, InstallRequirement]
+    weights,  # type: Dict[Optional[str], int]
 ):
     # type: (...) -> Tuple[int, str]
     """Key function used to sort install requirements for installation.

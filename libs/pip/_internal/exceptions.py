@@ -4,8 +4,9 @@ from __future__ import absolute_import
 
 from itertools import chain, groupby, repeat
 
-from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._vendor.six import iteritems
+
+from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:
     from typing import Any, Optional, List, Dict, Text
@@ -137,7 +138,6 @@ class MetadataInconsistent(InstallationError):
     that do not match the information previously obtained from sdist filename
     or user-supplied ``#egg=`` value.
     """
-
     def __init__(self, ireq, field, built):
         # type: (InstallRequirement, str, Any) -> None
         self.ireq = ireq
@@ -339,7 +339,6 @@ class HashMismatch(HashError):
                     Got        bcdefbcdefbcdefbcdefbcdefbcdefbcdefbcdefbcdef
 
         """
-
         def hash_then_or(hash_name):
             # type: (str) -> chain[str]
             # For now, all the decent hashes have 6-char names, so we can get
@@ -352,7 +351,7 @@ class HashMismatch(HashError):
             lines.extend(('        Expected {} {}'.format(next(prefix), e))
                          for e in expecteds)
             lines.append('             Got        {}\n'.format(
-                self.gots[hash_name].hexdigest()))
+                         self.gots[hash_name].hexdigest()))
         return '\n'.join(lines)
 
 

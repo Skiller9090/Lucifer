@@ -26,6 +26,7 @@ if MYPY_CHECK_RUNNING:
 
     from distutils.cmd import Command as DistutilsCommand
 
+
 # Application Directories
 USER_CACHE_DIR = appdirs.user_cache_dir("pip")
 
@@ -92,7 +93,7 @@ else:
 
 
 def distutils_scheme(
-        dist_name, user=False, home=None, root=None, isolated=False, prefix=None
+    dist_name, user=False, home=None, root=None, isolated=False, prefix=None
 ):
     # type:(str, bool, str, str, bool, str) -> Dict[str, str]
     """
@@ -156,12 +157,12 @@ def distutils_scheme(
 
 
 def get_scheme(
-        dist_name,  # type: str
-        user=False,  # type: bool
-        home=None,  # type: Optional[str]
-        root=None,  # type: Optional[str]
-        isolated=False,  # type: bool
-        prefix=None,  # type: Optional[str]
+    dist_name,  # type: str
+    user=False,  # type: bool
+    home=None,  # type: Optional[str]
+    root=None,  # type: Optional[str]
+    isolated=False,  # type: bool
+    prefix=None,  # type: Optional[str]
 ):
     # type: (...) -> Scheme
     """

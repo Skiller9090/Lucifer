@@ -19,12 +19,12 @@ class SelectionPreferences(object):
     # that decision to be made explicit in the calling code, which helps
     # people when reading the code.
     def __init__(
-            self,
-            allow_yanked,  # type: bool
-            allow_all_prereleases=False,  # type: bool
-            format_control=None,  # type: Optional[FormatControl]
-            prefer_binary=False,  # type: bool
-            ignore_requires_python=None,  # type: Optional[bool]
+        self,
+        allow_yanked,  # type: bool
+        allow_all_prereleases=False,  # type: bool
+        format_control=None,          # type: Optional[FormatControl]
+        prefer_binary=False,          # type: bool
+        ignore_requires_python=None,  # type: Optional[bool]
     ):
         # type: (...) -> None
         """Create a SelectionPreferences object.

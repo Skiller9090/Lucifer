@@ -55,6 +55,7 @@ except ImportError:
     class UnsupportedExtension(Exception):
         pass
 
+
 from socket import timeout, error as SocketError
 from io import BytesIO
 
@@ -70,6 +71,7 @@ from ..packages import six
 import sys
 
 from .. import util
+
 
 __all__ = ["inject_into_urllib3", "extract_from_urllib3"]
 
@@ -91,11 +93,12 @@ if hasattr(ssl, "PROTOCOL_TLSv1_1") and hasattr(OpenSSL.SSL, "TLSv1_1_METHOD"):
 if hasattr(ssl, "PROTOCOL_TLSv1_2") and hasattr(OpenSSL.SSL, "TLSv1_2_METHOD"):
     _openssl_versions[ssl.PROTOCOL_TLSv1_2] = OpenSSL.SSL.TLSv1_2_METHOD
 
+
 _stdlib_to_openssl_verify = {
     ssl.CERT_NONE: OpenSSL.SSL.VERIFY_NONE,
     ssl.CERT_OPTIONAL: OpenSSL.SSL.VERIFY_PEER,
     ssl.CERT_REQUIRED: OpenSSL.SSL.VERIFY_PEER
-                       + OpenSSL.SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
+    + OpenSSL.SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
 }
 _openssl_to_stdlib_verify = dict((v, k) for k, v in _stdlib_to_openssl_verify.items())
 
@@ -104,6 +107,7 @@ SSL_WRITE_BLOCKSIZE = 16384
 
 orig_util_HAS_SNI = util.HAS_SNI
 orig_util_SSLContext = util.ssl_.SSLContext
+
 
 log = logging.getLogger(__name__)
 
@@ -183,7 +187,7 @@ def _dnsname_to_stdlib(name):
         try:
             for prefix in [u"*.", u"."]:
                 if name.startswith(prefix):
-                    name = name[len(prefix):]
+                    name = name[len(prefix) :]
                     return prefix.encode("ascii") + idna.encode(name)
             return idna.encode(name)
         except idna.core.IDNAError:
@@ -221,10 +225,10 @@ def get_subj_alt_name(peer_cert):
         # No such extension, return the empty list.
         return []
     except (
-            x509.DuplicateExtension,
-            UnsupportedExtension,
-            x509.UnsupportedGeneralNameType,
-            UnicodeError,
+        x509.DuplicateExtension,
+        UnsupportedExtension,
+        x509.UnsupportedGeneralNameType,
+        UnicodeError,
     ) as e:
         # A problem has been found with the quality of the certificate. Assume
         # no SAN field is present.
@@ -345,7 +349,7 @@ class WrappedSocket(object):
         total_sent = 0
         while total_sent < len(data):
             sent = self._send_until_done(
-                data[total_sent: total_sent + SSL_WRITE_BLOCKSIZE]
+                data[total_sent : total_sent + SSL_WRITE_BLOCKSIZE]
             )
             total_sent += sent
 
@@ -462,12 +466,12 @@ class PyOpenSSLContext(object):
         self._ctx.use_privatekey_file(keyfile or certfile)
 
     def wrap_socket(
-            self,
-            sock,
-            server_side=False,
-            do_handshake_on_connect=True,
-            suppress_ragged_eofs=True,
-            server_hostname=None,
+        self,
+        sock,
+        server_side=False,
+        do_handshake_on_connect=True,
+        suppress_ragged_eofs=True,
+        server_hostname=None,
     ):
         cnx = OpenSSL.SSL.Connection(self._ctx, sock)
 

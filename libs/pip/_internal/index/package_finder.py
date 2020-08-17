@@ -8,6 +8,10 @@ from __future__ import absolute_import
 import logging
 import re
 
+from pip._vendor.packaging import specifiers
+from pip._vendor.packaging.utils import canonicalize_name
+from pip._vendor.packaging.version import parse as parse_version
+
 from pip._internal.exceptions import (
     BestVersionAlreadyInstalled,
     DistributionNotFound,
@@ -28,9 +32,6 @@ from pip._internal.utils.packaging import check_requires_python
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.unpacking import SUPPORTED_EXTENSIONS
 from pip._internal.utils.urls import url_to_path
-from pip._vendor.packaging import specifiers
-from pip._vendor.packaging.utils import canonicalize_name
-from pip._vendor.packaging.version import parse as parse_version
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -50,15 +51,17 @@ if MYPY_CHECK_RUNNING:
         Tuple[int, int, int, _BaseVersion, BuildTag, Optional[int]]
     )
 
+
 __all__ = ['FormatControl', 'BestCandidateResult', 'PackageFinder']
+
 
 logger = logging.getLogger(__name__)
 
 
 def _check_link_requires_python(
-        link,  # type: Link
-        version_info,  # type: Tuple[int, int, int]
-        ignore_requires_python=False,  # type: bool
+    link,  # type: Link
+    version_info,  # type: Tuple[int, int, int]
+    ignore_requires_python=False,  # type: bool
 ):
     # type: (...) -> bool
     """
@@ -99,6 +102,7 @@ def _check_link_requires_python(
 
 
 class LinkEvaluator(object):
+
     """
     Responsible for evaluating links for a particular project.
     """
@@ -110,13 +114,13 @@ class LinkEvaluator(object):
     # that decision to be made explicit in the calling code, which helps
     # people when reading the code.
     def __init__(
-            self,
-            project_name,  # type: str
-            canonical_name,  # type: str
-            formats,  # type: FrozenSet[str]
-            target_python,  # type: TargetPython
-            allow_yanked,  # type: bool
-            ignore_requires_python=None,  # type: Optional[bool]
+        self,
+        project_name,    # type: str
+        canonical_name,  # type: str
+        formats,         # type: FrozenSet[str]
+        target_python,   # type: TargetPython
+        allow_yanked,    # type: bool
+        ignore_requires_python=None,  # type: Optional[bool]
     ):
         # type: (...) -> None
         """
@@ -239,9 +243,9 @@ class LinkEvaluator(object):
 
 
 def filter_unallowed_hashes(
-        candidates,  # type: List[InstallationCandidate]
-        hashes,  # type: Hashes
-        project_name,  # type: str
+    candidates,    # type: List[InstallationCandidate]
+    hashes,        # type: Hashes
+    project_name,  # type: str
 ):
     # type: (...) -> List[InstallationCandidate]
     """
@@ -314,15 +318,16 @@ def filter_unallowed_hashes(
 
 
 class CandidatePreferences(object):
+
     """
     Encapsulates some of the preferences for filtering and sorting
     InstallationCandidate objects.
     """
 
     def __init__(
-            self,
-            prefer_binary=False,  # type: bool
-            allow_all_prereleases=False,  # type: bool
+        self,
+        prefer_binary=False,  # type: bool
+        allow_all_prereleases=False,  # type: bool
     ):
         # type: (...) -> None
         """
@@ -340,10 +345,10 @@ class BestCandidateResult(object):
     """
 
     def __init__(
-            self,
-            candidates,  # type: List[InstallationCandidate]
-            applicable_candidates,  # type: List[InstallationCandidate]
-            best_candidate,  # type: Optional[InstallationCandidate]
+        self,
+        candidates,             # type: List[InstallationCandidate]
+        applicable_candidates,  # type: List[InstallationCandidate]
+        best_candidate,         # type: Optional[InstallationCandidate]
     ):
         # type: (...) -> None
         """
@@ -378,6 +383,7 @@ class BestCandidateResult(object):
 
 
 class CandidateEvaluator(object):
+
     """
     Responsible for filtering and sorting candidates for installation based
     on what tags are valid.
@@ -385,13 +391,13 @@ class CandidateEvaluator(object):
 
     @classmethod
     def create(
-            cls,
-            project_name,  # type: str
-            target_python=None,  # type: Optional[TargetPython]
-            prefer_binary=False,  # type: bool
-            allow_all_prereleases=False,  # type: bool
-            specifier=None,  # type: Optional[specifiers.BaseSpecifier]
-            hashes=None,  # type: Optional[Hashes]
+        cls,
+        project_name,         # type: str
+        target_python=None,   # type: Optional[TargetPython]
+        prefer_binary=False,  # type: bool
+        allow_all_prereleases=False,  # type: bool
+        specifier=None,       # type: Optional[specifiers.BaseSpecifier]
+        hashes=None,          # type: Optional[Hashes]
     ):
         # type: (...) -> CandidateEvaluator
         """Create a CandidateEvaluator object.
@@ -421,13 +427,13 @@ class CandidateEvaluator(object):
         )
 
     def __init__(
-            self,
-            project_name,  # type: str
-            supported_tags,  # type: List[Tag]
-            specifier,  # type: specifiers.BaseSpecifier
-            prefer_binary=False,  # type: bool
-            allow_all_prereleases=False,  # type: bool
-            hashes=None,  # type: Optional[Hashes]
+        self,
+        project_name,         # type: str
+        supported_tags,       # type: List[Tag]
+        specifier,            # type: specifiers.BaseSpecifier
+        prefer_binary=False,  # type: bool
+        allow_all_prereleases=False,  # type: bool
+        hashes=None,                  # type: Optional[Hashes]
     ):
         # type: (...) -> None
         """
@@ -442,8 +448,8 @@ class CandidateEvaluator(object):
         self._supported_tags = supported_tags
 
     def get_applicable_candidates(
-            self,
-            candidates,  # type: List[InstallationCandidate]
+        self,
+        candidates,  # type: List[InstallationCandidate]
     ):
         # type: (...) -> List[InstallationCandidate]
         """
@@ -540,8 +546,8 @@ class CandidateEvaluator(object):
         )
 
     def sort_best_candidate(
-            self,
-            candidates,  # type: List[InstallationCandidate]
+        self,
+        candidates,    # type: List[InstallationCandidate]
     ):
         # type: (...) -> Optional[InstallationCandidate]
         """
@@ -554,8 +560,8 @@ class CandidateEvaluator(object):
         return best_candidate
 
     def compute_best_candidate(
-            self,
-            candidates,  # type: List[InstallationCandidate]
+        self,
+        candidates,      # type: List[InstallationCandidate]
     ):
         # type: (...) -> BestCandidateResult
         """
@@ -580,13 +586,13 @@ class PackageFinder(object):
     """
 
     def __init__(
-            self,
-            link_collector,  # type: LinkCollector
-            target_python,  # type: TargetPython
-            allow_yanked,  # type: bool
-            format_control=None,  # type: Optional[FormatControl]
-            candidate_prefs=None,  # type: CandidatePreferences
-            ignore_requires_python=None,  # type: Optional[bool]
+        self,
+        link_collector,       # type: LinkCollector
+        target_python,        # type: TargetPython
+        allow_yanked,         # type: bool
+        format_control=None,  # type: Optional[FormatControl]
+        candidate_prefs=None,         # type: CandidatePreferences
+        ignore_requires_python=None,  # type: Optional[bool]
     ):
         # type: (...) -> None
         """
@@ -621,10 +627,10 @@ class PackageFinder(object):
     # people when reading the code.
     @classmethod
     def create(
-            cls,
-            link_collector,  # type: LinkCollector
-            selection_prefs,  # type: SelectionPreferences
-            target_python=None,  # type: Optional[TargetPython]
+        cls,
+        link_collector,      # type: LinkCollector
+        selection_prefs,     # type: SelectionPreferences
+        target_python=None,  # type: Optional[TargetPython]
     ):
         # type: (...) -> PackageFinder
         """Create a PackageFinder.
@@ -839,10 +845,10 @@ class PackageFinder(object):
         return file_versions + find_links_versions + page_versions
 
     def make_candidate_evaluator(
-            self,
-            project_name,  # type: str
-            specifier=None,  # type: Optional[specifiers.BaseSpecifier]
-            hashes=None,  # type: Optional[Hashes]
+        self,
+        project_name,    # type: str
+        specifier=None,  # type: Optional[specifiers.BaseSpecifier]
+        hashes=None,     # type: Optional[Hashes]
     ):
         # type: (...) -> CandidateEvaluator
         """Create a CandidateEvaluator object to use.
@@ -858,10 +864,10 @@ class PackageFinder(object):
         )
 
     def find_best_candidate(
-            self,
-            project_name,  # type: str
-            specifier=None,  # type: Optional[specifiers.BaseSpecifier]
-            hashes=None,  # type: Optional[Hashes]
+        self,
+        project_name,       # type: str
+        specifier=None,     # type: Optional[specifiers.BaseSpecifier]
+        hashes=None,        # type: Optional[Hashes]
     ):
         # type: (...) -> BestCandidateResult
         """Find matches for the given project and specifier.
@@ -894,7 +900,7 @@ class PackageFinder(object):
         )
         best_candidate = best_candidate_result.best_candidate
 
-        installed_version = None  # type: Optional[_BaseVersion]
+        installed_version = None    # type: Optional[_BaseVersion]
         if req.satisfied_by is not None:
             installed_version = parse_version(req.satisfied_by.version)
 

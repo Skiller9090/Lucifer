@@ -17,9 +17,11 @@ else:
     except ImportError:
         import xml.etree.ElementTree as default_etree
 
+
 __all__ = ["default_etree", "MethodDispatcher", "isSurrogatePair",
            "surrogatePairToCodepoint", "moduleFactoryFactory",
            "supports_lone_surrogates"]
+
 
 # Platforms not supporting lone surrogates (\uD800-\uDFFF) should be
 # caught by the below test. In general this would be any platform
@@ -73,7 +75,6 @@ class MethodDispatcher(dict):
 
 class BoundMethodDispatcher(Mapping):
     """Wraps a MethodDispatcher, binding its return values to `instance`"""
-
     def __init__(self, instance, dispatcher):
         self.instance = instance
         self.dispatcher = dispatcher
@@ -112,7 +113,6 @@ def surrogatePairToCodepoint(data):
     char_val = (0x10000 + (ord(data[0]) - 0xD800) * 0x400 +
                 (ord(data[1]) - 0xDC00))
     return char_val
-
 
 # Module Factory Factory (no, this isn't Java, I know)
 # Here to stop this being duplicated all over the place.

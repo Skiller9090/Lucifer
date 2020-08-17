@@ -1,13 +1,11 @@
 from __future__ import absolute_import
-
+import re
 import datetime
 import logging
 import os
-import re
 import socket
-import warnings
 from socket import error as SocketError, timeout as SocketTimeout
-
+import warnings
 from .packages import six
 from .packages.six.moves.http_client import HTTPConnection as _HTTPConnection
 from .packages.six.moves.http_client import HTTPException  # noqa: F401
@@ -19,9 +17,9 @@ try:  # Compiled with SSL?
 except (ImportError, AttributeError):  # Platform-specific: No SSL.
     ssl = None
 
-
     class BaseSSLError(BaseException):
         pass
+
 
 try:
     # Python 3: not a no-op, we're adding this to the namespace so it can be imported.
@@ -30,6 +28,7 @@ except NameError:
     # Python 2
     class ConnectionError(Exception):
         pass
+
 
 from .exceptions import (
     NewConnectionError,
@@ -46,6 +45,7 @@ from .util.ssl_ import (
     create_urllib3_context,
     ssl_wrap_socket,
 )
+
 
 from .util import connection
 
@@ -245,17 +245,17 @@ class HTTPSConnection(HTTPConnection):
     assert_fingerprint = None
 
     def __init__(
-            self,
-            host,
-            port=None,
-            key_file=None,
-            cert_file=None,
-            key_password=None,
-            strict=None,
-            timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
-            ssl_context=None,
-            server_hostname=None,
-            **kw
+        self,
+        host,
+        port=None,
+        key_file=None,
+        cert_file=None,
+        key_password=None,
+        strict=None,
+        timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
+        ssl_context=None,
+        server_hostname=None,
+        **kw
     ):
 
         HTTPConnection.__init__(self, host, port, strict=strict, timeout=timeout, **kw)
@@ -271,16 +271,16 @@ class HTTPSConnection(HTTPConnection):
         self._protocol = "https"
 
     def set_cert(
-            self,
-            key_file=None,
-            cert_file=None,
-            cert_reqs=None,
-            key_password=None,
-            ca_certs=None,
-            assert_hostname=None,
-            assert_fingerprint=None,
-            ca_cert_dir=None,
-            ca_cert_data=None,
+        self,
+        key_file=None,
+        cert_file=None,
+        cert_reqs=None,
+        key_password=None,
+        ca_certs=None,
+        assert_hostname=None,
+        assert_fingerprint=None,
+        ca_cert_dir=None,
+        ca_cert_data=None,
     ):
         """
         This method should only be called once, before the connection is used.
@@ -350,11 +350,11 @@ class HTTPSConnection(HTTPConnection):
         # Try to load OS default certs if none are given.
         # Works well on Windows (requires Python3.4+)
         if (
-                not self.ca_certs
-                and not self.ca_cert_dir
-                and not self.ca_cert_data
-                and default_ssl_context
-                and hasattr(context, "load_default_certs")
+            not self.ca_certs
+            and not self.ca_cert_dir
+            and not self.ca_cert_data
+            and default_ssl_context
+            and hasattr(context, "load_default_certs")
         ):
             context.load_default_certs()
 
@@ -375,9 +375,9 @@ class HTTPSConnection(HTTPConnection):
                 self.sock.getpeercert(binary_form=True), self.assert_fingerprint
             )
         elif (
-                context.verify_mode != ssl.CERT_NONE
-                and not getattr(context, "check_hostname", False)
-                and self.assert_hostname is not False
+            context.verify_mode != ssl.CERT_NONE
+            and not getattr(context, "check_hostname", False)
+            and self.assert_hostname is not False
         ):
             # While urllib3 attempts to always turn off hostname matching from
             # the TLS library, this cannot always be done. So we check whether
@@ -396,8 +396,8 @@ class HTTPSConnection(HTTPConnection):
             _match_hostname(cert, self.assert_hostname or server_hostname)
 
         self.is_verified = (
-                context.verify_mode == ssl.CERT_REQUIRED
-                or self.assert_fingerprint is not None
+            context.verify_mode == ssl.CERT_REQUIRED
+            or self.assert_fingerprint is not None
         )
 
 
@@ -418,5 +418,6 @@ def _match_hostname(cert, asserted_hostname):
 
 if not ssl:
     HTTPSConnection = DummyConnection  # noqa: F811
+
 
 VerifiedHTTPSConnection = HTTPSConnection

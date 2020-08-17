@@ -1,7 +1,5 @@
 from __future__ import absolute_import
-
 from .packages.six.moves.http_client import IncompleteRead as httplib_IncompleteRead
-
 
 # Base Exceptions
 
@@ -254,7 +252,6 @@ class InvalidHeader(HTTPError):
 
 class ProxySchemeUnknown(AssertionError, ValueError):
     "ProxyManager does not support the supplied scheme"
-
     # TODO(t-8ch): Stop inheriting from AssertionError in v2.0.
 
     def __init__(self, scheme):

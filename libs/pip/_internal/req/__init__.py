@@ -32,7 +32,7 @@ class InstallationResult(object):
 
 
 def _validate_requirements(
-        requirements,  # type: List[InstallRequirement]
+    requirements,  # type: List[InstallRequirement]
 ):
     # type: (...) -> Iterator[Tuple[str, InstallRequirement]]
     for req in requirements:
@@ -41,15 +41,15 @@ def _validate_requirements(
 
 
 def install_given_reqs(
-        requirements,  # type: List[InstallRequirement]
-        install_options,  # type: List[str]
-        global_options,  # type: Sequence[str]
-        root,  # type: Optional[str]
-        home,  # type: Optional[str]
-        prefix,  # type: Optional[str]
-        warn_script_location,  # type: bool
-        use_user_site,  # type: bool
-        pycompile,  # type: bool
+    requirements,  # type: List[InstallRequirement]
+    install_options,  # type: List[str]
+    global_options,  # type: Sequence[str]
+    root,  # type: Optional[str]
+    home,  # type: Optional[str]
+    prefix,  # type: Optional[str]
+    warn_script_location,  # type: bool
+    use_user_site,  # type: bool
+    pycompile,  # type: bool
 ):
     # type: (...) -> List[InstallationResult]
     """

@@ -1,8 +1,9 @@
 # coding: utf-8
-import datetime
-import struct
-import sys
 from collections import namedtuple
+import datetime
+import sys
+import struct
+
 
 PY2 = sys.version_info[0] == 2
 
@@ -75,7 +76,7 @@ class Timestamp(object):
         """Check for equality with another Timestamp object"""
         if type(other) is self.__class__:
             return (
-                    self.seconds == other.seconds and self.nanoseconds == other.nanoseconds
+                self.seconds == other.seconds and self.nanoseconds == other.nanoseconds
             )
         return False
 

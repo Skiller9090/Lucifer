@@ -9,12 +9,13 @@ from collections import OrderedDict
 from distutils.sysconfig import get_python_lib
 from sysconfig import get_paths
 
+from pip._vendor.pkg_resources import Requirement, VersionConflict, WorkingSet
+
 from pip import __file__ as pip_location
 from pip._internal.cli.spinners import open_spinner
 from pip._internal.utils.subprocess import call_subprocess
 from pip._internal.utils.temp_dir import TempDirectory, tempdir_kinds
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor.pkg_resources import Requirement, VersionConflict, WorkingSet
 
 if MYPY_CHECK_RUNNING:
     from types import TracebackType
@@ -126,10 +127,10 @@ class BuildEnvironment(object):
         })
 
     def __exit__(
-            self,
-            exc_type,  # type: Optional[Type[BaseException]]
-            exc_val,  # type: Optional[BaseException]
-            exc_tb  # type: Optional[TracebackType]
+        self,
+        exc_type,  # type: Optional[Type[BaseException]]
+        exc_val,  # type: Optional[BaseException]
+        exc_tb  # type: Optional[TracebackType]
     ):
         # type: (...) -> None
         for varname, old_value in self._save_env.items():
@@ -158,11 +159,11 @@ class BuildEnvironment(object):
         return conflicting, missing
 
     def install_requirements(
-            self,
-            finder,  # type: PackageFinder
-            requirements,  # type: Iterable[str]
-            prefix_as_string,  # type: str
-            message  # type: str
+        self,
+        finder,  # type: PackageFinder
+        requirements,  # type: Iterable[str]
+        prefix_as_string,  # type: str
+        message  # type: str
     ):
         # type: (...) -> None
         prefix = self._prefixes[prefix_as_string]
@@ -217,10 +218,10 @@ class NoOpBuildEnvironment(BuildEnvironment):
         pass
 
     def __exit__(
-            self,
-            exc_type,  # type: Optional[Type[BaseException]]
-            exc_val,  # type: Optional[BaseException]
-            exc_tb  # type: Optional[TracebackType]
+        self,
+        exc_type,  # type: Optional[Type[BaseException]]
+        exc_val,  # type: Optional[BaseException]
+        exc_tb  # type: Optional[TracebackType]
     ):
         # type: (...) -> None
         pass
@@ -230,11 +231,11 @@ class NoOpBuildEnvironment(BuildEnvironment):
         pass
 
     def install_requirements(
-            self,
-            finder,  # type: PackageFinder
-            requirements,  # type: Iterable[str]
-            prefix_as_string,  # type: str
-            message  # type: str
+        self,
+        finder,  # type: PackageFinder
+        requirements,  # type: Iterable[str]
+        prefix_as_string,  # type: str
+        message  # type: str
     ):
         # type: (...) -> None
         raise NotImplementedError()

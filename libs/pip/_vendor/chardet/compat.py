@@ -21,6 +21,7 @@
 
 import sys
 
+
 if sys.version_info < (3, 0):
     PY2 = True
     PY3 = False

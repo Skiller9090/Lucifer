@@ -11,15 +11,17 @@ import os
 import sys
 from logging import Filter, getLogger
 
+from pip._vendor.six import PY2
+
 from pip._internal.utils.compat import WINDOWS
 from pip._internal.utils.deprecation import DEPRECATION_MSG_PREFIX
 from pip._internal.utils.misc import ensure_dir
-from pip._vendor.six import PY2
 
 try:
     import threading
 except ImportError:
     import dummy_threading as threading  # type: ignore
+
 
 try:
     # Use "import as" and set colorama in the else clause to avoid mypy
@@ -47,6 +49,7 @@ else:
     from pip._vendor.colorama import Fore
 
     colorama = _colorama
+
 
 _log_state = threading.local()
 subprocess_logger = getLogger('pip.subprocessor')
@@ -166,11 +169,11 @@ class IndentingFormatter(logging.Formatter):
 def _color_wrap(*colors):
     def wrapped(inp):
         return "".join(list(colors) + [inp, colorama.Style.RESET_ALL])
-
     return wrapped
 
 
 class ColorizedStreamHandler(logging.StreamHandler):
+
     # Don't build up a list of colors if we don't have colorama
     if colorama:
         COLORS = [
@@ -261,6 +264,7 @@ class MaxLevelFilter(Filter):
 
 
 class ExcludeLoggerFilter(Filter):
+
     """
     A logging Filter that excludes records from a logger (or its children).
     """

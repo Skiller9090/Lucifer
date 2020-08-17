@@ -144,8 +144,8 @@ class Command(CommandContextMixIn):
         )
 
         if (
-                sys.version_info[:2] == (2, 7) and
-                not options.no_python_version_warning
+            sys.version_info[:2] == (2, 7) and
+            not options.no_python_version_warning
         ):
             message = (
                 "pip 21.0 will drop support for Python 2.7 in January 2021. "
@@ -154,10 +154,10 @@ class Command(CommandContextMixIn):
             )
             if platform.python_implementation() == "CPython":
                 message = (
-                              "Python 2.7 reached the end of its life on January "
-                              "1st, 2020. Please upgrade your Python as Python 2.7 "
-                              "is no longer maintained. "
-                          ) + message
+                    "Python 2.7 reached the end of its life on January "
+                    "1st, 2020. Please upgrade your Python as Python 2.7 "
+                    "is no longer maintained. "
+                ) + message
             deprecated(message, replacement=None, gone_in=None)
 
         # TODO: Try to get these passing down from the command?

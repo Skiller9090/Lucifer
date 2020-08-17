@@ -4,6 +4,7 @@ from .compat import collections_abc
 from .providers import AbstractResolver
 from .structs import DirectedGraph
 
+
 RequirementInformation = collections.namedtuple(
     "RequirementInformation", ["requirement", "parent"]
 )

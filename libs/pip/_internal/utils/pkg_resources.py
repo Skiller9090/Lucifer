@@ -1,6 +1,7 @@
-from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._vendor.pkg_resources import yield_lines
 from pip._vendor.six import ensure_str
+
+from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:
     from typing import Dict, Iterable, List
@@ -9,7 +10,6 @@ if MYPY_CHECK_RUNNING:
 class DictMetadata(object):
     """IMetadataProvider that reads metadata files from a dictionary.
     """
-
     def __init__(self, metadata):
         # type: (Dict[str, bytes]) -> None
         self._metadata = metadata

@@ -15,11 +15,14 @@ except ImportError:  # Platform-specific: No threads available
         def __exit__(self, exc_type, exc_value, traceback):
             pass
 
+
 from collections import OrderedDict
 from .exceptions import InvalidHeader
 from .packages.six import iterkeys, itervalues, PY3
 
+
 __all__ = ["RecentlyUsedContainer", "HTTPHeaderDict"]
+
 
 _Null = object()
 

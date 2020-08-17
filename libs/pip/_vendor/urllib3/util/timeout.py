@@ -1,15 +1,16 @@
 from __future__ import absolute_import
 
-import time
 # The default socket timeout, used by httplib to indicate that no timeout was
 # specified by the user
 from socket import _GLOBAL_DEFAULT_TIMEOUT
+import time
 
 from ..exceptions import TimeoutStateError
 
 # A sentinel value to indicate that no timeout was specified by the user in
 # urllib3
 _Default = object()
+
 
 # Use time.monotonic if available.
 current_time = getattr(time, "monotonic", time.time)
@@ -245,10 +246,10 @@ class Timeout(object):
             has not yet been called on this object.
         """
         if (
-                self.total is not None
-                and self.total is not self.DEFAULT_TIMEOUT
-                and self._read is not None
-                and self._read is not self.DEFAULT_TIMEOUT
+            self.total is not None
+            and self.total is not self.DEFAULT_TIMEOUT
+            and self._read is not None
+            and self._read is not self.DEFAULT_TIMEOUT
         ):
             # In case the connect timeout has not yet been established.
             if self._start_connect is None:

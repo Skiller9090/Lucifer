@@ -5,6 +5,8 @@ import logging
 import mimetypes
 import os
 
+from pip._vendor.requests.models import CONTENT_CHUNK_SIZE
+
 from pip._internal.cli.progress_bars import DownloadProgressProvider
 from pip._internal.exceptions import NetworkConnectionError
 from pip._internal.models.index import PyPI
@@ -20,7 +22,6 @@ from pip._internal.utils.misc import (
     splitext,
 )
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor.requests.models import CONTENT_CHUNK_SIZE
 
 if MYPY_CHECK_RUNNING:
     from typing import Iterable, Optional
@@ -42,9 +43,9 @@ def _get_http_response_size(resp):
 
 
 def _prepare_download(
-        resp,  # type: Response
-        link,  # type: Link
-        progress_bar  # type: str
+    resp,  # type: Response
+    link,  # type: Link
+    progress_bar  # type: str
 ):
     # type: (...) -> Iterable[bytes]
     total_length = _get_http_response_size(resp)
@@ -142,10 +143,10 @@ def _http_get_download(session, link):
 
 class Download(object):
     def __init__(
-            self,
-            response,  # type: Response
-            filename,  # type: str
-            chunks,  # type: Iterable[bytes]
+        self,
+        response,  # type: Response
+        filename,  # type: str
+        chunks,  # type: Iterable[bytes]
     ):
         # type: (...) -> None
         self.response = response
@@ -155,9 +156,9 @@ class Download(object):
 
 class Downloader(object):
     def __init__(
-            self,
-            session,  # type: PipSession
-            progress_bar,  # type: str
+        self,
+        session,  # type: PipSession
+        progress_bar,  # type: str
     ):
         # type: (...) -> None
         self._session = session

@@ -1,9 +1,9 @@
-import contextlib
-import errno
-import io
 import os
-import shutil
+import io
+import contextlib
 import tempfile
+import shutil
+import errno
 import zipfile
 
 

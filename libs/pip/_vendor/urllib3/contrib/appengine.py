@@ -39,12 +39,11 @@ urllib3 on Google App Engine:
 """
 
 from __future__ import absolute_import
-
 import io
 import logging
 import warnings
+from ..packages.six.moves.urllib.parse import urljoin
 
-from . import _appengine_environ
 from ..exceptions import (
     HTTPError,
     HTTPWarning,
@@ -53,16 +52,18 @@ from ..exceptions import (
     TimeoutError,
     SSLError,
 )
-from ..packages.six.moves.urllib.parse import urljoin
+
 from ..request import RequestMethods
 from ..response import HTTPResponse
-from ..util.retry import Retry
 from ..util.timeout import Timeout
+from ..util.retry import Retry
+from . import _appengine_environ
 
 try:
     from google.appengine.api import urlfetch
 except ImportError:
     urlfetch = None
+
 
 log = logging.getLogger(__name__)
 
@@ -96,11 +97,11 @@ class AppEngineManager(RequestMethods):
     """
 
     def __init__(
-            self,
-            headers=None,
-            retries=None,
-            validate_certificate=True,
-            urlfetch_retries=True,
+        self,
+        headers=None,
+        retries=None,
+        validate_certificate=True,
+        urlfetch_retries=True,
     ):
         if not urlfetch:
             raise AppEnginePlatformError(
@@ -128,15 +129,15 @@ class AppEngineManager(RequestMethods):
         return False
 
     def urlopen(
-            self,
-            method,
-            url,
-            body=None,
-            headers=None,
-            retries=None,
-            redirect=True,
-            timeout=Timeout.DEFAULT_TIMEOUT,
-            **response_kw
+        self,
+        method,
+        url,
+        body=None,
+        headers=None,
+        retries=None,
+        redirect=True,
+        timeout=Timeout.DEFAULT_TIMEOUT,
+        **response_kw
     ):
 
         retries = self._get_retries(retries, redirect)

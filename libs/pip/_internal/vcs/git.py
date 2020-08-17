@@ -7,6 +7,10 @@ import logging
 import os.path
 import re
 
+from pip._vendor.packaging.version import parse as parse_version
+from pip._vendor.six.moves.urllib import parse as urllib_parse
+from pip._vendor.six.moves.urllib import request as urllib_request
+
 from pip._internal.exceptions import BadCommand, SubProcessError
 from pip._internal.utils.misc import display_path, hide_url
 from pip._internal.utils.subprocess import make_command
@@ -18,19 +22,19 @@ from pip._internal.vcs.versioncontrol import (
     find_path_to_setup_from_repo_root,
     vcs,
 )
-from pip._vendor.packaging.version import parse as parse_version
-from pip._vendor.six.moves.urllib import parse as urllib_parse
-from pip._vendor.six.moves.urllib import request as urllib_request
 
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Tuple
     from pip._internal.utils.misc import HiddenText
     from pip._internal.vcs.versioncontrol import AuthInfo, RevOptions
 
+
 urlsplit = urllib_parse.urlsplit
 urlunsplit = urllib_parse.urlunsplit
 
+
 logger = logging.getLogger(__name__)
+
 
 HASH_REGEX = re.compile('^[a-fA-F0-9]{40}$')
 
@@ -97,7 +101,7 @@ class Git(VersionControl):
         # and to suppress the message to stderr.
         args = ['symbolic-ref', '-q', 'HEAD']
         output = cls.run_command(
-            args, extra_ok_returncodes=(1,), cwd=location,
+            args, extra_ok_returncodes=(1, ), cwd=location,
         )
         ref = output.strip()
 
@@ -287,7 +291,7 @@ class Git(VersionControl):
         # exits with return code 1 if there are no matching lines.
         stdout = cls.run_command(
             ['config', '--get-regexp', r'remote\..*\.url'],
-            extra_ok_returncodes=(1,), cwd=location,
+            extra_ok_returncodes=(1, ), cwd=location,
         )
         remotes = stdout.splitlines()
         try:
@@ -341,9 +345,9 @@ class Git(VersionControl):
         if scheme.endswith('file'):
             initial_slashes = path[:-len(path.lstrip('/'))]
             newpath = (
-                    initial_slashes +
-                    urllib_request.url2pathname(path)
-                    .replace('\\', '/').lstrip('/')
+                initial_slashes +
+                urllib_request.url2pathname(path)
+                .replace('\\', '/').lstrip('/')
             )
             url = urlunsplit((scheme, netloc, newpath, query, fragment))
             after_plus = scheme.find('+') + 1

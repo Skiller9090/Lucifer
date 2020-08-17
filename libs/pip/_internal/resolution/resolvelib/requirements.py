@@ -1,5 +1,6 @@
-from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._vendor.packaging.utils import canonicalize_name
+
+from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 
 from .base import Requirement, format_name
 
@@ -100,7 +101,6 @@ class SpecifierRequirement(Requirement):
 class RequiresPythonRequirement(Requirement):
     """A requirement representing Requires-Python metadata.
     """
-
     def __init__(self, specifier, match):
         # type: (SpecifierSet, Candidate) -> None
         self.specifier = specifier

@@ -1,9 +1,10 @@
 import os
 import sys
 
-from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._vendor.six.moves.urllib import parse as urllib_parse
 from pip._vendor.six.moves.urllib import request as urllib_request
+
+from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Text, Union
@@ -34,7 +35,7 @@ def url_to_path(url):
     """
     assert url.startswith('file:'), (
         "You can only turn file: urls into filenames (not {url!r})"
-            .format(**locals()))
+        .format(**locals()))
 
     _, netloc, path, _, _ = urllib_parse.urlsplit(url)
 
@@ -47,7 +48,7 @@ def url_to_path(url):
     else:
         raise ValueError(
             'non-local file URIs are not supported on this platform: {url!r}'
-                .format(**locals())
+            .format(**locals())
         )
 
     path = urllib_request.url2pathname(netloc + path)

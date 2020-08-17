@@ -37,7 +37,7 @@ class HashCommand(Command):
             action='store',
             default=FAVORITE_HASH,
             help='The hash algorithm to use: one of {}'.format(
-                ', '.join(STRONG_HASHES)))
+                 ', '.join(STRONG_HASHES)))
         self.parser.insert_option_group(0, self.cmd_opts)
 
     def run(self, options, args):

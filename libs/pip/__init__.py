@@ -3,7 +3,8 @@ from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 if MYPY_CHECK_RUNNING:
     from typing import List, Optional
 
-__version__ = "20.2"
+
+__version__ = "20.2.2"
 
 
 def main(args=None):
@@ -15,7 +16,3 @@ def main(args=None):
     from pip._internal.utils.entrypoints import _wrapper
 
     return _wrapper(args)
-
-
-def install_package(package):
-    main(["install", "-t", "./libs", "--upgrade", package])

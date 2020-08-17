@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
-import re
 from collections import OrderedDict
+import re
 
 from pip._vendor.six import string_types
 
@@ -29,7 +29,6 @@ def getETreeBuilder(ElementTreeImplementation):
         4. A flag "text", "tail" or None to indicate if the current node is a
            text node; either the text or tail of the current element (1)
         """
-
         def getNodeDetails(self, node):
             if isinstance(node, tuple):  # It might be the root Element
                 elt, _, _, flag = node
@@ -38,7 +37,7 @@ def getETreeBuilder(ElementTreeImplementation):
                 else:
                     node = elt
 
-            if not (hasattr(node, "tag")):
+            if not(hasattr(node, "tag")):
                 node = node.getroot()
 
             if node.tag in ("DOCUMENT_ROOT", "DOCUMENT_FRAGMENT"):

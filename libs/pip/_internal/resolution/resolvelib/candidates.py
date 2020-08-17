@@ -1,6 +1,11 @@
 import logging
 import sys
 
+from pip._vendor.contextlib2 import suppress
+from pip._vendor.packaging.specifiers import InvalidSpecifier, SpecifierSet
+from pip._vendor.packaging.utils import canonicalize_name
+from pip._vendor.packaging.version import Version
+
 from pip._internal.exceptions import HashError, MetadataInconsistent
 from pip._internal.network.lazy_wheel import (
     HTTPRangeRequestUnsupported,
@@ -15,10 +20,6 @@ from pip._internal.utils.logging import indent_log
 from pip._internal.utils.misc import dist_is_editable, normalize_version_info
 from pip._internal.utils.packaging import get_requires_python
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor.contextlib2 import suppress
-from pip._vendor.packaging.specifiers import InvalidSpecifier, SpecifierSet
-from pip._vendor.packaging.utils import canonicalize_name
-from pip._vendor.packaging.version import Version
 
 from .base import Candidate, format_name
 
@@ -39,6 +40,7 @@ if MYPY_CHECK_RUNNING:
         "EditableCandidate",
         "LinkCandidate",
     ]
+
 
 logger = logging.getLogger(__name__)
 
@@ -130,13 +132,13 @@ class _InstallRequirementBackedCandidate(Candidate):
     is_installed = False
 
     def __init__(
-            self,
-            link,  # type: Link
-            source_link,  # type: Link
-            ireq,  # type: InstallRequirement
-            factory,  # type: Factory
-            name=None,  # type: Optional[str]
-            version=None,  # type: Optional[_BaseVersion]
+        self,
+        link,          # type: Link
+        source_link,   # type: Link
+        ireq,          # type: InstallRequirement
+        factory,       # type: Factory
+        name=None,     # type: Optional[str]
+        version=None,  # type: Optional[_BaseVersion]
     ):
         # type: (...) -> None
         self._link = link
@@ -273,8 +275,10 @@ class _InstallRequirementBackedCandidate(Candidate):
             return None
         return spec
 
-    def iter_dependencies(self):
-        # type: () -> Iterable[Optional[Requirement]]
+    def iter_dependencies(self, with_requires):
+        # type: (bool) -> Iterable[Optional[Requirement]]
+        if not with_requires:
+            return
         for r in self.dist.requires():
             yield self._factory.make_requirement_from_spec(str(r), self._ireq)
         python_dep = self._factory.make_requires_python_requirement(
@@ -293,12 +297,12 @@ class LinkCandidate(_InstallRequirementBackedCandidate):
     is_editable = False
 
     def __init__(
-            self,
-            link,  # type: Link
-            template,  # type: InstallRequirement
-            factory,  # type: Factory
-            name=None,  # type: Optional[str]
-            version=None,  # type: Optional[_BaseVersion]
+        self,
+        link,          # type: Link
+        template,        # type: InstallRequirement
+        factory,       # type: Factory
+        name=None,     # type: Optional[str]
+        version=None,  # type: Optional[_BaseVersion]
     ):
         # type: (...) -> None
         source_link = link
@@ -333,12 +337,12 @@ class EditableCandidate(_InstallRequirementBackedCandidate):
     is_editable = True
 
     def __init__(
-            self,
-            link,  # type: Link
-            template,  # type: InstallRequirement
-            factory,  # type: Factory
-            name=None,  # type: Optional[str]
-            version=None,  # type: Optional[_BaseVersion]
+        self,
+        link,          # type: Link
+        template,        # type: InstallRequirement
+        factory,       # type: Factory
+        name=None,     # type: Optional[str]
+        version=None,  # type: Optional[_BaseVersion]
     ):
         # type: (...) -> None
         super(EditableCandidate, self).__init__(
@@ -360,10 +364,10 @@ class AlreadyInstalledCandidate(Candidate):
     source_link = None
 
     def __init__(
-            self,
-            dist,  # type: Distribution
-            template,  # type: InstallRequirement
-            factory,  # type: Factory
+        self,
+        dist,  # type: Distribution
+        template,  # type: InstallRequirement
+        factory,  # type: Factory
     ):
         # type: (...) -> None
         self.dist = dist
@@ -418,8 +422,10 @@ class AlreadyInstalledCandidate(Candidate):
         # type: () -> str
         return "{} {} (Installed)".format(self.name, self.version)
 
-    def iter_dependencies(self):
-        # type: () -> Iterable[Optional[Requirement]]
+    def iter_dependencies(self, with_requires):
+        # type: (bool) -> Iterable[Optional[Requirement]]
+        if not with_requires:
+            return
         for r in self.dist.requires():
             yield self._factory.make_requirement_from_spec(str(r), self._ireq)
 
@@ -452,11 +458,10 @@ class ExtrasCandidate(Candidate):
     version 2.0. Having those candidates depend on foo=1.0 and foo=2.0
     respectively forces the resolver to recognise that this is a conflict.
     """
-
     def __init__(
-            self,
-            base,  # type: BaseCandidate
-            extras,  # type: FrozenSet[str]
+        self,
+        base,  # type: BaseCandidate
+        extras,  # type: FrozenSet[str]
     ):
         # type: (...) -> None
         self.base = base
@@ -518,9 +523,15 @@ class ExtrasCandidate(Candidate):
         # type: () -> Optional[Link]
         return self.base.source_link
 
-    def iter_dependencies(self):
-        # type: () -> Iterable[Optional[Requirement]]
+    def iter_dependencies(self, with_requires):
+        # type: (bool) -> Iterable[Optional[Requirement]]
         factory = self.base._factory
+
+        # Add a dependency on the exact base
+        # (See note 2b in the class docstring)
+        yield factory.make_requirement_from_candidate(self.base)
+        if not with_requires:
+            return
 
         # The user may have specified extras that the candidate doesn't
         # support. We ignore any unsupported extras here.
@@ -533,10 +544,6 @@ class ExtrasCandidate(Candidate):
                 self.version,
                 extra
             )
-
-        # Add a dependency on the exact base
-        # (See note 2b in the class docstring)
-        yield factory.make_requirement_from_candidate(self.base)
 
         for r in self.base.dist.requires(valid_extras):
             requirement = factory.make_requirement_from_spec(
@@ -584,8 +591,8 @@ class RequiresPythonCandidate(Candidate):
         # type: () -> str
         return "Python {}".format(self.version)
 
-    def iter_dependencies(self):
-        # type: () -> Iterable[Optional[Requirement]]
+    def iter_dependencies(self, with_requires):
+        # type: (bool) -> Iterable[Optional[Requirement]]
         return ()
 
     def get_install_requirement(self):

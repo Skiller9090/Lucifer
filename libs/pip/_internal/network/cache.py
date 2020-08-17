@@ -4,12 +4,13 @@
 import os
 from contextlib import contextmanager
 
-from pip._internal.utils.filesystem import adjacent_tmp_file, replace
-from pip._internal.utils.misc import ensure_dir
-from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._vendor.cachecontrol.cache import BaseCache
 from pip._vendor.cachecontrol.caches import FileCache
 from pip._vendor.requests.models import Response
+
+from pip._internal.utils.filesystem import adjacent_tmp_file, replace
+from pip._internal.utils.misc import ensure_dir
+from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Iterator

@@ -19,10 +19,11 @@ from ..constants import namespaces, prefixes
 
 __all__ = ["Filter"]
 
+
 _deprecation_msg = (
-        "html5lib's sanitizer is deprecated; see " +
-        "https://github.com/html5lib/html5lib-python/issues/443 and please let " +
-        "us know if Bleach is unsuitable for your needs"
+    "html5lib's sanitizer is deprecated; see " +
+    "https://github.com/html5lib/html5lib-python/issues/443 and please let " +
+    "us know if Bleach is unsuitable for your needs"
 )
 
 warnings.warn(_deprecation_msg, DeprecationWarning)
@@ -705,6 +706,7 @@ allowed_content_types = frozenset((
     'text/plain',
 ))
 
+
 data_content_type = re.compile(r'''
                                 ^
                                 # Match a content type <application>/<type>
@@ -721,7 +723,6 @@ data_content_type = re.compile(r'''
 
 class Filter(base.Filter):
     """Sanitizes token stream of XHTML+MathML+SVG and of inline style attributes"""
-
     def __init__(self,
                  source,
                  allowed_elements=allowed_elements,
@@ -805,8 +806,8 @@ class Filter(base.Filter):
             name = token["name"]
             namespace = token["namespace"]
             if ((namespace, name) in self.allowed_elements or
-                    (namespace is None and
-                     (namespaces["html"], name) in self.allowed_elements)):
+                (namespace is None and
+                 (namespaces["html"], name) in self.allowed_elements)):
                 return self.allowed_token(token)
             else:
                 return self.disallowed_token(token)
@@ -857,8 +858,8 @@ class Filter(base.Filter):
                                          ' ',
                                          unescape(attrs[attr]))
             if (token["name"] in self.svg_allow_local_href and
-                    (namespaces['xlink'], 'href') in attrs and re.search(r'^\s*[^#\s].*',
-                                                                         attrs[(namespaces['xlink'], 'href')])):
+                (namespaces['xlink'], 'href') in attrs and re.search(r'^\s*[^#\s].*',
+                                                                     attrs[(namespaces['xlink'], 'href')])):
                 del attrs[(namespaces['xlink'], 'href')]
             if (None, 'style') in attrs:
                 attrs[(None, 'style')] = self.sanitize_css(attrs[(None, 'style')])
@@ -905,9 +906,7 @@ class Filter(base.Filter):
                                                 'padding']:
                 for keyword in value.split():
                     if keyword not in self.allowed_css_keywords and \
-                            not re.match(
-                                r"^(#[0-9a-fA-F]+|rgb\(\d+%?,\d*%?,?\d*%?\)?|\d{0,2}\.?\d{0,2}(cm|em|ex|in|mm|pc|pt|px|%|,|\))?)$",
-                                keyword):  # noqa
+                            not re.match(r"^(#[0-9a-fA-F]+|rgb\(\d+%?,\d*%?,?\d*%?\)?|\d{0,2}\.?\d{0,2}(cm|em|ex|in|mm|pc|pt|px|%|,|\))?)$", keyword):  # noqa
                         break
                 else:
                     clean.append(prop + ': ' + value + ';')

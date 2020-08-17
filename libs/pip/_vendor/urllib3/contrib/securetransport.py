@@ -61,6 +61,7 @@ import ssl
 import threading
 import weakref
 
+from .. import util
 from ._securetransport.bindings import Security, SecurityConst, CoreFoundation
 from ._securetransport.low_level import (
     _assert_no_error,
@@ -68,7 +69,6 @@ from ._securetransport.low_level import (
     _temporary_keychain,
     _load_client_cert_chain,
 )
-from .. import util
 
 try:  # Platform-specific: Python 2
     from socket import _fileobject
@@ -432,15 +432,15 @@ class WrappedSocket(object):
             )
 
     def handshake(
-            self,
-            server_hostname,
-            verify,
-            trust_bundle,
-            min_version,
-            max_version,
-            client_cert,
-            client_key,
-            client_key_passphrase,
+        self,
+        server_hostname,
+        verify,
+        trust_bundle,
+        min_version,
+        max_version,
+        client_cert,
+        client_key,
+        client_key_passphrase,
     ):
         """
         Actually performs the TLS handshake. This is run automatically by
@@ -564,8 +564,8 @@ class WrappedSocket(object):
                 # Timed out, no data read.
                 raise socket.timeout("recv timed out")
         elif result in (
-                SecurityConst.errSSLClosedGraceful,
-                SecurityConst.errSSLClosedNoNotify,
+            SecurityConst.errSSLClosedGraceful,
+            SecurityConst.errSSLClosedNoNotify,
         ):
             # The remote peer has closed this connection. We should do so as
             # well. Note that we don't actually return here because in
@@ -605,7 +605,7 @@ class WrappedSocket(object):
     def sendall(self, data):
         total_sent = 0
         while total_sent < len(data):
-            sent = self.send(data[total_sent: total_sent + SSL_WRITE_BLOCKSIZE])
+            sent = self.send(data[total_sent : total_sent + SSL_WRITE_BLOCKSIZE])
             total_sent += sent
 
     def shutdown(self):
@@ -735,6 +735,7 @@ else:  # Platform-specific: Python 3
         buffering = 0
         return backport_makefile(self, mode, buffering, *args, **kwargs)
 
+
 WrappedSocket.makefile = makefile
 
 
@@ -831,12 +832,12 @@ class SecureTransportContext(object):
         self._client_cert_passphrase = password
 
     def wrap_socket(
-            self,
-            sock,
-            server_side=False,
-            do_handshake_on_connect=True,
-            suppress_ragged_eofs=True,
-            server_hostname=None,
+        self,
+        sock,
+        server_side=False,
+        do_handshake_on_connect=True,
+        suppress_ragged_eofs=True,
+        server_hostname=None,
     ):
         # So, what do we do here? Firstly, we assert some properties. This is a
         # stripped down shim, so there is some functionality we don't support.

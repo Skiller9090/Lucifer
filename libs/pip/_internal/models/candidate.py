@@ -1,6 +1,7 @@
+from pip._vendor.packaging.version import parse as parse_version
+
 from pip._internal.utils.models import KeyBasedCompareMixin
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
-from pip._vendor.packaging.version import parse as parse_version
 
 if MYPY_CHECK_RUNNING:
     from pip._vendor.packaging.version import _BaseVersion

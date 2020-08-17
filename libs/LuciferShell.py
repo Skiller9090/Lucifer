@@ -1,4 +1,7 @@
 from .utils import check_int, clear_screen
+import re
+import os
+import importlib
 
 
 class Shell:
@@ -8,6 +11,8 @@ class Shell:
         self.luciferManager = lucifer_manager
         self.gui = False
         self.module = ""
+        self.module_obj = None
+        self.loaded_modules = {}
         self.program_name = "Lucifer"
         self.shell_in = ""
         self.vars = {}
@@ -15,6 +20,7 @@ class Shell:
 show        - Shows options or modules based on input, EX: show <options/modules>
 use         - Move into a module, EX: use <module>
 set         - Sets a variable or option, EX: set <var> <data>
+run         - Runs the current module, can also use exploit to do the same
 reset       - Resets Everything
 spawn_shell - Spawns a alternative shell
 open_shell  - Open a shell by id EX: open_shell <id>
@@ -29,7 +35,9 @@ name        - Shows name of current shell"""
         self.name = "Shell " if not self.is_main else "Main Shell"
 
     def getIn(self):
-        self.shell_in = input(f"{self.program_name}|{self.module}|{self.id}> ")
+        self.shell_in = input(f"{self.program_name}|" +
+                              f"{self.module if '.py' not in self.module else self.module.replace('.py', '')}" +
+                              f"|{self.id}> ")
 
     def print_id(self):
         print(f"Shell ID: {self.id}")
@@ -142,6 +150,22 @@ name        - Shows name of current shell"""
         elif com == "clear":
             print(self.luciferManager.colorama.ansi.clear_screen())
             return
+        if com == "use":
+            if len(com_args) > 1:
+                module_path = ""
+                if len(com_args) == 2:
+                    module_path = re.split(r"\\|/|,", com_args[1].rstrip())
+                else:
+                    com_args.pop(0)
+                    module_path = re.split(r"\\| |/|,", " ".join(com_args).rstrip())
+                if module_path != "" or module_path != []:
+                    while "" in module_path:
+                        module_path.remove("")
+                    self.use_module(module_path)
+            else:
+                print("Please add valid module path")
+        if com == "run" or com == "exploit":
+            self.run_module()
         return
 
     def help(self):
@@ -173,6 +197,55 @@ name        - Shows name of current shell"""
     def show_options(self):
         print(self.vars)
 
+    def use_module(self, mod_path: list):
+        if self.module_obj is not None:
+            self.loaded_modules[self.module] = self.module_obj
+        print(mod_path)
+        ori_path = mod_path.copy()
+        file = mod_path.pop(-1)
+        path = "modules"
+        for directory in mod_path:
+            path += "/" + directory
+            if os.path.exists(path):
+                if os.path.isdir(path):
+                    continue
+                else:
+                    print(f"Module: {'/'.join(ori_path)} Does Not Exist!")
+                    return
+            else:
+                print(f"Module: {'/'.join(ori_path)} Does Not Exist!")
+                return
+        else:
+            if os.path.isfile(path + "/" + file):
+                self.module = path + "/" + file
+                print(f"Using module: {self.module}")
+            elif os.path.isfile(path + "/" + file + ".py"):
+                self.module = path + "/" + file + ".py"
+                print(f"Using module: {self.module}")
+            else:
+                print(f"Module: {'/'.join(ori_path)} Does Not Exist!")
+                return
+
+        if self.module in self.loaded_modules.keys():
+            self.module_obj = self.loaded_modules.get(self.module)
+        else:
+            to_import = (self.module.replace("/", ".")
+                         if ".py" not in self.module else
+                         self.module.replace(".py", "").replace("/", ".")).split(".")
+            pkg = to_import.pop(-1)
+            to_import = ".".join(to_import)
+            imported_module = importlib.import_module(to_import+"."+pkg)
+            self.module_obj = imported_module.Module(self.luciferManager)
+            self.loaded_modules[self.module] = self.module_obj
+        return
+
+    def run_module(self):
+        if self.module_obj is not None:
+            self.module_obj.run()
+            return
+        else:
+            print("Please Select A Module First!")
+            return
 # help
 # show <options/modules>
 # use <module>

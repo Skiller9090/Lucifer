@@ -8,9 +8,9 @@ import os
 import platform
 import sys
 
-from pip._vendor.pyparsing import Literal as L  # noqa
 from pip._vendor.pyparsing import ParseException, ParseResults, stringStart, stringEnd
 from pip._vendor.pyparsing import ZeroOrMore, Group, Forward, QuotedString
+from pip._vendor.pyparsing import Literal as L  # noqa
 
 from ._compat import string_types
 from ._typing import TYPE_CHECKING
@@ -20,6 +20,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
     Operator = Callable[[str, str], bool]
+
 
 __all__ = [
     "InvalidMarker",
@@ -86,24 +87,24 @@ class Op(Node):
 
 
 VARIABLE = (
-        L("implementation_version")
-        | L("platform_python_implementation")
-        | L("implementation_name")
-        | L("python_full_version")
-        | L("platform_release")
-        | L("platform_version")
-        | L("platform_machine")
-        | L("platform_system")
-        | L("python_version")
-        | L("sys_platform")
-        | L("os_name")
-        | L("os.name")  # PEP-345
-        | L("sys.platform")  # PEP-345
-        | L("platform.version")  # PEP-345
-        | L("platform.machine")  # PEP-345
-        | L("platform.python_implementation")  # PEP-345
-        | L("python_implementation")  # undocumented setuptools legacy
-        | L("extra")  # PEP-508
+    L("implementation_version")
+    | L("platform_python_implementation")
+    | L("implementation_name")
+    | L("python_full_version")
+    | L("platform_release")
+    | L("platform_version")
+    | L("platform_machine")
+    | L("platform_system")
+    | L("python_version")
+    | L("sys_platform")
+    | L("os_name")
+    | L("os.name")  # PEP-345
+    | L("sys.platform")  # PEP-345
+    | L("platform.version")  # PEP-345
+    | L("platform.machine")  # PEP-345
+    | L("platform.python_implementation")  # PEP-345
+    | L("python_implementation")  # undocumented setuptools legacy
+    | L("extra")  # PEP-508
 )
 ALIASES = {
     "os.name": "os_name",
@@ -116,7 +117,7 @@ ALIASES = {
 VARIABLE.setParseAction(lambda s, l, t: Variable(ALIASES.get(t[0], t[0])))
 
 VERSION_CMP = (
-        L("===") | L("==") | L(">=") | L("<=") | L("!=") | L("~=") | L(">") | L("<")
+    L("===") | L("==") | L(">=") | L("<=") | L("!=") | L("~=") | L(">") | L("<")
 )
 
 MARKER_OP = VERSION_CMP | L("not in") | L("in")
@@ -160,9 +161,9 @@ def _format_marker(marker, first=True):
     # the rest of this function so that we don't get extraneous () on the
     # outside.
     if (
-            isinstance(marker, list)
-            and len(marker) == 1
-            and isinstance(marker[0], (list, tuple))
+        isinstance(marker, list)
+        and len(marker) == 1
+        and isinstance(marker[0], (list, tuple))
     ):
         return _format_marker(marker[0])
 
@@ -298,7 +299,7 @@ class Marker(object):
             self._markers = _coerce_parse_result(MARKER.parseString(marker))
         except ParseException as e:
             err_str = "Invalid marker: {0!r}, parse error at {1!r}".format(
-                marker, marker[e.loc: e.loc + 8]
+                marker, marker[e.loc : e.loc + 8]
             )
             raise InvalidMarker(err_str)
 

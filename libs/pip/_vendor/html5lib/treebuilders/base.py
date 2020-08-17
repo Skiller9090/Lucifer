@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, unicode_literals
-
 from pip._vendor.six import text_type
 
 from ..constants import scopingElements, tableInsertModeElements, namespaces
@@ -23,7 +22,6 @@ listElementsMap = {
 
 class Node(object):
     """Represents an item in the tree"""
-
     def __init__(self, name):
         """Creates a Node
 

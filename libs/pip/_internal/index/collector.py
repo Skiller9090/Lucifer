@@ -11,6 +11,12 @@ import os
 import re
 from collections import OrderedDict
 
+from pip._vendor import html5lib, requests
+from pip._vendor.distlib.compat import unescape
+from pip._vendor.requests.exceptions import RetryError, SSLError
+from pip._vendor.six.moves.urllib import parse as urllib_parse
+from pip._vendor.six.moves.urllib import request as urllib_request
+
 from pip._internal.exceptions import NetworkConnectionError
 from pip._internal.models.link import Link
 from pip._internal.models.search_scope import SearchScope
@@ -20,11 +26,6 @@ from pip._internal.utils.misc import pairwise, redact_auth_from_url
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.urls import path_to_url, url_to_path
 from pip._internal.vcs import is_url, vcs
-from pip._vendor import html5lib, requests
-from pip._vendor.distlib.compat import unescape
-from pip._vendor.requests.exceptions import RetryError, SSLError
-from pip._vendor.six.moves.urllib import parse as urllib_parse
-from pip._vendor.six.moves.urllib import request as urllib_request
 
 if MYPY_CHECK_RUNNING:
     from optparse import Values
@@ -44,11 +45,11 @@ if MYPY_CHECK_RUNNING:
     # Used in the @lru_cache polyfill.
     F = TypeVar('F')
 
-
     class LruCache(Protocol):
         def __call__(self, maxsize=None):
             # type: (Optional[int]) -> Callable[[F], F]
             raise NotImplementedError
+
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +61,6 @@ def noop_lru_cache(maxsize=None):
     def _wrapper(f):
         # type: (F) -> F
         return f
-
     return _wrapper
 
 
@@ -279,9 +279,9 @@ def _clean_link(url):
 
 
 def _create_link_from_element(
-        anchor,  # type: HTMLElement
-        page_url,  # type: str
-        base_url,  # type: str
+    anchor,    # type: HTMLElement
+    page_url,  # type: str
+    base_url,  # type: str
 ):
     # type: (...) -> Optional[Link]
     """
@@ -327,7 +327,7 @@ class CacheablePageContent(object):
 
 
 def with_cached_html_pages(
-        fn,  # type: Callable[[HTMLPage], Iterable[Link]]
+    fn,    # type: Callable[[HTMLPage], Iterable[Link]]
 ):
     # type: (...) -> Callable[[HTMLPage], List[Link]]
     """
@@ -380,11 +380,11 @@ class HTMLPage(object):
     """Represents one page, along with its URL"""
 
     def __init__(
-            self,
-            content,  # type: bytes
-            encoding,  # type: Optional[str]
-            url,  # type: str
-            cache_link_parsing=True,  # type: bool
+        self,
+        content,                  # type: bytes
+        encoding,                 # type: Optional[str]
+        url,                      # type: str
+        cache_link_parsing=True,  # type: bool
     ):
         # type: (...) -> None
         """
@@ -405,9 +405,9 @@ class HTMLPage(object):
 
 
 def _handle_get_page_fail(
-        link,  # type: Link
-        reason,  # type: Union[str, Exception]
-        meth=None  # type: Optional[Callable[..., None]]
+    link,  # type: Link
+    reason,  # type: Union[str, Exception]
+    meth=None  # type: Optional[Callable[..., None]]
 ):
     # type: (...) -> None
     if meth is None:
@@ -551,6 +551,7 @@ def group_locations(locations, expand_dir=False):
 
 
 class CollectedLinks(object):
+
     """
     Encapsulates the return value of a call to LinkCollector.collect_links().
 
@@ -567,10 +568,10 @@ class CollectedLinks(object):
     """
 
     def __init__(
-            self,
-            files,  # type: List[Link]
-            find_links,  # type: List[Link]
-            project_urls,  # type: List[Link]
+        self,
+        files,         # type: List[Link]
+        find_links,    # type: List[Link]
+        project_urls,  # type: List[Link]
     ):
         # type: (...) -> None
         """
@@ -585,6 +586,7 @@ class CollectedLinks(object):
 
 
 class LinkCollector(object):
+
     """
     Responsible for collecting Link objects from all configured locations,
     making network requests as needed.
@@ -593,9 +595,9 @@ class LinkCollector(object):
     """
 
     def __init__(
-            self,
-            session,  # type: PipSession
-            search_scope,  # type: SearchScope
+        self,
+        session,       # type: PipSession
+        search_scope,  # type: SearchScope
     ):
         # type: (...) -> None
         self.search_scope = search_scope

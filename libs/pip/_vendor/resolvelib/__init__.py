@@ -13,6 +13,7 @@ __all__ = [
 
 __version__ = "0.4.0"
 
+
 from .providers import AbstractProvider, AbstractResolver
 from .reporters import BaseReporter
 from .resolvers import (

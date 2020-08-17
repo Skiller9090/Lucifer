@@ -8,6 +8,9 @@ import shutil
 import site
 from optparse import SUPPRESS_HELP
 
+from pip._vendor import pkg_resources
+from pip._vendor.packaging.utils import canonicalize_name
+
 from pip._internal.cache import WheelCache
 from pip._internal.cli import cmdoptions
 from pip._internal.cli.cmdoptions import make_target_python
@@ -33,8 +36,6 @@ from pip._internal.utils.temp_dir import TempDirectory
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.virtualenv import virtualenv_no_global
 from pip._internal.wheel_builder import build, should_build_for_install_command
-from pip._vendor import pkg_resources
-from pip._vendor.packaging.utils import canonicalize_name
 
 if MYPY_CHECK_RUNNING:
     from optparse import Values
@@ -44,6 +45,7 @@ if MYPY_CHECK_RUNNING:
     from pip._internal.operations.check import ConflictDetails
     from pip._internal.req.req_install import InstallRequirement
     from pip._internal.wheel_builder import BinaryAllowedPredicate
+
 
 logger = logging.getLogger(__name__)
 
@@ -255,7 +257,7 @@ class InstallCommand(RequirementCommand):
             options.ignore_installed = True
             options.target_dir = os.path.abspath(options.target_dir)
             if (os.path.exists(options.target_dir) and not
-            os.path.isdir(options.target_dir)):
+                    os.path.isdir(options.target_dir)):
                 raise CommandError(
                     "Target path exists but is not a directory, will not "
                     "continue."
@@ -356,7 +358,7 @@ class InstallCommand(RequirementCommand):
             # If we're using PEP 517, we cannot do a direct install
             # so we fail here.
             pep517_build_failure_names = [
-                r.name  # type: ignore
+                r.name   # type: ignore
                 for r in build_failures if r.use_pep517
             ]  # type: List[str]
             if pep517_build_failure_names:
@@ -395,8 +397,8 @@ class InstallCommand(RequirementCommand):
             # Check for conflicts in the package set we're installing.
             conflicts = None  # type: Optional[ConflictDetails]
             should_warn_about_conflicts = (
-                    not options.ignore_dependencies and
-                    options.warn_about_conflicts
+                not options.ignore_dependencies and
+                options.warn_about_conflicts
             )
             if should_warn_about_conflicts:
                 conflicts = self._determine_conflicts(to_install)
@@ -624,11 +626,11 @@ def site_packages_writable(root, isolated):
 
 
 def decide_user_install(
-        use_user_site,  # type: Optional[bool]
-        prefix_path=None,  # type: Optional[str]
-        target_dir=None,  # type: Optional[str]
-        root_path=None,  # type: Optional[str]
-        isolated_mode=False,  # type: bool
+    use_user_site,  # type: Optional[bool]
+    prefix_path=None,  # type: Optional[str]
+    target_dir=None,  # type: Optional[str]
+    root_path=None,  # type: Optional[str]
+    isolated_mode=False,  # type: bool
 ):
     # type: (...) -> bool
     """Determine whether to do a user install based on the input options.
@@ -688,7 +690,6 @@ def reject_location_related_install_options(requirements, options):
     """If any location-changing --install-option arguments were passed for
     requirements or on the command-line, then show a deprecation warning.
     """
-
     def format_options(option_names):
         # type: (Iterable[str]) -> List[str]
         return ["--{}".format(name.replace("_", "-")) for name in option_names]

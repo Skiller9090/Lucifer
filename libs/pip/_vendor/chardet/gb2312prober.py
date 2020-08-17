@@ -25,11 +25,10 @@
 # 02110-1301  USA
 ######################### END LICENSE BLOCK #########################
 
-from .chardistribution import GB2312DistributionAnalysis
-from .codingstatemachine import CodingStateMachine
 from .mbcharsetprober import MultiByteCharSetProber
+from .codingstatemachine import CodingStateMachine
+from .chardistribution import GB2312DistributionAnalysis
 from .mbcssm import GB2312_SM_MODEL
-
 
 class GB2312Prober(MultiByteCharSetProber):
     def __init__(self):

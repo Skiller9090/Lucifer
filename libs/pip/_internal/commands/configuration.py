@@ -151,8 +151,8 @@ class ConfigurationCommand(Command):
                 return None
             # Default to user, unless there's a site file.
             elif any(
-                    os.path.exists(site_config_file)
-                    for site_config_file in get_configuration_files()[kinds.SITE]
+                os.path.exists(site_config_file)
+                for site_config_file in get_configuration_files()[kinds.SITE]
             ):
                 return kinds.SITE
             else:
@@ -214,7 +214,7 @@ class ConfigurationCommand(Command):
     def print_config_file_values(self, variant):
         # type: (Kind) -> None
         """Get key-value pairs from the file of a variant"""
-        for name, value in self.configuration. \
+        for name, value in self.configuration.\
                 get_values_in_config(variant).items():
             with indent_log():
                 write_output("%s: %s", name, value)
@@ -241,7 +241,7 @@ class ConfigurationCommand(Command):
         except subprocess.CalledProcessError as e:
             raise PipError(
                 "Editor Subprocess exited with exit code {}"
-                    .format(e.returncode)
+                .format(e.returncode)
             )
 
     def _get_n_args(self, args, example, n):

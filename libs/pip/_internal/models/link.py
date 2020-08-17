@@ -2,6 +2,8 @@ import os
 import posixpath
 import re
 
+from pip._vendor.six.moves.urllib import parse as urllib_parse
+
 from pip._internal.utils.filetypes import WHEEL_EXTENSION
 from pip._internal.utils.misc import (
     redact_auth_from_url,
@@ -11,7 +13,6 @@ from pip._internal.utils.misc import (
 from pip._internal.utils.models import KeyBasedCompareMixin
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.urls import path_to_url, url_to_path
-from pip._vendor.six.moves.urllib import parse as urllib_parse
 
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Text, Tuple, Union
@@ -33,12 +34,12 @@ class Link(KeyBasedCompareMixin):
     ]
 
     def __init__(
-            self,
-            url,  # type: str
-            comes_from=None,  # type: Optional[Union[str, HTMLPage]]
-            requires_python=None,  # type: Optional[str]
-            yanked_reason=None,  # type: Optional[Text]
-            cache_link_parsing=True,  # type: bool
+        self,
+        url,                   # type: str
+        comes_from=None,       # type: Optional[Union[str, HTMLPage]]
+        requires_python=None,  # type: Optional[str]
+        yanked_reason=None,    # type: Optional[Text]
+        cache_link_parsing=True,  # type: bool
     ):
         # type: (...) -> None
         """

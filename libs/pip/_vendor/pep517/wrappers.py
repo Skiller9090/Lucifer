@@ -1,17 +1,17 @@
-import os
-import shutil
-import sys
 import threading
 from contextlib import contextmanager
+import os
 from os.path import dirname, abspath, join as pjoin
+import shutil
 from subprocess import check_call, check_output, STDOUT
+import sys
 from tempfile import mkdtemp
 
 from . import compat
 
+
 try:
     import importlib.resources as resources
-
 
     def _in_proc_script_path():
         return resources.path(__package__, '_in_process.py')
@@ -32,14 +32,12 @@ def tempdir():
 
 class BackendUnavailable(Exception):
     """Will be raised if the backend cannot be imported in the hook process."""
-
     def __init__(self, traceback):
         self.traceback = traceback
 
 
 class BackendInvalid(Exception):
     """Will be raised if the backend is invalid."""
-
     def __init__(self, backend_name, backend_path, message):
         self.backend_name = backend_name
         self.backend_path = backend_path
@@ -48,7 +46,6 @@ class BackendInvalid(Exception):
 
 class HookMissing(Exception):
     """Will be raised on missing hooks."""
-
     def __init__(self, hook_name):
         super(HookMissing, self).__init__(hook_name)
         self.hook_name = hook_name
@@ -56,7 +53,6 @@ class HookMissing(Exception):
 
 class UnsupportedOperation(Exception):
     """May be raised by build_sdist if the backend indicates that it can't."""
-
     def __init__(self, traceback):
         self.traceback = traceback
 
@@ -120,7 +116,6 @@ class Pep517HookCaller(object):
         extra_environ : a dict mapping environment variable names to values
             which must be set for the subprocess execution.
     """
-
     def __init__(
             self,
             source_dir,
