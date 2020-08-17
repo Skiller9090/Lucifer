@@ -3,6 +3,7 @@
 ##Commands:
 
 | Command | Description |
+| --- | --- |
 |help        | Displays This Menu|
 |show        | Shows options or modules based on input, EX: show <options/modules>|
 |use         | Move into a module, EX: use <module>|
