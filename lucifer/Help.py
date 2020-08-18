@@ -1,4 +1,4 @@
-from .termcolor import colored
+from libs.termcolor import colored
 
 
 help_menu = f"""{colored('Help Menu', 'green', attrs=['bold', 'underline'])}

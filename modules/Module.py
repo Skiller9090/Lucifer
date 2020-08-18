@@ -1,4 +1,4 @@
-from libs.LuciferErrors import NoShellError
+from lucifer.Errors import NoShellError
 
 
 class BaseModule:

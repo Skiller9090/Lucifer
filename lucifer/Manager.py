@@ -1,5 +1,5 @@
-from . import termcolor
-from . import colorama
+from libs import termcolor
+from libs import colorama
 
 
 class LuciferManager:
@@ -15,5 +15,5 @@ class LuciferManager:
         self.auto_vars = auto_vars
 
     def end(self, *args, **kwargs):
-        print("Thank you for using Lucifer, see you next time!")
+        print("Thank you for using lucifer, see you next time!")
         exit(0)
