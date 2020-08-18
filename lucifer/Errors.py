@@ -1,3 +1,6 @@
+from subprocess import CalledProcessError
+
+
 class IncompatibleSystemError(Exception):
     def __init__(self, message):
         self.message = message
@@ -21,3 +24,5 @@ def checkErrors(e):
         print(e)
     except NoShellError:
         print(e)
+    except CalledProcessError:
+        pass

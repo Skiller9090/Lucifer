@@ -3,10 +3,10 @@ import os
 import sys
 
 from .LuciferShell import Shell
-from .LuciferManager import LuciferManager
+from .Manager import LuciferManager
 
 
-class VAAETParser(argparse.ArgumentParser):
+class LuciferParser(argparse.ArgumentParser):
     def __init__(self, lucifer_manager: LuciferManager, *args, **kwargs):
         super().__init__(args, kwargs)
         self.luciferManager = lucifer_manager
@@ -26,7 +26,7 @@ class VAAETParser(argparse.ArgumentParser):
             print("Show GUI")
         else:
             self.luciferManager.colorama.init(autoreset=True)
-            print(self.luciferManager.termcolor.colored("Lucifer Prototype 1", "red", attrs=["bold", "underline"]))
+            print(self.luciferManager.termcolor.colored("lucifer Prototype 1", "red", attrs=["bold", "underline"]))
             self.luciferManager.main_shell = Shell(self.luciferManager.next_shell_id, self.luciferManager)
             self.luciferManager.next_shell_id += 1
             self.luciferManager.main_shell.spawn()

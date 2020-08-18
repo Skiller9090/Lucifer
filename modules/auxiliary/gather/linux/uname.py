@@ -1,5 +1,5 @@
 from modules.Module import BaseModule
-from libs.LuciferErrors import IncompatibleSystemError
+from lucifer.Errors import IncompatibleSystemError
 from subprocess import check_output
 import os
 

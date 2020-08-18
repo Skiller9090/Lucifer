@@ -1,6 +1,6 @@
-from .utils import check_int
-from .LuciferErrors import checkErrors
-from .LuciferHelp import help_menu
+from lucifer.utils import check_int
+from .Errors import checkErrors
+from .Help import help_menu
 import re
 import os
 import importlib
@@ -15,7 +15,7 @@ class Shell:
         self.module = ""
         self.module_obj = None
         self.loaded_modules = {}
-        self.program_name = "Lucifer"
+        self.program_name = "lucifer"
         self.shell_in = ""
         self.vars = {}
         self.auto_vars = lucifer_manager.auto_vars
