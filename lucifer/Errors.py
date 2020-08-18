@@ -17,6 +17,14 @@ class NoShellError(Exception):
         return "No Shell Error Error: " + str(self.message)
 
 
+class ArgumentUndefinedError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return "Argument Undefined: " + str(self.message)
+
+
 def checkErrors(e):
     try:
         raise e
@@ -26,3 +34,5 @@ def checkErrors(e):
         print(e)
     except CalledProcessError:
         pass
+    except ArgumentUndefinedError:
+        print(e)
