@@ -30,3 +30,9 @@ class VAAETParser(argparse.ArgumentParser):
             self.luciferManager.main_shell = Shell(self.luciferManager.next_shell_id, self.luciferManager)
             self.luciferManager.next_shell_id += 1
             self.luciferManager.main_shell.spawn()
+
+    def check_autoset(self):
+        if self.args.auto_set_vars:
+            self.luciferManager.auto_vars = True
+            print("Auto Set Variables Enabled")
+

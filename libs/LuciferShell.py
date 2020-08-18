@@ -1,5 +1,5 @@
 from .utils import check_int
-from .LuciferErrors import IncompatibleSystemError
+from .LuciferErrors import checkErrors
 import re
 import os
 import importlib
@@ -17,6 +17,7 @@ class Shell:
         self.program_name = "Lucifer"
         self.shell_in = ""
         self.vars = {}
+        self.auto_vars = lucifer_manager.auto_vars
         self.help_menu = """help        - Displays This Menu
 show        - Shows options or modules based on input, EX: show <options/modules>
 use         - Move into a module, EX: use <module>
@@ -51,8 +52,15 @@ name        - Shows name of current shell"""
             "clear": self.clear_shell,
             "use": self.use,
             "run": self.run_module,
-            "exploit": self.run_module
-
+            "exploit": self.run_module,
+            "set_vars": self.set_vars,
+            "options": self.show_options,
+            "description": self.describe_module,
+            "describe": self.describe_module,
+            "auto_vars": self.print_auto_vars,
+            "change_auto_vars": self.change_auto_set_vars,
+            "auto_var": self.print_auto_vars,
+            "change_auto_var": self.change_auto_set_vars
         }
         self.luciferManager.shell_recur += 1
 
@@ -61,10 +69,10 @@ name        - Shows name of current shell"""
                               f"{self.module if '.py' not in self.module else self.module.replace('.py', '')}" +
                               f"|{self.id}> ")
 
-    def print_id(self, com_args: list):
+    def print_id(self, *args, **kwargs):
         print(f"Shell ID: {self.id}")
 
-    def print_name(self, com_args: list):
+    def print_name(self, *args, **kwargs):
         print(f"Shell Name: {self.name}")
 
     def parseShellIn(self):
@@ -79,7 +87,7 @@ name        - Shows name of current shell"""
             return return_value
         return
 
-    def help(self, com_args):
+    def help(self, *args, **kwargs):
         print(self.help_menu)
 
     def spawn(self):
@@ -101,7 +109,7 @@ name        - Shows name of current shell"""
         else:
             print("Please specify a variable to set")
 
-    def spawn_shell(self, com_args: list):
+    def spawn_shell(self, *args, **kwargs):
         self.luciferManager.alternative_shells.append(Shell(self.luciferManager.next_shell_id, self.luciferManager))
         self.luciferManager.next_shell_id += 1
         self.luciferManager.alternative_shells[-1].name += str(self.luciferManager.next_shell_id - 1)
@@ -113,19 +121,31 @@ name        - Shows name of current shell"""
                 self.show_options()
                 return
             else:
-                print("Please enter a valid argument: options or modules")
+                print("Please enter a valid argument: options/vars or modules")
         else:
             print("Please specify options or modules to show!")
         return
 
-    def show_options(self):
-        print(self.vars)
+    def show_options(self, *args, **kwargs):
+        max_l = 0
+        for k, v in zip(self.vars.keys(), self.vars.values()):
+            if len(k) + 2 > max_l:
+                max_l = len(k) + 2
+            if len(v) > max_l:
+                max_l = len(v)
+        if (2 * max_l - 3) % 2 != 0:
+            max_l += 1
+        title_padding = int((2 * max_l - 3) / 2)
+        print(f"{' ' * title_padding}" +
+              f"{self.luciferManager.termcolor.colored('Vars', 'green', attrs=['bold', 'underline'])}")
+        print("=" * (2 * title_padding + 5))
+        for k, v in zip(self.vars.keys(), self.vars.values()):
+            print(f"{k}{' ' * (max_l - len(k))}| {v}")
         return
 
     def use_module(self, mod_path: list):
         if self.module_obj is not None:
             self.loaded_modules[self.module] = self.module_obj
-        print(mod_path)
         ori_path = mod_path.copy()
         file = mod_path.pop(-1)
         path = "modules"
@@ -162,9 +182,11 @@ name        - Shows name of current shell"""
             imported_module = importlib.import_module(to_import + "." + pkg)
             self.module_obj = imported_module.Module(self.luciferManager, ShellRun=True)
             self.loaded_modules[self.module] = self.module_obj
+        if self.auto_vars:
+            self.set_vars()
         return
 
-    def run_module(self, com_args: list):
+    def run_module(self, *args, **kwargs):
         try:
             if self.module_obj is not None:
                 self.module_obj.run()
@@ -172,8 +194,30 @@ name        - Shows name of current shell"""
             else:
                 print("Please Select A Module First!")
                 return
-        except IncompatibleSystemError as e:
-            print(e)
+        except Exception as e:
+            checkErrors(e)
+
+    def describe_module(self, *args, **kwargs):
+        try:
+            if self.module_obj is not None:
+                print(self.module_obj.get_description())
+                return
+            else:
+                print("Please Select A Module First!")
+                return
+        except Exception as e:
+            checkErrors(e)
+
+    def set_vars(self, *args, **kwargs):
+        try:
+            if self.module_obj is not None:
+                self.vars.update(self.module_obj.set_vars())
+                return
+            else:
+                print("Please Select A Module First!")
+                return
+        except Exception as e:
+            checkErrors(e)
 
     def open_shell(self, com_args: list):
         if len(com_args) > 1:
@@ -181,12 +225,14 @@ name        - Shows name of current shell"""
             if check_int(openid):
                 openid = int(openid)
                 if openid == 0:
+                    self.luciferManager.current_shell_id = 0
                     self.luciferManager.main_shell.spawn()
                     return
                 else:
                     found = False
                     for index, shell in enumerate(self.luciferManager.alternative_shells):
                         if shell.id == openid:
+                            self.luciferManager.current_shell_id = openid
                             self.luciferManager.alternative_shells[index].spawn()
                             return
                     else:
@@ -199,7 +245,7 @@ name        - Shows name of current shell"""
             print("Please specify a valid ID")
             return
 
-    def show_shells(self, com_args: list):
+    def show_shells(self, *args, **kwargs):
         print(f"{self.luciferManager.main_shell.name} => {self.luciferManager.main_shell.id}")
         for shell in self.luciferManager.alternative_shells:
             print(f"{shell.name} => {shell.id}")
@@ -239,7 +285,7 @@ name        - Shows name of current shell"""
             print("Please add a valid ID")
             return
 
-    def clear_shell(self, com_args: list):
+    def clear_shell(self, *args, **kwargs):
         print(self.luciferManager.colorama.ansi.clear_screen())
 
     def use(self, com_args: list):
@@ -263,3 +309,43 @@ name        - Shows name of current shell"""
         else:
             self.luciferManager.shell_recur -= 1
         return 7
+
+    def change_auto_set_vars(self, com_args: list):
+        com_args.pop(0)
+        if len(com_args) > 0:
+            to_set = None
+            set_global = False
+            set_for_new = False
+            inclusive = False
+            for argument in com_args:
+                argument = argument.rstrip()
+                if argument.lower() == "true" or argument.lower() == "t" or argument.lower() == "-t":
+                    to_set = True
+                elif argument.lower() == "false" or argument.lower() == "f" or argument.lower() == "-f":
+                    to_set = False
+                elif argument.lower() == "-g":
+                    set_global = True
+                elif argument.lower() == "-n":
+                    set_for_new = True
+                elif argument.lower() == "-i":
+                    inclusive = True
+            if to_set is None:
+                print("Please Add An Argument!")
+                return
+            if set_global:
+                self.luciferManager.main_shell.auto_vars = to_set
+                for shell in self.luciferManager.alternative_shells:
+                    shell.auto_vars = to_set
+                print(f"Auto Variable On All Shells => {to_set}")
+            if (not set_for_new and not set_global) or inclusive:
+                self.auto_vars = to_set
+                print(f"This Shell Auto Vars => {to_set}")
+            if set_for_new:
+                self.luciferManager.auto_vars = to_set
+                print(f"Future Shells Will Have Auto Vars => {to_set}")
+            return
+        else:
+            print("Please Add Arguments!")
+
+    def print_auto_vars(self, *args, **kwargs):
+        print(f"Auto Var => {self.auto_vars}")
