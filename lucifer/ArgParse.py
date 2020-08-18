@@ -2,7 +2,7 @@ import argparse
 import os
 import sys
 
-from .LuciferShell import Shell
+from .Shell import Shell
 from .Manager import LuciferManager
 
 
