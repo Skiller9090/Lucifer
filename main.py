@@ -1,6 +1,6 @@
 from lucifer.ArgParse import LuciferParser
 from lucifer.Manager import LuciferManager
-from argparse import SUPPRESS
+
 
 luciferManager = LuciferManager()
 parser = LuciferParser(luciferManager, description="Lucifer")

@@ -56,7 +56,7 @@ class Shell:
                               f"|{self.id}> ")
         if self.luciferManager.log_file is not None:
             if self.luciferManager.log_amount == 1:
-                self.luciferManager.log_file.write(f"Command:> {self.shell_in}\n")
+                self.luciferManager.log_command(self.shell_in)
 
     def print_id(self, *args, **kwargs):
         print(f"Shell ID: {self.id}")

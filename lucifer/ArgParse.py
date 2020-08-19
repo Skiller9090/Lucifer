@@ -2,8 +2,10 @@ import argparse
 import os
 import sys
 import re as _re
+import tkinter as tk
 from .Shell import Shell
 from .Manager import LuciferManager
+from .GUI import LuciferGui
 
 
 class CapitalisedHelpFormatter(argparse.HelpFormatter):
@@ -108,8 +110,16 @@ class LuciferParser(argparse.ArgumentParser):
 
     def check_gui(self):
         if self.args.gui:
+
             self.luciferManager.gui = True
-            print("Show GUI")
+            self.luciferManager.main_shell = Shell(self.luciferManager.next_shell_id, self.luciferManager)
+            self.luciferManager.next_shell_id += 1
+            root = tk.Tk()
+            self.luciferManager.gui = root
+            application = LuciferGui(self.luciferManager, root)
+            self.luciferManager.application = application
+            root.mainloop()
+
         else:
             self.luciferManager.colorama.init(autoreset=True)
             print(self.luciferManager.termcolor.colored("lucifer Prototype 1", "red", attrs=["bold", "underline"]))
@@ -124,7 +134,7 @@ class LuciferParser(argparse.ArgumentParser):
 
     def check_logging(self):
         if self.args.logger_loc is not None:
-            if os.path.exists(self.args.logger_loc):
+            if not os.path.exists(self.args.logger_loc):
                 open(self.args.logger_loc, "w").close()
-            self.luciferManager.log_file = open(self.args.logger_loc, "a")
+            self.luciferManager.log_file = self.args.logger_loc
             self.luciferManager.log_amount = 1  # 0 - None, 1 - Commands
