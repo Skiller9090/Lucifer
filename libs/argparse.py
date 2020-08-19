@@ -272,7 +272,7 @@ class HelpFormatter(object):
         if text is not SUPPRESS and text is not None:
             self._add_item(self._format_text, [text])
 
-    def add_usage(self, usage, actions, groups, prefix=None):
+    def add_usage(self, usage, actions, groups, prefix=None, help_menu=False):
         if usage is not SUPPRESS:
             args = usage, actions, groups, prefix
             self._add_item(self._format_usage, args)
