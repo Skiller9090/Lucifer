@@ -13,6 +13,8 @@ class LuciferManager:
         self.termcolor = termcolor
         self.current_shell_id = 0
         self.auto_vars = auto_vars
+        self.log_file = None
+        self.log_amount = 0
 
     def end(self, *args, **kwargs):
         print("Thank you for using lucifer, see you next time!")

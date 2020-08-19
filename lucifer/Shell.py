@@ -54,6 +54,9 @@ class Shell:
         self.shell_in = input(f"{self.program_name}|" +
                               f"{self.module if '.py' not in self.module else self.module.replace('.py', '')}" +
                               f"|{self.id}> ")
+        if self.luciferManager.log_file is not None:
+            if self.luciferManager.log_amount == 1:
+                self.luciferManager.log_file.write(f"Command:> {self.shell_in}\n")
 
     def print_id(self, *args, **kwargs):
         print(f"Shell ID: {self.id}")
