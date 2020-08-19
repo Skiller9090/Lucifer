@@ -13,7 +13,7 @@ class BaseModule:
                     self.shell = shell
                     break
             else:
-                raise NoShellError("Couldn't Find Shell With ID: "+str(self.luciferManager.current_shell_id))
+                raise NoShellError("Couldn't Find Shell With ID: " + str(self.luciferManager.current_shell_id))
 
     def run(self):
         for action in self.actions:

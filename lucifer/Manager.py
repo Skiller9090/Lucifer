@@ -15,7 +15,15 @@ class LuciferManager:
         self.auto_vars = auto_vars
         self.log_file = None
         self.log_amount = 0
+        self.gui = None
 
     def end(self, *args, **kwargs):
         print("Thank you for using lucifer, see you next time!")
         exit(0)
+        if self.log_amount > 0:
+            if self.log_file is not None:
+                self.log_file.close()
+
+    def log_command(self, command):
+        with open(self.log_file, "a") as f:
+            f.write(f"Command:> {str(command)}\n")
