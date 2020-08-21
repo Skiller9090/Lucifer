@@ -3,6 +3,7 @@ import os
 import sys
 import re as _re
 import tkinter as tk
+from libs.ttkthemes import themed_tk
 from .Shell import Shell
 from .Manager import LuciferManager
 from .GUI import LuciferGui
@@ -114,7 +115,8 @@ class LuciferParser(argparse.ArgumentParser):
             self.luciferManager.gui = True
             self.luciferManager.main_shell = Shell(self.luciferManager.next_shell_id, self.luciferManager)
             self.luciferManager.next_shell_id += 1
-            root = tk.Tk()
+            root = themed_tk.ThemedTk()
+            root.set_theme("arc", toplevel=None, themebg=('#%02x%02x%02x' % (39, 44, 53)))
             self.luciferManager.gui = root
             application = LuciferGui(self.luciferManager, root)
             self.luciferManager.application = application
