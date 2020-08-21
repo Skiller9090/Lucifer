@@ -1,9 +1,8 @@
 import tkinter as tk
+from tkinter import ttk
 from .Errors import NoShellError
-from ctypes import create_string_buffer, windll, create_unicode_buffer, byref
 import sys
 import re
-
 
 ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
 font = None
@@ -20,9 +19,10 @@ class TextRedirect(object):
         self.widget.configure(state="disabled")
 
 
-class LuciferConsole(tk.Canvas):
+class LuciferConsole(tk.Frame):
     def __init__(self, luciferManager, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
+
         self.parent = parent
         self.expand = True
         self.luciferManager = luciferManager
@@ -31,12 +31,15 @@ class LuciferConsole(tk.Canvas):
         self.ConsoleBox.configure(state="disabled")
         self.ConsoleBox.tag_configure("stderr", foreground="#b22222")
 
-        self.yscrollbar = tk.Scrollbar(self)
+        self.yscrollbar = ttk.Scrollbar(self)
 
         self.ConsoleBox.config(yscrollcommand=self.yscrollbar.set)
         self.yscrollbar.config(command=self.ConsoleBox.yview)
-        self.ConsoleInput = tk.Entry(self, textvariable=self.console_in)
+        self.ConsoleInput = ttk.Entry(self, textvariable=self.console_in)
         self.get_shell()
+
+        self.ConsoleBox["bg"] = '#%02x%02x%02x' % (28, 28, 36)
+        self.ConsoleBox["foreground"] = '#%02x%02x%02x' % (255, 255, 255)
 
         self.ConsoleInput.pack(side=tk.BOTTOM, anchor=tk.W, expand=False, fill="x")
         self.yscrollbar.pack(side=tk.RIGHT, fill="y", anchor=tk.E, expand=False)
@@ -87,7 +90,6 @@ class LuciferToolbar(tk.Frame):
 
         self.MenuBar = tk.Menu(self)
         self.parent.config(menu=self.MenuBar)
-
         self.fileMenu = tk.Menu(self.MenuBar)
         self.fileMenu.add_command(label="Exit", command=luciferManager.end)
         self.MenuBar.add_cascade(label="File", menu=self.fileMenu)
@@ -101,6 +103,8 @@ class LuciferGui(tk.Frame):
 
         self.parent.title("Lucifer")
         self.parent.geometry("1200x600")
+        self.parent["bg"] = '#%02x%02x%02x' % (28, 28, 36)
+
         self.parent.grid_columnconfigure(0, weight=1)
         self.parent.grid_columnconfigure(1, weight=1)
         self.parent.grid_rowconfigure(0, weight=1)
@@ -109,4 +113,4 @@ class LuciferGui(tk.Frame):
         self.toolbar = LuciferToolbar(self.luciferManager, self.parent)
         self.console = LuciferConsole(self.luciferManager, self.parent)
 
-        self.console.grid(column=0, row=0, sticky=tk.NSEW, rowspan=2, columnspan=2)
+        self.console.grid(column=0, row=0, sticky=tk.NSEW, rowspan=2, columnspan=1)
