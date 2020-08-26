@@ -1,6 +1,6 @@
+import lucifer.Requirements
 from lucifer.ArgParse import LuciferParser
 from lucifer.Manager import LuciferManager
-
 
 luciferManager = LuciferManager()
 parser = LuciferParser(luciferManager, description="Lucifer")
