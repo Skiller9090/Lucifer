@@ -38,4 +38,7 @@ def index_modules():
                         "path": base_path + "\\".join(split_path[0:ind + 1]) + "\\" + module
                     }
             current_node = current_node[dir]["folders"]
-    return tree, modules
+    return tree, modules, sub_folders
+
+
+

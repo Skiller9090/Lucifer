@@ -179,10 +179,8 @@ class Shell:
         try:
             if self.module_obj is not None:
                 self.module_obj.run()
-                return
             else:
                 print("Please Select A Module First!")
-                return
         except Exception as e:
             checkErrors(e)
 
@@ -275,7 +273,10 @@ class Shell:
             return
 
     def clear_shell(self, *args, **kwargs):
-        print(self.luciferManager.colorama.ansi.clear_screen())
+        if self.luciferManager.gui is not None:
+            self.luciferManager.gui.console.clear()
+        else:
+            print(self.luciferManager.colorama.ansi.clear_screen())
 
     def use(self, com_args: list):
         if len(com_args) > 1:
