@@ -51,13 +51,19 @@ class LuciferModulesView(tk.Frame):
         self.moduleView["columns"] = "path"
         self.moduleView.heading("#0", text="Module", anchor=tk.W)
         self.moduleView.heading("#1", text="Path", anchor=tk.W)
-
+        self.moduleView.bind("<Double-1>", self.run_Module)
         self.add_Modules()
 
         self.moduleView.pack(fill="both", side=tk.TOP, expand=True)
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+
+    def run_Module(self, event, *args, **kwargs):
+        selected = self.moduleView.selection()
+        if "M" == selected[0][0]:
+            path = self.moduleView.item(selected[0])["values"][0]
+            self.luciferManager.gui.console.console_in.set(f'use {path}')
 
     def add_Modules(self):
         _, modules, directories = index_modules()
