@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-from .Errors import NoShellError
+from .Errors import NoShellError, checkErrors
+from .Indexing import index_modules
 import sys
 import re
+import threading
 
 ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
 font = None
@@ -17,6 +19,85 @@ class TextRedirect(object):
         self.widget.configure(state="normal")
         self.widget.insert("end", ansi_escape.sub("", string), (self.tag,))
         self.widget.configure(state="disabled")
+
+    def flush(self):
+        pass
+
+    def fileno(self):
+        if self.tag == "stdout":
+            return 1
+        else:
+            return 2
+
+
+class LuciferModulesView(tk.Frame):
+    def __init__(self, luciferManager, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.treeDirectory = []
+        self.parent = parent
+        self.expand = True
+        self.luciferManager = luciferManager
+
+        style = ttk.Style()
+        style.configure("Treeview",
+                        background="#E1E1E1",
+                        foreground="#000000",
+                        rowheight=25,
+                        fieldbackground="#E1E1E1")
+        style.map('Treeview', background=[('selected', '#BFBFBF')])
+
+        self.moduleView = ttk.Treeview(self)
+
+        self.moduleView["columns"] = "path"
+        self.moduleView.heading("#0", text="Module", anchor=tk.W)
+        self.moduleView.heading("#1", text="Path", anchor=tk.W)
+
+        self.add_Modules()
+
+        self.moduleView.pack(fill="both", side=tk.TOP, expand=True)
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+    def add_Modules(self):
+        _, modules, directories = index_modules()
+        directories.sort()
+
+        class folder:
+            def __init__(self, tree_obj, path):
+                self.obj = tree_obj
+                self.path = path
+
+        for index, directory in enumerate(directories):
+            layers = directory.split("\\")
+            name = layers[-1]
+            base_obj = None
+            if len(layers) > 1:
+                base_obj = self.treeDirectory[index - 1]
+                for td in self.treeDirectory:
+                    if td.path == directory.replace("\\"+name,""):
+                        base_obj = td
+                        break
+                obj = self.moduleView.insert(base_obj.obj, tk.END, index + 1,
+                                             text=name.title(), values=(directory.replace("\\", "/")))
+            else:
+                obj = self.moduleView.insert("", tk.END, index + 1,
+                                             text=name.title(), values=(directory.replace("\\", "/")))
+            self.treeDirectory.append(folder(obj, directory))
+
+        for i, k in enumerate(modules.keys()):
+            module = modules[k]
+            path = module["path"].replace("modules\\", "")
+            test_path = "\\".join(path.split("\\")[0:-1])
+            name = module["name"]
+            folder_obj = None
+
+            for folder in self.treeDirectory:
+                if folder.path == test_path:
+                    folder_obj = folder
+                    break
+            self.moduleView.insert(folder_obj.obj, tk.END, "M" + str(i + 1), text=name,
+                                   values=(path.replace("\\", "/")))
 
 
 class LuciferConsole(tk.Frame):
@@ -41,6 +122,8 @@ class LuciferConsole(tk.Frame):
         self.ConsoleBox["bg"] = '#%02x%02x%02x' % (28, 28, 36)
         self.ConsoleBox["foreground"] = '#%02x%02x%02x' % (255, 255, 255)
 
+        self.ConsoleInput.insert(0, 'Enter Command...')
+
         self.ConsoleInput.pack(side=tk.BOTTOM, anchor=tk.W, expand=False, fill="x")
         self.yscrollbar.pack(side=tk.RIGHT, fill="y", anchor=tk.E, expand=False)
         self.ConsoleBox.pack(fill="both", side=tk.LEFT, anchor=tk.E, expand=True)
@@ -50,26 +133,35 @@ class LuciferConsole(tk.Frame):
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
+        self.ConsoleInput.bind('<FocusIn>', self.on_entry_click)
+        self.ConsoleInput.bind('<FocusOut>', self.on_focusout)
         self.ConsoleInput.bind("<Return>", self.send_command)
-        sys.stdout = TextRedirect(self.ConsoleBox, "stdout")
-        sys.stderr = TextRedirect(self.ConsoleBox, "stderr")
+
+        self.luciferManager.stdout = TextRedirect(self.ConsoleBox, "stdout")
+        self.luciferManager.stderr = TextRedirect(self.ConsoleBox, "stderr")
+        sys.stdout = self.luciferManager.stdout
+        sys.stderr = self.luciferManager.stderr
+
         print("lucifer Prototype 1")
         print(f"{self.shell.program_name}|" +
               f"{self.shell.module if '.py' not in self.shell.module else self.shell.module.replace('.py', '')}" +
               f"|{self.shell.id}> ", end="")
 
+    def on_entry_click(self, *args, **kwargs):
+        if self.ConsoleInput.get() == 'Enter Command...':
+            self.ConsoleInput.delete(0, "end")
+            self.ConsoleInput.insert(0, '')
+
+    def on_focusout(self, *args, **kwargs):
+        if self.ConsoleInput.get() == '':
+            self.ConsoleInput.insert(0, 'Enter Command...')
+
     def send_command(self, *args, **kwargs):
-        self.get_shell()
-        self.shell.shell_in = self.console_in.get()
-        print(self.shell.shell_in)
-        self.console_in.set("")
-        self.shell.parseShellIn()
-        print(f"{self.shell.program_name}|" +
-              f"{self.shell.module if '.py' not in self.shell.module else self.shell.module.replace('.py', '')}" +
-              f"|{self.shell.id}> ", end="")
-        if self.luciferManager.log_file is not None:
-            if self.luciferManager.log_amount == 1:
-                self.luciferManager.log_command(self.shell.shell_in)
+        if self.luciferManager.gui_thread_free:
+            self.luciferManager.gui_thread_free = False
+            thread = threading.Thread(target=self.send_command_daemon)
+            thread.setDaemon(True)
+            thread.start()
 
     def get_shell(self):
         self.shell = self.luciferManager.main_shell if self.luciferManager.current_shell_id == 0 else None
@@ -80,6 +172,29 @@ class LuciferConsole(tk.Frame):
                     break
             else:
                 raise NoShellError("Couldn't Find Shell With ID: " + str(self.luciferManager.current_shell_id))
+
+    def clear(self):
+        self.ConsoleBox.configure(state="normal")
+        self.ConsoleBox.delete(1.0, tk.END)
+        self.ConsoleBox.configure(state="disabled")
+
+    def send_command_daemon(self):
+        try:
+            self.get_shell()
+            self.shell.shell_in = self.console_in.get()
+            print(self.shell.shell_in)
+            self.console_in.set("")
+            self.shell.parseShellIn()
+            print(f"{self.shell.program_name}|" +
+                  f"{self.shell.module if '.py' not in self.shell.module else self.shell.module.replace('.py', '')}" +
+                  f"|{self.shell.id}> ", end="")
+            if self.luciferManager.log_file is not None:
+                if self.luciferManager.log_amount == 1:
+                    self.luciferManager.log_command(self.shell.shell_in)
+            self.ConsoleBox.see(tk.END)
+        except Exception as e:
+            checkErrors(e)
+        self.luciferManager.gui_thread_free = True
 
 
 class LuciferToolbar(tk.Frame):
@@ -110,7 +225,18 @@ class LuciferGui(tk.Frame):
         self.parent.grid_rowconfigure(0, weight=1)
         self.parent.grid_rowconfigure(1, weight=1)
 
+        self.mainPane = ttk.PanedWindow(orient=tk.HORIZONTAL)
+        self.mainPane.pack(fill=tk.BOTH, expand=True)
+
         self.toolbar = LuciferToolbar(self.luciferManager, self.parent)
         self.console = LuciferConsole(self.luciferManager, self.parent)
+        self.mainPane.add(self.console)
 
-        self.console.grid(column=0, row=0, sticky=tk.NSEW, rowspan=2, columnspan=1)
+        self.rightPane = ttk.PanedWindow(orient=tk.VERTICAL)
+        self.mainPane.add(self.rightPane)
+
+        self.moduleView = LuciferModulesView(self.luciferManager, self.parent)
+        self.rightPane.add(self.moduleView)
+
+        # self.console.grid(column=0, row=0, sticky=tk.NSEW, rowspan=2, columnspan=1)
+        # self.moduleView.grid(column=1, row=0, sticky=tk.NSEW)

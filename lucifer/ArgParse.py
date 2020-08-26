@@ -111,15 +111,14 @@ class LuciferParser(argparse.ArgumentParser):
 
     def check_gui(self):
         if self.args.gui:
-
             self.luciferManager.gui = True
             self.luciferManager.main_shell = Shell(self.luciferManager.next_shell_id, self.luciferManager)
             self.luciferManager.next_shell_id += 1
             root = themed_tk.ThemedTk()
             root.set_theme("arc", toplevel=None, themebg=('#%02x%02x%02x' % (39, 44, 53)))
-            self.luciferManager.gui = root
+            self.luciferManager.root = root
             application = LuciferGui(self.luciferManager, root)
-            self.luciferManager.application = application
+            self.luciferManager.gui = application
             root.mainloop()
 
         else:

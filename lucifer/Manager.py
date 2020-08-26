@@ -1,6 +1,6 @@
 from libs import termcolor
 from libs import colorama
-
+import sys
 
 class LuciferManager:
     def __init__(self, auto_vars=False):
@@ -16,6 +16,9 @@ class LuciferManager:
         self.log_file = None
         self.log_amount = 0
         self.gui = None
+        self.gui_thread_free = True
+        self.stdout = sys.stdout
+        self.stderr = sys.stderr
 
     def end(self, *args, **kwargs):
         print("Thank you for using lucifer, see you next time!")
