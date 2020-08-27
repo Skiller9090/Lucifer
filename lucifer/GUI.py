@@ -87,26 +87,25 @@ class LuciferModulesView(tk.Frame):
                 self.path = obj_path
 
         for index, directory in enumerate(directories):
-            layers = directory.split("\\")
+            layers = directory.split("/")
             name = layers[-1]
             base_obj = None
             if len(layers) > 1:
-                base_obj = self.treeDirectory[index - 1]
                 for td in self.treeDirectory:
-                    if td.path == directory.replace("\\" + name, ""):
+                    if td.path == directory.replace("/" + name, ""):
                         base_obj = td
                         break
                 obj = self.moduleView.insert(base_obj.obj, tk.END, index + 1,
-                                             text=name.title(), values=(directory.replace("\\", "/")))
+                                             text=name.title(), values=(directory,))
             else:
                 obj = self.moduleView.insert("", tk.END, index + 1,
-                                             text=name.title(), values=(directory.replace("\\", "/")))
+                                             text=name.title(), values=(directory,))
             self.treeDirectory.append(Folder(obj, directory))
 
         for i, k in enumerate(modules.keys()):
             module = modules[k]
-            path = module["path"].replace("modules\\", "")
-            test_path = "\\".join(path.split("\\")[0:-1])
+            path = module["path"].replace("modules/", "")
+            test_path = "/".join(path.split("/")[0:-1])
             name = module["name"]
             folder_obj = None
 
@@ -115,7 +114,7 @@ class LuciferModulesView(tk.Frame):
                     folder_obj = folder
                     break
             self.moduleView.insert(folder_obj.obj, tk.END, "M" + str(i + 1), text=name,
-                                   values=(path.replace("\\", "/"),))
+                                   values=(path,))
 
 
 class LuciferConsole(tk.Frame, RetrieveShell):
