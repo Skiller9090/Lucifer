@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from .Errors import NoShellError, checkErrors
 from .Indexing import index_modules
 import sys
@@ -271,6 +272,7 @@ class LuciferGui(tk.Frame):
         self.parent.title("Lucifer")
         self.parent.geometry("1200x600")
         self.parent["bg"] = '#%02x%02x%02x' % (28, 28, 36)
+        self.parent.protocol("WM_DELETE_WINDOW", self.on_close)
 
         self.parent.grid_columnconfigure(0, weight=1)
         self.parent.grid_columnconfigure(1, weight=1)
@@ -294,3 +296,9 @@ class LuciferGui(tk.Frame):
 
         # self.console.grid(column=0, row=0, sticky=tk.NSEW, rowspan=2, columnspan=1)
         # self.moduleView.grid(column=1, row=0, sticky=tk.NSEW)
+
+    def on_close(self):
+        if messagebox.askokcancel("Quit Lucifer", "Are you sure you want to quit Lucifer?"):
+            self.parent.destroy()
+            self.luciferManager.end()
+
