@@ -239,10 +239,10 @@ class Shell:
         return
 
     def set_name(self, com_args: list):
-        print(com_args)
         if len(com_args) > 1:
             com_args.pop(0)
             self.name = " ".join(com_args)
+            print(f"{self.id} => {self.name}")
         return
 
     def set_name_id(self, com_args: list):

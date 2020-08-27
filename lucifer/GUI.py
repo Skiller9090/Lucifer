@@ -221,11 +221,13 @@ class LuciferToolbar(tk.Frame):
 class LuciferVarView(tk.Frame, RetrieveShell):
     def __init__(self, luciferManager, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
+        self.luciferManager = luciferManager
+        self.get_shell()
+        self.varViewVars = {}
         self.varViewObjects = []
         self.treeDirectory = []
         self.parent = parent
         self.expand = True
-        self.luciferManager = luciferManager
 
         style = ttk.Style()
         style.configure("Treeview",
@@ -248,11 +250,13 @@ class LuciferVarView(tk.Frame, RetrieveShell):
         self.grid_rowconfigure(0, weight=1)
 
     def display_vars(self):
-        self.clear_varView()
         self.get_shell()
-        for k, v in zip(self.shell.vars.keys(), self.shell.vars.values()):
-            obj = self.varView.insert("", tk.END, k, text=k, values=(v,))
-            self.varViewObjects.append(obj)
+        if self.varViewVars != self.shell.vars:
+            self.clear_varView()
+            self.varViewVars = self.shell.vars.copy()
+            for k, v in zip(self.varViewVars.keys(), self.varViewVars.values()):
+                obj = self.varView.insert("", tk.END, k, text=k, values=(v,))
+                self.varViewObjects.append(obj)
 
     def clear_varView(self):
         self.varView.delete(*self.varView.get_children())
