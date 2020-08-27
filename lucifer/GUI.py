@@ -30,6 +30,18 @@ class TextRedirect(object):
             return 2
 
 
+class RetrieveShell:
+    def get_shell(self):
+        self.shell = self.luciferManager.main_shell if self.luciferManager.current_shell_id == 0 else None
+        if self.shell is None:
+            for shell in self.luciferManager.alternative_shells:
+                if shell.id == self.luciferManager.current_shell_id:
+                    self.shell = shell
+                    break
+            else:
+                raise NoShellError("Couldn't Find Shell With ID: " + str(self.luciferManager.current_shell_id))
+
+
 class LuciferModulesView(tk.Frame):
     def __init__(self, luciferManager, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -69,10 +81,10 @@ class LuciferModulesView(tk.Frame):
         _, modules, directories = index_modules()
         directories.sort()
 
-        class folder:
-            def __init__(self, tree_obj, path):
+        class Folder:
+            def __init__(self, tree_obj, obj_path):
                 self.obj = tree_obj
-                self.path = path
+                self.path = obj_path
 
         for index, directory in enumerate(directories):
             layers = directory.split("\\")
@@ -81,7 +93,7 @@ class LuciferModulesView(tk.Frame):
             if len(layers) > 1:
                 base_obj = self.treeDirectory[index - 1]
                 for td in self.treeDirectory:
-                    if td.path == directory.replace("\\"+name,""):
+                    if td.path == directory.replace("\\" + name, ""):
                         base_obj = td
                         break
                 obj = self.moduleView.insert(base_obj.obj, tk.END, index + 1,
@@ -89,7 +101,7 @@ class LuciferModulesView(tk.Frame):
             else:
                 obj = self.moduleView.insert("", tk.END, index + 1,
                                              text=name.title(), values=(directory.replace("\\", "/")))
-            self.treeDirectory.append(folder(obj, directory))
+            self.treeDirectory.append(Folder(obj, directory))
 
         for i, k in enumerate(modules.keys()):
             module = modules[k]
@@ -103,10 +115,10 @@ class LuciferModulesView(tk.Frame):
                     folder_obj = folder
                     break
             self.moduleView.insert(folder_obj.obj, tk.END, "M" + str(i + 1), text=name,
-                                   values=(path.replace("\\", "/")))
+                                   values=(path.replace("\\", "/"),))
 
 
-class LuciferConsole(tk.Frame):
+class LuciferConsole(tk.Frame, RetrieveShell):
     def __init__(self, luciferManager, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
@@ -169,16 +181,6 @@ class LuciferConsole(tk.Frame):
             thread.setDaemon(True)
             thread.start()
 
-    def get_shell(self):
-        self.shell = self.luciferManager.main_shell if self.luciferManager.current_shell_id == 0 else None
-        if self.shell is None:
-            for shell in self.luciferManager.alternative_shells:
-                if shell.id == self.luciferManager.current_shell_id:
-                    self.shell = shell
-                    break
-            else:
-                raise NoShellError("Couldn't Find Shell With ID: " + str(self.luciferManager.current_shell_id))
-
     def clear(self):
         self.ConsoleBox.configure(state="normal")
         self.ConsoleBox.delete(1.0, tk.END)
@@ -200,6 +202,7 @@ class LuciferConsole(tk.Frame):
             self.ConsoleBox.see(tk.END)
         except Exception as e:
             checkErrors(e)
+        self.luciferManager.gui.varView.display_vars()
         self.luciferManager.gui_thread_free = True
 
 
@@ -214,6 +217,46 @@ class LuciferToolbar(tk.Frame):
         self.fileMenu = tk.Menu(self.MenuBar)
         self.fileMenu.add_command(label="Exit", command=luciferManager.end)
         self.MenuBar.add_cascade(label="File", menu=self.fileMenu)
+
+
+class LuciferVarView(tk.Frame, RetrieveShell):
+    def __init__(self, luciferManager, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.varViewObjects = []
+        self.treeDirectory = []
+        self.parent = parent
+        self.expand = True
+        self.luciferManager = luciferManager
+
+        style = ttk.Style()
+        style.configure("Treeview",
+                        background="#E1E1E1",
+                        foreground="#000000",
+                        rowheight=25,
+                        fieldbackground="#E1E1E1")
+        style.map('Treeview', background=[('selected', '#BFBFBF')])
+
+        self.varView = ttk.Treeview(self)
+
+        self.varView["columns"] = "path"
+        self.varView.heading("#0", text="Variable", anchor=tk.W)
+        self.varView.heading("#1", text="Value", anchor=tk.W)
+
+        self.varView.pack(fill="both", side=tk.TOP, expand=True)
+        self.display_vars()
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+    def display_vars(self):
+        self.clear_varView()
+        self.get_shell()
+        for k, v in zip(self.shell.vars.keys(), self.shell.vars.values()):
+            obj = self.varView.insert("", tk.END, k, text=k, values=(v,))
+            self.varViewObjects.append(obj)
+
+    def clear_varView(self):
+        self.varView.delete(*self.varView.get_children())
 
 
 class LuciferGui(tk.Frame):
@@ -242,7 +285,9 @@ class LuciferGui(tk.Frame):
         self.mainPane.add(self.rightPane)
 
         self.moduleView = LuciferModulesView(self.luciferManager, self.parent)
+        self.varView = LuciferVarView(self.luciferManager, self.parent)
         self.rightPane.add(self.moduleView)
+        self.rightPane.add(self.varView)
 
         # self.console.grid(column=0, row=0, sticky=tk.NSEW, rowspan=2, columnspan=1)
         # self.moduleView.grid(column=1, row=0, sticky=tk.NSEW)
