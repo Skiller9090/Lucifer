@@ -22,6 +22,7 @@ def index_modules():
     for sf in sub_folders:
         split_path = sf.split("\\")
         current_node = tree
+        print(sub_folders)
         for ind, dir in enumerate(split_path):
             if dir not in current_node.keys():
                 current_node[dir] = {
