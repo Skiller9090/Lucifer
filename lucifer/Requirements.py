@@ -12,6 +12,3 @@ def check_requirements():
             print(f'{e.req} is need for lucifer to run\nPlease install requirements.txt with:\n'
                   f'    pip install -r requirements.txt')
             exit(1)
-
-
-check_requirements()
