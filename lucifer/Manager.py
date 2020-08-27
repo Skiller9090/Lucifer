@@ -2,6 +2,7 @@ from libs import termcolor
 from libs import colorama
 import sys
 
+
 class LuciferManager:
     def __init__(self, auto_vars=False):
         self.main_shell = None
