@@ -105,10 +105,6 @@ class LuciferParser(argparse.ArgumentParser):
         self.print_help()
         sys.exit(os.EX_USAGE)
 
-    def check_args(self):
-        if len(sys.argv) == 1:
-            self.error_usage("No Arguments")
-
     def check_gui(self):
         if self.args.gui:
             self.luciferManager.gui = True
@@ -128,7 +124,7 @@ class LuciferParser(argparse.ArgumentParser):
             self.luciferManager.next_shell_id += 1
             self.luciferManager.main_shell.spawn()
 
-    def check_autoset(self):
+    def check_autoSet(self):
         if self.args.auto_set_vars:
             self.luciferManager.auto_vars = True
             print("Auto Set Variables Enabled")
@@ -139,3 +135,17 @@ class LuciferParser(argparse.ArgumentParser):
                 open(self.args.logger_loc, "w").close()
             self.luciferManager.log_file = self.args.logger_loc
             self.luciferManager.log_amount = 1  # 0 - None, 1 - Commands
+
+    def run(self):
+        self.check_logging()
+        self.check_autoSet()
+        self.check_gui()
+
+    def add_lucifer_args(self):
+        self.add_argument("-l", "--log-commands", dest="logger_loc", help="Enables Command Logging To File",
+                            action="store", required=False)
+        self.add_argument("-g", "--gui", help="Enables The Gui Mode",
+                            action="store_true", required=False)
+        self.add_argument("-a", "--auto-set-vars", dest="auto_set_vars",
+                            help="Enables Auto Setting of Vars On Module Load",
+                            action="store_true", required=False)
