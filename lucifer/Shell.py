@@ -1,6 +1,7 @@
 from lucifer.utils import check_int
 from .Errors import checkErrors
 from .Help import help_menu
+import lucifer.Indexing as Indexing
 import re
 import os
 import importlib
@@ -48,7 +49,14 @@ class Shell:
             "auto_var": self.print_auto_vars,
             "change_auto_var": self.change_auto_set_vars
         }
+        self.module_cache = None
         self.luciferManager.shell_recur += 1
+        self.index_modules()
+
+    def index_modules(self):
+        print("Indexing Modules...")
+        self.module_cache = Indexing.index_modules()
+        print(f"Indexing Complete, Found {len(self.module_cache[1].keys())} Modules")
 
     def getIn(self):
         self.shell_in = input(f"{self.program_name}|" +
@@ -133,6 +141,10 @@ class Shell:
         return
 
     def use_module(self, mod_path: list):
+        use_cache = True
+        if "-R" in mod_path:
+            mod_path.remove("-R")
+            use_cache = False
         if self.module_obj is not None:
             self.loaded_modules[self.module] = self.module_obj
         ori_path = mod_path.copy()
@@ -159,10 +171,13 @@ class Shell:
             else:
                 print(f"Module: {'/'.join(ori_path)} Does Not Exist!")
                 return
-
-        if self.module in self.loaded_modules.keys():
+        isInCache = self.module in self.loaded_modules.keys()
+        if isInCache and use_cache:
+            print(f"Loading {self.module} from cache, use -R to override this.")
             self.module_obj = self.loaded_modules.get(self.module)
         else:
+            print(f"{self.module} in cache, ignoring it...") if isInCache else None
+            print(f"Loading {self.module} from file.")
             to_import = (self.module.replace("/", ".")
                          if ".py" not in self.module else
                          self.module.replace(".py", "").replace("/", ".")).split(".")
