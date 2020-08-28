@@ -31,6 +31,13 @@ class TextRedirect(object):
             return 2
 
 
+class Closer:
+    def on_close(self):
+        if messagebox.askokcancel("Quit Lucifer", "Are you sure you want to quit Lucifer?"):
+            self.parent.destroy()
+            self.luciferManager.end()
+
+
 class RetrieveShell:
     def get_shell(self):
         self.shell = self.luciferManager.main_shell if self.luciferManager.current_shell_id == 0 else None
@@ -130,10 +137,10 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         self.ConsoleBox.configure(state="disabled")
         self.ConsoleBox.tag_configure("stderr", foreground="#b22222")
 
-        self.yscrollbar = ttk.Scrollbar(self)
+        self.y_scrollbar = ttk.Scrollbar(self)
 
-        self.ConsoleBox.config(yscrollcommand=self.yscrollbar.set)
-        self.yscrollbar.config(command=self.ConsoleBox.yview)
+        self.ConsoleBox.config(yscrollcommand=self.y_scrollbar.set)
+        self.y_scrollbar.config(command=self.ConsoleBox.yview)
         self.ConsoleInput = ttk.Entry(self, textvariable=self.console_in)
         self.get_shell()
 
@@ -143,7 +150,7 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         self.ConsoleInput.insert(0, 'Enter Command...')
 
         self.ConsoleInput.pack(side=tk.BOTTOM, anchor=tk.W, expand=False, fill="x")
-        self.yscrollbar.pack(side=tk.RIGHT, fill="y", anchor=tk.E, expand=False)
+        self.y_scrollbar.pack(side=tk.RIGHT, fill="y", anchor=tk.E, expand=False)
         self.ConsoleBox.pack(fill="both", side=tk.LEFT, anchor=tk.E, expand=True)
 
         self.grid_columnconfigure(0, weight=1)
@@ -206,17 +213,27 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         self.luciferManager.gui_thread_free = True
 
 
-class LuciferToolbar(tk.Frame):
-    def __init__(self, luciferManager, parent, *args, **kwargs):
+class LuciferToolbar(tk.Frame, Closer):
+    def __init__(self, luciferManager, parent, GUI, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
         self.luciferManager = luciferManager
+        self.LuciferGui = GUI
 
         self.MenuBar = tk.Menu(self)
         self.parent.config(menu=self.MenuBar)
+
         self.fileMenu = tk.Menu(self.MenuBar)
-        self.fileMenu.add_command(label="Exit", command=luciferManager.end)
+        self.viewMenu = tk.Menu(self.MenuBar)
+
+        self.fileMenu.add_command(label="Exit", command=self.on_close)
+        self.viewMenu.add_command(label="Toggle Console", command=self.LuciferGui.toggle_console)
+        self.viewMenu.add_command(label="Toggle Module View", command=self.LuciferGui.toggle_module_view)
+        self.viewMenu.add_command(label="Toggle Variable View", command=self.LuciferGui.toggle_var_view)
+        self.viewMenu.add_command(label="Toggle Right Pane", command=self.LuciferGui.toggle_right_pane)
+
         self.MenuBar.add_cascade(label="File", menu=self.fileMenu)
+        self.MenuBar.add_cascade(label="View", menu=self.viewMenu)
 
 
 class LuciferVarView(tk.Frame, RetrieveShell):
@@ -263,11 +280,16 @@ class LuciferVarView(tk.Frame, RetrieveShell):
         self.varView.delete(*self.varView.get_children())
 
 
-class LuciferGui(tk.Frame):
+class LuciferGui(tk.Frame, Closer):
     def __init__(self, luciferManager, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
         self.luciferManager = luciferManager
+
+        self.isRightPaneEnabled = True
+        self.isConsoleEnabled = True
+        self.isVarViewEnabled = True
+        self.isModuleViewEnabled = True
 
         self.parent.title("Lucifer")
         self.parent.geometry("1200x600")
@@ -282,7 +304,7 @@ class LuciferGui(tk.Frame):
         self.mainPane = ttk.PanedWindow(orient=tk.HORIZONTAL)
         self.mainPane.pack(fill=tk.BOTH, expand=True)
 
-        self.toolbar = LuciferToolbar(self.luciferManager, self.parent)
+        self.toolbar = LuciferToolbar(self.luciferManager, self.parent, self)
         self.console = LuciferConsole(self.luciferManager, self.parent)
         self.mainPane.add(self.console)
 
@@ -294,11 +316,36 @@ class LuciferGui(tk.Frame):
         self.rightPane.add(self.moduleView)
         self.rightPane.add(self.varView)
 
-        # self.console.grid(column=0, row=0, sticky=tk.NSEW, rowspan=2, columnspan=1)
-        # self.moduleView.grid(column=1, row=0, sticky=tk.NSEW)
+    def toggle_right_pane(self):
+        if self.isRightPaneEnabled:
+            self.mainPane.remove(self.rightPane)
+        else:
+            self.mainPane.add(self.rightPane)
+        self.isRightPaneEnabled = not self.isRightPaneEnabled
 
-    def on_close(self):
-        if messagebox.askokcancel("Quit Lucifer", "Are you sure you want to quit Lucifer?"):
-            self.parent.destroy()
-            self.luciferManager.end()
+    def toggle_console(self):
+        if self.isConsoleEnabled:
+            self.mainPane.remove(self.console)
+        else:
+            if len(self.mainPane.panes()) > 0:
+                self.mainPane.insert(0, self.console)
+            else:
+                self.mainPane.add(self.console)
+        self.isConsoleEnabled = not self.isConsoleEnabled
 
+    def toggle_var_view(self):
+        if self.isVarViewEnabled:
+            self.rightPane.remove(self.varView)
+        else:
+            self.rightPane.add(self.varView)
+        self.isVarViewEnabled = not self.isVarViewEnabled
+
+    def toggle_module_view(self):
+        if not self.isModuleViewEnabled:
+            if len(self.rightPane.panes()) > 0:
+                self.rightPane.insert(0, self.moduleView)
+            else:
+                self.rightPane.add(self.moduleView)
+        else:
+            self.rightPane.remove(self.moduleView)
+        self.isModuleViewEnabled = not self.isModuleViewEnabled
