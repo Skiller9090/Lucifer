@@ -7,7 +7,6 @@ class LuciferManager:
     def __init__(self, auto_vars=False):
         self.main_shell = None
         self.alternative_shells = []
-        self.gui = False
         self.next_shell_id = 0
         self.shell_recur = 0
         self.colorama = colorama
@@ -22,11 +21,15 @@ class LuciferManager:
         self.stderr = sys.stderr
 
     def end(self, *args, **kwargs):
+        sys.stderr = sys.__stderr__
+        sys.stdout = sys.__stdout__
         print("Thank you for using lucifer, see you next time!")
-        exit(0)
         if self.log_amount > 0:
             if self.log_file is not None:
                 self.log_file.close()
+        if self.gui is not None:
+            self.gui.parent.destroy()
+        exit(0)
 
     def log_command(self, command):
         with open(self.log_file, "a") as f:

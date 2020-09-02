@@ -136,6 +136,9 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         self.ConsoleBox = tk.Text(self, font=font)
         self.ConsoleBox.configure(state="disabled")
         self.ConsoleBox.tag_configure("stderr", foreground="#b22222")
+        self.command_history = []
+        self.command_index = None
+        self.opened_order = [0]
 
         self.y_scrollbar = ttk.Scrollbar(self)
 
@@ -161,12 +164,13 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         self.ConsoleInput.bind('<FocusIn>', self.on_entry_click)
         self.ConsoleInput.bind('<FocusOut>', self.on_focusout)
         self.ConsoleInput.bind("<Return>", self.send_command)
+        self.ConsoleInput.bind("<Up>", self.history_up)
+        self.ConsoleInput.bind("<Down>", self.history_down)
 
         self.luciferManager.stdout = TextRedirect(self.ConsoleBox, "stdout")
         self.luciferManager.stderr = TextRedirect(self.ConsoleBox, "stderr")
         sys.stdout = self.luciferManager.stdout
         sys.stderr = self.luciferManager.stderr
-
         print("lucifer Prototype 1")
         print(f"{self.shell.program_name}|" +
               f"{self.shell.module if '.py' not in self.shell.module else self.shell.module.replace('.py', '')}" +
@@ -195,11 +199,16 @@ class LuciferConsole(tk.Frame, RetrieveShell):
 
     def send_command_daemon(self):
         try:
+            self.luciferManager.gui.statusFrame.status.set("Starting Command")
             self.get_shell()
             self.shell.shell_in = self.console_in.get()
+            self.command_index = None
+            self.command_history.append(self.shell.shell_in)
+            self.luciferManager.gui.statusFrame.status.set(f"Running Command: {self.shell.shell_in}")
             print(self.shell.shell_in)
             self.console_in.set("")
             self.shell.parseShellIn()
+            self.get_shell()
             print(f"{self.shell.program_name}|" +
                   f"{self.shell.module if '.py' not in self.shell.module else self.shell.module.replace('.py', '')}" +
                   f"|{self.shell.id}> ", end="")
@@ -209,8 +218,50 @@ class LuciferConsole(tk.Frame, RetrieveShell):
             self.ConsoleBox.see(tk.END)
         except Exception as e:
             checkErrors(e)
+        self.luciferManager.gui.statusFrame.status.set("Idle")
         self.luciferManager.gui.varView.display_vars()
         self.luciferManager.gui_thread_free = True
+
+    def history_up(self, *args, **kwargs):
+        if self.command_index is None:
+            if len(self.command_history) > 0:
+                self.command_index = len(self.command_history) - 1
+                self.ConsoleInput.delete(0, "end")
+                self.ConsoleInput.insert(0, self.command_history[self.command_index])
+        else:
+            if self.command_index > 0:
+                self.command_index -= 1
+                self.ConsoleInput.delete(0, "end")
+                self.ConsoleInput.insert(0, self.command_history[self.command_index])
+
+    def history_down(self, *args, **kwargs):
+        if self.command_index is not None:
+            if len(self.command_history)-1 > self.command_index:
+                self.command_index += 1
+                self.ConsoleInput.delete(0, "end")
+                self.ConsoleInput.insert(0, self.command_history[self.command_index])
+            else:
+                self.command_index = None
+                self.ConsoleInput.delete(0, "end")
+
+
+class LuciferStatus(tk.Frame):
+    def __init__(self, luciferManager, parent, GUI, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.parent = parent
+        self.luciferManager = luciferManager
+        self.LuciferGui = GUI
+        self.status = tk.StringVar()
+        self.status.set("Idle")
+
+        style = ttk.Style()
+        style.configure("Label", foreground="white")
+
+        self.statusWidget = ttk.Label(self, textvariable=self.status,
+                                      relief=tk.SUNKEN, anchor=tk.E,
+                                      font="None 8 bold")
+        self.statusWidget.config(style="Label")
+        self.statusWidget.pack(fill=tk.X, expand=False)
 
 
 class LuciferToolbar(tk.Frame, Closer):
@@ -302,7 +353,9 @@ class LuciferGui(tk.Frame, Closer):
         self.parent.grid_rowconfigure(1, weight=1)
 
         self.mainPane = ttk.PanedWindow(orient=tk.HORIZONTAL)
-        self.mainPane.pack(fill=tk.BOTH, expand=True)
+        self.statusFrame = LuciferStatus(self.luciferManager, self.parent, self)
+        self.statusFrame.pack(fill=tk.X, expand=False, side=tk.BOTTOM)
+        self.mainPane.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
 
         self.toolbar = LuciferToolbar(self.luciferManager, self.parent, self)
         self.console = LuciferConsole(self.luciferManager, self.parent)
