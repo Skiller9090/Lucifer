@@ -88,11 +88,12 @@ class Shell:
         print(self.help_menu)
 
     def spawn(self):
-        while True:
-            self.getIn()
-            signal = self.parseShellIn()
-            if signal == 7:
-                break
+        if self.luciferManager.gui is None:
+            while True:
+                self.getIn()
+                signal = self.parseShellIn()
+                if signal == 7:
+                    break
 
     def command_set(self, com_args: list):
         com_args.pop(0)
@@ -227,15 +228,22 @@ class Shell:
             if check_int(openid):
                 openid = int(openid)
                 if openid == 0:
-                    self.luciferManager.current_shell_id = 0
-                    self.luciferManager.main_shell.spawn()
+                    self.luciferManager.gui.console.opened_order.append(openid)
+                    self.luciferManager.current_shell_id = openid
+                    try:
+                        self.luciferManager.main_shell.spawn()
+                    except Exception as e:
+                        checkErrors(e)
                     return
                 else:
-                    found = False
                     for index, shell in enumerate(self.luciferManager.alternative_shells):
                         if shell.id == openid:
                             self.luciferManager.current_shell_id = openid
-                            self.luciferManager.alternative_shells[index].spawn()
+                            self.luciferManager.gui.console.opened_order.append(openid)
+                            try:
+                                self.luciferManager.alternative_shells[index].spawn()
+                            except Exception as e:
+                                checkErrors(e)
                             return
                     else:
                         print("Please specify a valid ID")
@@ -309,11 +317,19 @@ class Shell:
         return
 
     def background_shell(self, com_args: list):
-        if self.luciferManager.shell_recur == 1:
-            self.luciferManager.end()
+        if self.luciferManager.gui is None:
+            if self.luciferManager.shell_recur == 1:
+                self.luciferManager.end()
+            else:
+                self.luciferManager.shell_recur -= 1
+            return 7
         else:
-            self.luciferManager.shell_recur -= 1
-        return 7
+            if len(self.luciferManager.gui.console.opened_order) > 1:
+                self.luciferManager.gui.console.opened_order.pop(-1)
+                self.luciferManager.current_shell_id = self.luciferManager.gui.console.opened_order[-1]
+            else:
+                self.luciferManager.end()
+
 
     def change_auto_set_vars(self, com_args: list):
         com_args.pop(0)

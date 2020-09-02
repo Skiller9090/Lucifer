@@ -12,7 +12,5 @@ def start():
 
     parser.run()
 
-    luciferManager.end()
-
 
 
