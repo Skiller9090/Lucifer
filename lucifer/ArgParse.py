@@ -2,7 +2,6 @@ import argparse
 import os
 import sys
 import re as _re
-import tkinter as tk
 from libs.ttkthemes import themed_tk
 from .Shell import Shell
 from .Manager import LuciferManager
@@ -143,9 +142,9 @@ class LuciferParser(argparse.ArgumentParser):
 
     def add_lucifer_args(self):
         self.add_argument("-l", "--log-commands", dest="logger_loc", help="Enables Command Logging To File",
-                            action="store", required=False)
+                          action="store", required=False)
         self.add_argument("-g", "--gui", help="Enables The Gui Mode",
-                            action="store_true", required=False)
+                          action="store_true", required=False)
         self.add_argument("-a", "--auto-set-vars", dest="auto_set_vars",
-                            help="Enables Auto Setting of Vars On Module Load",
-                            action="store_true", required=False)
+                          help="Enables Auto Setting of Vars On Module Load",
+                          action="store_true", required=False)
