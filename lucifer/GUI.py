@@ -303,7 +303,7 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         # self.luciferManager.stderr = TextRedirect(self.ConsoleBox, "stderr")
         sys.stdout = self.luciferManager.stdout
         sys.stderr = self.luciferManager.stderr
-        print("lucifer Prototype 1")
+        print("Lucifer Prototype 2")
         print(f"{self.shell.program_name}|" +
               f"{self.shell.module if '.py' not in self.shell.module else self.shell.module.replace('.py', '')}" +
               f"|{self.shell.id}> ", end="")
