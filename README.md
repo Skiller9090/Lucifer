@@ -1,5 +1,5 @@
 # Lucifer
-
+09/09/2020
 ## Commands
 
 | Command | Description |
