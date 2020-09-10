@@ -10,7 +10,6 @@ import base64
 import codecs
 import datetime
 import distutils.util
-from email import message_from_file
 import hashlib
 import imp
 import json
@@ -22,11 +21,12 @@ import shutil
 import sys
 import tempfile
 import zipfile
+from email import message_from_file
 
 from . import __version__, DistlibException
 from .compat import sysconfig, ZipFile, fsdecode, text_type, filter
 from .database import InstalledDistribution
-from .metadata import (Metadata, METADATA_FILENAME, WHEEL_METADATA_FILENAME,
+from .metadata import (Metadata, WHEEL_METADATA_FILENAME,
                        LEGACY_METADATA_FILENAME)
 from .util import (FileOperator, convert_path, CSVReader, CSVWriter, Cache,
                    cached_property, get_cache_base, read_exports, tempdir)
@@ -34,7 +34,7 @@ from .version import NormalizedVersion, UnsupportedVersionError
 
 logger = logging.getLogger(__name__)
 
-cache = None    # created when needed
+cache = None  # created when needed
 
 if hasattr(sys, 'pypy_version_info'):  # pragma: no cover
     IMP_PREFIX = 'pp'
@@ -46,7 +46,7 @@ else:
     IMP_PREFIX = 'cp'
 
 VER_SUFFIX = sysconfig.get_config_var('py_version_nodot')
-if not VER_SUFFIX:   # pragma: no cover
+if not VER_SUFFIX:  # pragma: no cover
     VER_SUFFIX = '%s%s' % sys.version_info[:2]
 PYVER = 'py' + VER_SUFFIX
 IMPVER = IMP_PREFIX + VER_SUFFIX
@@ -66,6 +66,8 @@ else:
         if sysconfig.get_config_var('Py_UNICODE_SIZE') == 4:
             parts.append('u')
         return ''.join(parts)
+
+
     ABI = _derive_abi()
     del _derive_abi
 
@@ -130,6 +132,7 @@ class Mounter(object):
             if len(parts) > 1:
                 result.__package__ = parts[0]
         return result
+
 
 _hook = Mounter()
 
@@ -223,10 +226,10 @@ class Wheel(object):
             wv = wheel_metadata['Wheel-Version'].split('.', 1)
             file_version = tuple([int(i) for i in wv])
             # if file_version < (1, 1):
-                # fns = [WHEEL_METADATA_FILENAME, METADATA_FILENAME,
-                       # LEGACY_METADATA_FILENAME]
+            # fns = [WHEEL_METADATA_FILENAME, METADATA_FILENAME,
+            # LEGACY_METADATA_FILENAME]
             # else:
-                # fns = [WHEEL_METADATA_FILENAME, METADATA_FILENAME]
+            # fns = [WHEEL_METADATA_FILENAME, METADATA_FILENAME]
             fns = [WHEEL_METADATA_FILENAME, LEGACY_METADATA_FILENAME]
             result = None
             for fn in fns:
@@ -302,7 +305,7 @@ class Wheel(object):
         return hash_kind, result
 
     def write_record(self, records, record_path, base):
-        records = list(records) # make a copy, as mutated
+        records = list(records)  # make a copy, as mutated
         p = to_posix(os.path.relpath(record_path, base))
         records.append((p, '', ''))
         with CSVWriter(record_path) as writer:
@@ -437,6 +440,7 @@ class Wheel(object):
             if '.dist-info' in ap:
                 n += 10000
             return (n, ap)
+
         archive_paths = sorted(archive_paths, key=sorter)
 
         # Now, at last, RECORD.
@@ -524,11 +528,11 @@ class Wheel(object):
             # make a new instance rather than a copy of maker's,
             # as we mutate it
             fileop = FileOperator(dry_run=dry_run)
-            fileop.record = True    # so we can rollback if needed
+            fileop.record = True  # so we can rollback if needed
 
-            bc = not sys.dont_write_bytecode    # Double negatives. Lovely!
+            bc = not sys.dont_write_bytecode  # Double negatives. Lovely!
 
-            outfiles = []   # for RECORD writing
+            outfiles = []  # for RECORD writing
 
             # for script copying/shebang processing
             workdir = tempfile.mkdtemp()
@@ -664,7 +668,7 @@ class Wheel(object):
                                 fileop.set_executable_mode(filenames)
 
                             if gui_scripts:
-                                options = {'gui': True }
+                                options = {'gui': True}
                                 for k, v in gui_scripts.items():
                                     script = '%s = %s' % (k, v)
                                     filenames = maker.make(script, options)
@@ -674,7 +678,7 @@ class Wheel(object):
                     dist = InstalledDistribution(p)
 
                     # Write SHARED
-                    paths = dict(paths)     # don't change passed in dict
+                    paths = dict(paths)  # don't change passed in dict
                     del paths['purelib']
                     del paths['platlib']
                     paths['lib'] = libdir
@@ -746,7 +750,7 @@ class Wheel(object):
         """
         Determine if a wheel is asserted as mountable by its metadata.
         """
-        return True # for now - metadata details TBD
+        return True  # for now - metadata details TBD
 
     def mount(self, append=False):
         pathname = os.path.abspath(os.path.join(self.dirname, self.filename))
@@ -938,6 +942,7 @@ class Wheel(object):
                     shutil.copyfile(newpath, pathname)
         return modified
 
+
 def compatible_tags():
     """
     Return (pyver, abi, arch) tuples compatible with this Python.
@@ -977,7 +982,7 @@ def compatible_tags():
             while minor >= 0:
                 for match in matches:
                     s = '%s_%s_%s_%s' % (name, major, minor, match)
-                    if s != ARCH:   # already there
+                    if s != ARCH:  # already there
                         arches.append(s)
                 minor -= 1
 
@@ -1007,7 +1012,7 @@ del compatible_tags
 
 def is_compatible(wheel, tags=None):
     if not isinstance(wheel, Wheel):
-        wheel = Wheel(wheel)    # assume it's a filename
+        wheel = Wheel(wheel)  # assume it's a filename
     result = False
     if tags is None:
         tags = COMPATIBLE_TAGS

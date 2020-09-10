@@ -6,19 +6,17 @@ from __future__ import absolute_import
 import logging
 import os
 
-from pip._vendor.six.moves.urllib import parse as urllib_parse
-
 from pip._internal.utils.misc import display_path, rmtree
 from pip._internal.utils.subprocess import make_command
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.urls import path_to_url
 from pip._internal.vcs.versioncontrol import VersionControl, vcs
+from pip._vendor.six.moves.urllib import parse as urllib_parse
 
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Tuple
     from pip._internal.utils.misc import HiddenText
     from pip._internal.vcs.versioncontrol import AuthInfo, RevOptions
-
 
 logger = logging.getLogger(__name__)
 

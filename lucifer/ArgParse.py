@@ -1,11 +1,12 @@
 import argparse
 import os
-import sys
 import re as _re
+import sys
+
 from libs.ttkthemes import themed_tk
-from .Shell import Shell
+from .GUI.GUI import LuciferGui
 from .Manager import LuciferManager
-from .GUI import LuciferGui
+from .Shell import Shell
 
 
 class CapitalisedHelpFormatter(argparse.HelpFormatter):
@@ -90,7 +91,7 @@ class CapitalisedHelpFormatter(argparse.HelpFormatter):
 
             # join lines into usage
             usage = '\n'.join(lines)
-        return usage.replace("()", "python main.py")
+        return usage.replace("()", "python Main.py")
 
 
 class LuciferParser(argparse.ArgumentParser):

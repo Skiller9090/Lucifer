@@ -3,7 +3,6 @@ from __future__ import absolute_import
 from .filepost import encode_multipart_formdata
 from .packages.six.moves.urllib.parse import urlencode
 
-
 __all__ = ["RequestMethods"]
 
 
@@ -42,14 +41,14 @@ class RequestMethods(object):
         self.headers = headers or {}
 
     def urlopen(
-        self,
-        method,
-        url,
-        body=None,
-        headers=None,
-        encode_multipart=True,
-        multipart_boundary=None,
-        **kw
+            self,
+            method,
+            url,
+            body=None,
+            headers=None,
+            encode_multipart=True,
+            multipart_boundary=None,
+            **kw
     ):  # Abstract
         raise NotImplementedError(
             "Classes extending RequestMethods must implement "
@@ -97,14 +96,14 @@ class RequestMethods(object):
         return self.urlopen(method, url, **extra_kw)
 
     def request_encode_body(
-        self,
-        method,
-        url,
-        fields=None,
-        headers=None,
-        encode_multipart=True,
-        multipart_boundary=None,
-        **urlopen_kw
+            self,
+            method,
+            url,
+            fields=None,
+            headers=None,
+            encode_multipart=True,
+            multipart_boundary=None,
+            **urlopen_kw
     ):
         """
         Make a request using :meth:`urlopen` with the ``fields`` encoded in

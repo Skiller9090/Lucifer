@@ -12,5 +12,5 @@ XZ_EXTENSIONS = ('.tar.xz', '.txz', '.tlz',
 ZIP_EXTENSIONS = ('.zip', WHEEL_EXTENSION)  # type: Tuple[str, ...]
 TAR_EXTENSIONS = ('.tar.gz', '.tgz', '.tar')  # type: Tuple[str, ...]
 ARCHIVE_EXTENSIONS = (
-    ZIP_EXTENSIONS + BZ2_EXTENSIONS + TAR_EXTENSIONS + XZ_EXTENSIONS
+        ZIP_EXTENSIONS + BZ2_EXTENSIONS + TAR_EXTENSIONS + XZ_EXTENSIONS
 )

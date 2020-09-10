@@ -2,23 +2,21 @@
 urllib3 - Thread-safe connection pooling and re-using.
 """
 from __future__ import absolute_import
-import warnings
 
-from .connectionpool import HTTPConnectionPool, HTTPSConnectionPool, connection_from_url
+# Set default logging handler to avoid "No handler found" warnings.
+import logging
+import warnings
+from logging import NullHandler
 
 from . import exceptions
+from .connectionpool import HTTPConnectionPool, HTTPSConnectionPool, connection_from_url
 from .filepost import encode_multipart_formdata
 from .poolmanager import PoolManager, ProxyManager, proxy_from_url
 from .response import HTTPResponse
 from .util.request import make_headers
-from .util.url import get_host
-from .util.timeout import Timeout
 from .util.retry import Retry
-
-
-# Set default logging handler to avoid "No handler found" warnings.
-import logging
-from logging import NullHandler
+from .util.timeout import Timeout
+from .util.url import get_host
 
 __author__ = "Andrey Petrov (andrey.petrov@shazow.net)"
 __license__ = "MIT"
@@ -64,7 +62,6 @@ def add_stderr_logger(level=logging.DEBUG):
 
 # ... Clean up.
 del NullHandler
-
 
 # All warning filters *must* be appended unless you're really certain that they
 # shouldn't be: otherwise, it's very hard for users to use most Python

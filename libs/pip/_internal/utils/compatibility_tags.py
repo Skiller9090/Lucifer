@@ -5,6 +5,7 @@ from __future__ import absolute_import
 
 import re
 
+from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._vendor.packaging.tags import (
     Tag,
     compatible_tags,
@@ -14,8 +15,6 @@ from pip._vendor.packaging.tags import (
     interpreter_version,
     mac_platforms,
 )
-
-from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:
     from typing import List, Optional, Tuple
@@ -104,10 +103,10 @@ def _get_custom_interpreter(implementation=None, version=None):
 
 
 def get_supported(
-    version=None,  # type: Optional[str]
-    platform=None,  # type: Optional[str]
-    impl=None,  # type: Optional[str]
-    abi=None  # type: Optional[str]
+        version=None,  # type: Optional[str]
+        platform=None,  # type: Optional[str]
+        impl=None,  # type: Optional[str]
+        abi=None  # type: Optional[str]
 ):
     # type: (...) -> List[Tag]
     """Return a list of supported tags for each version specified in

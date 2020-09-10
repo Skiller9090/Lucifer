@@ -44,9 +44,9 @@ def _contains_egg_info(s):
 
 
 def _should_build(
-    req,  # type: InstallRequirement
-    need_wheel,  # type: bool
-    check_binary_allowed,  # type: BinaryAllowedPredicate
+        req,  # type: InstallRequirement
+        need_wheel,  # type: bool
+        check_binary_allowed,  # type: BinaryAllowedPredicate
 ):
     # type: (...) -> bool
     """Return whether an InstallRequirement should be built into a wheel."""
@@ -89,7 +89,7 @@ def _should_build(
 
 
 def should_build_for_wheel_command(
-    req,  # type: InstallRequirement
+        req,  # type: InstallRequirement
 ):
     # type: (...) -> bool
     return _should_build(
@@ -98,8 +98,8 @@ def should_build_for_wheel_command(
 
 
 def should_build_for_install_command(
-    req,  # type: InstallRequirement
-    check_binary_allowed,  # type: BinaryAllowedPredicate
+        req,  # type: InstallRequirement
+        check_binary_allowed,  # type: BinaryAllowedPredicate
 ):
     # type: (...) -> bool
     return _should_build(
@@ -108,7 +108,7 @@ def should_build_for_install_command(
 
 
 def _should_cache(
-    req,  # type: InstallRequirement
+        req,  # type: InstallRequirement
 ):
     # type: (...) -> Optional[bool]
     """
@@ -141,8 +141,8 @@ def _should_cache(
 
 
 def _get_cache_dir(
-    req,  # type: InstallRequirement
-    wheel_cache,  # type: WheelCache
+        req,  # type: InstallRequirement
+        wheel_cache,  # type: WheelCache
 ):
     # type: (...) -> str
     """Return the persistent or temporary cache directory where the built
@@ -163,10 +163,10 @@ def _always_true(_):
 
 
 def _build_one(
-    req,  # type: InstallRequirement
-    output_dir,  # type: str
-    build_options,  # type: List[str]
-    global_options,  # type: List[str]
+        req,  # type: InstallRequirement
+        output_dir,  # type: str
+        build_options,  # type: List[str]
+        global_options,  # type: List[str]
 ):
     # type: (...) -> Optional[str]
     """Build one wheel.
@@ -190,10 +190,10 @@ def _build_one(
 
 
 def _build_one_inside_env(
-    req,  # type: InstallRequirement
-    output_dir,  # type: str
-    build_options,  # type: List[str]
-    global_options,  # type: List[str]
+        req,  # type: InstallRequirement
+        output_dir,  # type: str
+        build_options,  # type: List[str]
+        global_options,  # type: List[str]
 ):
     # type: (...) -> Optional[str]
     with TempDirectory(kind="wheel") as temp_dir:
@@ -257,10 +257,10 @@ def _clean_one_legacy(req, global_options):
 
 
 def build(
-    requirements,  # type: Iterable[InstallRequirement]
-    wheel_cache,  # type: WheelCache
-    build_options,  # type: List[str]
-    global_options,  # type: List[str]
+        requirements,  # type: Iterable[InstallRequirement]
+        wheel_cache,  # type: WheelCache
+        build_options,  # type: List[str]
+        global_options,  # type: List[str]
 ):
     # type: (...) -> BuildResult
     """Build wheels.

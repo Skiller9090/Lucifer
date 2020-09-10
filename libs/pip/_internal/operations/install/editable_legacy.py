@@ -12,21 +12,20 @@ if MYPY_CHECK_RUNNING:
 
     from pip._internal.build_env import BuildEnvironment
 
-
 logger = logging.getLogger(__name__)
 
 
 def install_editable(
-    install_options,  # type: List[str]
-    global_options,  # type: Sequence[str]
-    prefix,  # type: Optional[str]
-    home,  # type: Optional[str]
-    use_user_site,  # type: bool
-    name,  # type: str
-    setup_py_path,  # type: str
-    isolated,  # type: bool
-    build_env,  # type: BuildEnvironment
-    unpacked_source_directory,  # type: str
+        install_options,  # type: List[str]
+        global_options,  # type: Sequence[str]
+        prefix,  # type: Optional[str]
+        home,  # type: Optional[str]
+        use_user_site,  # type: bool
+        name,  # type: str
+        setup_py_path,  # type: str
+        isolated,  # type: bool
+        build_env,  # type: BuildEnvironment
+        unpacked_source_directory,  # type: str
 ):
     # type: (...) -> None
     """Install a package in editable mode. Most arguments are pass-through

@@ -3,17 +3,15 @@ from __future__ import absolute_import
 import logging
 from collections import OrderedDict
 
-from pip._vendor.packaging.utils import canonicalize_name
-
 from pip._internal.exceptions import InstallationError
 from pip._internal.models.wheel import Wheel
 from pip._internal.utils import compatibility_tags
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.packaging.utils import canonicalize_name
 
 if MYPY_CHECK_RUNNING:
     from typing import Dict, Iterable, List, Optional, Tuple
     from pip._internal.req.req_install import InstallRequirement
-
 
 logger = logging.getLogger(__name__)
 
@@ -65,10 +63,10 @@ class RequirementSet(object):
         self.requirements[project_name] = install_req
 
     def add_requirement(
-        self,
-        install_req,  # type: InstallRequirement
-        parent_req_name=None,  # type: Optional[str]
-        extras_requested=None  # type: Optional[Iterable[str]]
+            self,
+            install_req,  # type: InstallRequirement
+            parent_req_name=None,  # type: Optional[str]
+            extras_requested=None  # type: Optional[Iterable[str]]
     ):
         # type: (...) -> Tuple[List[InstallRequirement], Optional[InstallRequirement]]  # noqa: E501
         """Add install_req as a requirement to install.
@@ -124,16 +122,16 @@ class RequirementSet(object):
             existing_req = None
 
         has_conflicting_requirement = (
-            parent_req_name is None and
-            existing_req and
-            not existing_req.constraint and
-            existing_req.extras == install_req.extras and
-            existing_req.req.specifier != install_req.req.specifier
+                parent_req_name is None and
+                existing_req and
+                not existing_req.constraint and
+                existing_req.extras == install_req.extras and
+                existing_req.req.specifier != install_req.req.specifier
         )
         if has_conflicting_requirement:
             raise InstallationError(
                 "Double requirement given: {} (already in {}, name={!r})"
-                .format(install_req, existing_req, install_req.name)
+                    .format(install_req, existing_req, install_req.name)
             )
 
         # When no existing requirement exists, add the requirement as a
@@ -149,11 +147,11 @@ class RequirementSet(object):
             return [], existing_req
 
         does_not_satisfy_constraint = (
-            install_req.link and
-            not (
-                existing_req.link and
-                install_req.link.path == existing_req.link.path
-            )
+                install_req.link and
+                not (
+                        existing_req.link and
+                        install_req.link.path == existing_req.link.path
+                )
         )
         if does_not_satisfy_constraint:
             raise InstallationError(
@@ -184,8 +182,8 @@ class RequirementSet(object):
         project_name = canonicalize_name(name)
 
         return (
-            project_name in self.requirements and
-            not self.requirements[project_name].constraint
+                project_name in self.requirements and
+                not self.requirements[project_name].constraint
         )
 
     def get_requirement(self, name):

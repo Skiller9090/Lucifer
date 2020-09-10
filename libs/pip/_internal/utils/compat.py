@@ -13,9 +13,8 @@ import os
 import shutil
 import sys
 
-from pip._vendor.six import PY2, text_type
-
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.six import PY2, text_type
 
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Text, Tuple, Union
@@ -27,15 +26,14 @@ except ImportError:
         from pip._vendor import ipaddress  # type: ignore
     except ImportError:
         import ipaddr as ipaddress  # type: ignore
+
         ipaddress.ip_address = ipaddress.IPAddress  # type: ignore
         ipaddress.ip_network = ipaddress.IPNetwork  # type: ignore
-
 
 __all__ = [
     "ipaddress", "uses_pycache", "console_to_str",
     "get_path_uid", "stdlib_pkgs", "WINDOWS", "samefile", "get_terminal_size",
 ]
-
 
 logger = logging.getLogger(__name__)
 
@@ -51,8 +49,6 @@ if PY2:
     uses_pycache = cache_from_source is not None
 else:
     uses_pycache = True
-    from importlib.util import cache_from_source
-
 
 if PY2:
     # In Python 2.7, backslashreplace exists
@@ -65,6 +61,8 @@ if PY2:
         # Python 2 gave us characters - convert to numeric bytes
         raw_bytes = (ord(b) for b in raw_bytes)
         return u"".join(map(u"\\x{:x}".format, raw_bytes)), err.end
+
+
     codecs.register_error(
         "backslashreplace_decode",
         backslashreplace_decode_fn,
@@ -211,7 +209,6 @@ def expanduser(path):
 # make this ineffective, so hard-coding
 stdlib_pkgs = {"python", "wsgiref", "argparse"}
 
-
 # windows detection, covers cpython and ironpython
 WINDOWS = (sys.platform.startswith("win") or
            (sys.platform == 'cli' and os.name == 'nt'))
@@ -243,6 +240,7 @@ else:
         Returns a tuple (x, y) representing the width(x) and the height(y)
         in characters of the terminal window.
         """
+
         def ioctl_GWINSZ(fd):
             try:
                 import fcntl
@@ -257,6 +255,7 @@ else:
             if cr == (0, 0):
                 return None
             return cr
+
         cr = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
         if not cr:
             if sys.platform != "win32":

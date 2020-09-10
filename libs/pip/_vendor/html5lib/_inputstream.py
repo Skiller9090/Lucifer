@@ -1,24 +1,22 @@
 from __future__ import absolute_import, division, unicode_literals
 
-from pip._vendor.six import text_type
-from pip._vendor.six.moves import http_client, urllib
-
 import codecs
 import re
 from io import BytesIO, StringIO
 
 from pip._vendor import webencodings
+from pip._vendor.six import text_type
+from pip._vendor.six.moves import http_client, urllib
 
+from . import _utils
 from .constants import EOF, spaceCharacters, asciiLetters, asciiUppercase
 from .constants import _ReparseException
-from . import _utils
 
 # Non-unicode versions of constants for use in the pre-parser
 spaceCharactersBytes = frozenset([item.encode("ascii") for item in spaceCharacters])
 asciiLettersBytes = frozenset([item.encode("ascii") for item in asciiLetters])
 asciiUppercaseBytes = frozenset([item.encode("ascii") for item in asciiUppercase])
 spacesAngleBrackets = spaceCharactersBytes | frozenset([b">", b"<"])
-
 
 invalid_unicode_no_surrogate = "[\u0001-\u0008\u000B\u000E-\u001F\u007F-\u009F\uFDD0-\uFDEF\uFFFE\uFFFF\U0001FFFE\U0001FFFF\U0002FFFE\U0002FFFF\U0003FFFE\U0003FFFF\U0004FFFE\U0004FFFF\U0005FFFE\U0005FFFF\U0006FFFE\U0006FFFF\U0007FFFE\U0007FFFF\U0008FFFE\U0008FFFF\U0009FFFE\U0009FFFF\U000AFFFE\U000AFFFF\U000BFFFE\U000BFFFF\U000CFFFE\U000CFFFF\U000DFFFE\U000DFFFF\U000EFFFE\U000EFFFF\U000FFFFE\U000FFFFF\U0010FFFE\U0010FFFF]"  # noqa
 
@@ -126,9 +124,9 @@ def HTMLInputStream(source, **kwargs):
     # Work around Python bug #20007: read(0) closes the connection.
     # http://bugs.python.org/issue20007
     if (isinstance(source, http_client.HTTPResponse) or
-        # Also check for addinfourl wrapping HTTPResponse
-        (isinstance(source, urllib.response.addbase) and
-         isinstance(source.fp, http_client.HTTPResponse))):
+            # Also check for addinfourl wrapping HTTPResponse
+            (isinstance(source, urllib.response.addbase) and
+             isinstance(source.fp, http_client.HTTPResponse))):
         isUnicode = False
     elif hasattr(source, "read"):
         isUnicode = isinstance(source.read(0), text_type)
@@ -324,7 +322,7 @@ class HTMLUnicodeInputStream(object):
         except KeyError:
             if __debug__:
                 for c in characters:
-                    assert(ord(c) < 128)
+                    assert (ord(c) < 128)
             regex = "".join(["\\x%02x" % ord(c) for c in characters])
             if not opposite:
                 regex = "^%s" % regex
@@ -541,11 +539,11 @@ class HTMLBinaryInputStream(HTMLUnicodeInputStream):
         assert isinstance(string, bytes)
 
         # Try detecting the BOM using bytes from the string
-        encoding = bomDict.get(string[:3])         # UTF-8
+        encoding = bomDict.get(string[:3])  # UTF-8
         seek = 3
         if not encoding:
             # Need to detect UTF-32 before UTF-16
-            encoding = bomDict.get(string)         # UTF-32
+            encoding = bomDict.get(string)  # UTF-32
             seek = 4
             if not encoding:
                 encoding = bomDict.get(string[:2])  # UTF-16
@@ -579,6 +577,7 @@ class EncodingBytes(bytes):
     """String-like object with an associated position and various extra methods
     If the position is ever greater than the string length then an exception is
     raised"""
+
     def __new__(self, value):
         assert isinstance(value, bytes)
         return bytes.__new__(self, value.lower())
@@ -633,7 +632,7 @@ class EncodingBytes(bytes):
 
     def skip(self, chars=spaceCharactersBytes):
         """Skip past a list of characters"""
-        p = self.position               # use property for the error-checking
+        p = self.position  # use property for the error-checking
         while p < len(self):
             c = self[p:p + 1]
             if c not in chars:

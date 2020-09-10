@@ -14,14 +14,6 @@ import platform
 import sys
 import warnings
 
-from pip._vendor import requests, six, urllib3
-from pip._vendor.cachecontrol import CacheControlAdapter
-from pip._vendor.requests.adapters import BaseAdapter, HTTPAdapter
-from pip._vendor.requests.models import Response
-from pip._vendor.requests.structures import CaseInsensitiveDict
-from pip._vendor.six.moves.urllib import parse as urllib_parse
-from pip._vendor.urllib3.exceptions import InsecureRequestWarning
-
 from pip import __version__
 from pip._internal.network.auth import MultiDomainBasicAuth
 from pip._internal.network.cache import SafeFileCache
@@ -35,6 +27,13 @@ from pip._internal.utils.misc import (
 )
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.urls import url_to_path
+from pip._vendor import requests, six, urllib3
+from pip._vendor.cachecontrol import CacheControlAdapter
+from pip._vendor.requests.adapters import BaseAdapter, HTTPAdapter
+from pip._vendor.requests.models import Response
+from pip._vendor.requests.structures import CaseInsensitiveDict
+from pip._vendor.six.moves.urllib import parse as urllib_parse
+from pip._vendor.urllib3.exceptions import InsecureRequestWarning
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -45,13 +44,10 @@ if MYPY_CHECK_RUNNING:
 
     SecureOrigin = Tuple[str, str, Optional[Union[int, str]]]
 
-
 logger = logging.getLogger(__name__)
-
 
 # Ignore warning raised when using --trusted-host.
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
-
 
 SECURE_ORIGINS = [
     # protocol, hostname, port
@@ -64,7 +60,6 @@ SECURE_ORIGINS = [
     # ssh is always secure.
     ("ssh", "*", "*"),
 ]  # type: List[SecureOrigin]
-
 
 # These are environment variables present when running under various
 # CI systems.  For each variable, some CI systems that use the variable
@@ -226,7 +221,6 @@ class InsecureCacheControlAdapter(CacheControlAdapter):
 
 
 class PipSession(requests.Session):
-
     timeout = None  # type: Optional[int]
 
     def __init__(self, *args, **kwargs):
@@ -376,9 +370,9 @@ class PipSession(requests.Session):
                 # We don't have both a valid address or a valid network, so
                 # we'll check this origin against hostnames.
                 if (
-                    origin_host and
-                    origin_host.lower() != secure_host.lower() and
-                    secure_host != "*"
+                        origin_host and
+                        origin_host.lower() != secure_host.lower() and
+                        secure_host != "*"
                 ):
                     continue
             else:
@@ -389,9 +383,9 @@ class PipSession(requests.Session):
 
             # Check to see if the port matches.
             if (
-                origin_port != secure_port and
-                secure_port != "*" and
-                secure_port is not None
+                    origin_port != secure_port and
+                    secure_port != "*" and
+                    secure_port is not None
             ):
                 continue
 

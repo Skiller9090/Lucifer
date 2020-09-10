@@ -40,9 +40,11 @@ is at <https://requests.readthedocs.io>.
 :license: Apache 2.0, see LICENSE for more details.
 """
 
-from pip._vendor import urllib3
-from pip._vendor import chardet
 import warnings
+
+from pip._vendor import chardet
+from pip._vendor import urllib3
+
 from .exceptions import RequestsDependencyWarning
 
 
@@ -82,6 +84,7 @@ def _check_cryptography(cryptography_version):
         warning = 'Old version of cryptography ({}) may cause slowdown.'.format(cryptography_version)
         warnings.warn(warning, RequestsDependencyWarning)
 
+
 # Check imported dependencies for compatibility.
 try:
     check_compatibility(urllib3.__version__, chardet.__version__)
@@ -97,6 +100,7 @@ try:
     # Note: This logic prevents upgrading cryptography on Windows, if imported
     #       as part of pip.
     from pip._internal.utils.compat import WINDOWS
+
     if not WINDOWS:
         raise ImportError("pip internals: don't import cryptography on Windows")
     try:
@@ -106,16 +110,19 @@ try:
 
     if not getattr(ssl, "HAS_SNI", False):
         from pip._vendor.urllib3.contrib import pyopenssl
+
         pyopenssl.inject_into_urllib3()
 
         # Check cryptography version
         from cryptography import __version__ as cryptography_version
+
         _check_cryptography(cryptography_version)
 except ImportError:
     pass
 
 # urllib3's DependencyWarnings should be silenced.
 from pip._vendor.urllib3.exceptions import DependencyWarning
+
 warnings.simplefilter('ignore', DependencyWarning)
 
 from .__version__ import __title__, __description__, __url__, __version__

@@ -1,10 +1,11 @@
-from lucifer.utils import check_int
+import importlib
+import os
+import re
+
+import lucifer.Indexing as Indexing
+from lucifer.Utils import check_int
 from .Errors import checkErrors
 from .Help import help_menu
-import lucifer.Indexing as Indexing
-import re
-import os
-import importlib
 
 
 class Shell:
@@ -329,7 +330,6 @@ class Shell:
                 self.luciferManager.current_shell_id = self.luciferManager.gui.console.opened_order[-1]
             else:
                 self.luciferManager.end()
-
 
     def change_auto_set_vars(self, com_args: list):
         com_args.pop(0)

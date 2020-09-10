@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 
 def format_command_result(
-    command_args,  # type: List[str]
-    command_output,  # type: Text
+        command_args,  # type: List[str]
+        command_output,  # type: Text
 ):
     # type: (...) -> str
     """Format command information for logging."""
@@ -40,11 +40,11 @@ def format_command_result(
 
 
 def get_legacy_build_wheel_path(
-    names,  # type: List[str]
-    temp_dir,  # type: str
-    name,  # type: str
-    command_args,  # type: List[str]
-    command_output,  # type: Text
+        names,  # type: List[str]
+        temp_dir,  # type: str
+        name,  # type: str
+        command_args,  # type: List[str]
+        command_output,  # type: Text
 ):
     # type: (...) -> Optional[str]
     """Return the path to the wheel in the temporary build directory."""
@@ -70,12 +70,12 @@ def get_legacy_build_wheel_path(
 
 
 def build_wheel_legacy(
-    name,  # type: str
-    setup_py_path,  # type: str
-    source_dir,  # type: str
-    global_options,  # type: List[str]
-    build_options,  # type: List[str]
-    tempd,  # type: str
+        name,  # type: str
+        setup_py_path,  # type: str
+        source_dir,  # type: str
+        global_options,  # type: List[str]
+        build_options,  # type: List[str]
+        tempd,  # type: str
 ):
     # type: (...) -> Optional[str]
     """Build one unpacked package using the "legacy" build process.

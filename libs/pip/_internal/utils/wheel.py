@@ -7,13 +7,12 @@ import logging
 from email.parser import Parser
 from zipfile import ZipFile
 
-from pip._vendor.packaging.utils import canonicalize_name
-from pip._vendor.pkg_resources import DistInfoDistribution
-from pip._vendor.six import PY2, ensure_str
-
 from pip._internal.exceptions import UnsupportedWheel
 from pip._internal.utils.pkg_resources import DictMetadata
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.packaging.utils import canonicalize_name
+from pip._vendor.pkg_resources import DistInfoDistribution
+from pip._vendor.six import PY2, ensure_str
 
 if MYPY_CHECK_RUNNING:
     from email.message import Message
@@ -26,9 +25,7 @@ if PY2:
 else:
     from zipfile import BadZipFile
 
-
 VERSION_COMPATIBLE = (1, 0)
-
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +34,7 @@ class WheelMetadata(DictMetadata):
     """Metadata provider that maps metadata decoding exceptions to our
     internal exception type.
     """
+
     def __init__(self, metadata, wheel_name):
         # type: (Dict[str, bytes], str) -> None
         super(WheelMetadata, self).__init__(metadata)

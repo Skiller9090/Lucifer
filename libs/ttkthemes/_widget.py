@@ -6,11 +6,13 @@ Copyright (c) 2017-2018 RedFantom
 # Standard library
 import os
 from shutil import copytree, rmtree
+
 # Packages
 from PIL import Image, ImageEnhance
+
+from . import _imgops as imgops
 # Project Modules
 from . import _utils as utils
-from . import _imgops as imgops
 from ._utils import get_file_directory
 
 

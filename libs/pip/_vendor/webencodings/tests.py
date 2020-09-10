@@ -108,6 +108,7 @@ def test_iter_decode():
     def iter_decode_to_string(input, fallback_encoding):
         output, _encoding = iter_decode(input, fallback_encoding)
         return ''.join(output)
+
     assert iter_decode_to_string([], 'latin1') == ''
     assert iter_decode_to_string([b''], 'latin1') == ''
     assert iter_decode_to_string([b'\xe9'], 'latin1') == 'é'

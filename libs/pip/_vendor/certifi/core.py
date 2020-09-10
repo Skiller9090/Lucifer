@@ -14,6 +14,7 @@ try:
     _CACERT_CTX = None
     _CACERT_PATH = None
 
+
     def where():
         # This is slightly terrible, but we want to delay extracting the file
         # in cases where we're inside of a zipimport situation until someone
@@ -47,6 +48,7 @@ except ImportError:
     def read_text(_module, _path, encoding="ascii"):
         with open(where(), "r", encoding=encoding) as data:
             return data.read()
+
 
     # If we don't have importlib.resources, then we will just do the old logic
     # of assuming we're on the filesystem and munge the path directly.

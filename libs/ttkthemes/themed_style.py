@@ -3,9 +3,9 @@ Author: RedFantom
 License: GNU GPLv3
 Copyright (c) 2017-2018 RedFantom
 """
-from ._widget import ThemedWidget
-import tkinter as tk
 from tkinter import ttk
+
+from ._widget import ThemedWidget
 
 
 class ThemedStyle(ttk.Style, ThemedWidget):
@@ -14,6 +14,7 @@ class ThemedStyle(ttk.Style, ThemedWidget):
     used as a drop-in replacement for normal ttk.Style instances.
     Supports the themes provided by this package.
     """
+
     def __init__(self, *args, **kwargs):
         """
         :param theme: Theme to set up initialization completion. If the

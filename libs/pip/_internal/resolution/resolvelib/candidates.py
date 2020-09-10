@@ -1,11 +1,6 @@
 import logging
 import sys
 
-from pip._vendor.contextlib2 import suppress
-from pip._vendor.packaging.specifiers import InvalidSpecifier, SpecifierSet
-from pip._vendor.packaging.utils import canonicalize_name
-from pip._vendor.packaging.version import Version
-
 from pip._internal.exceptions import HashError, MetadataInconsistent
 from pip._internal.network.lazy_wheel import (
     HTTPRangeRequestUnsupported,
@@ -20,6 +15,10 @@ from pip._internal.utils.logging import indent_log
 from pip._internal.utils.misc import dist_is_editable, normalize_version_info
 from pip._internal.utils.packaging import get_requires_python
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.contextlib2 import suppress
+from pip._vendor.packaging.specifiers import InvalidSpecifier, SpecifierSet
+from pip._vendor.packaging.utils import canonicalize_name
+from pip._vendor.packaging.version import Version
 
 from .base import Candidate, format_name
 
@@ -40,7 +39,6 @@ if MYPY_CHECK_RUNNING:
         "EditableCandidate",
         "LinkCandidate",
     ]
-
 
 logger = logging.getLogger(__name__)
 
@@ -132,13 +130,13 @@ class _InstallRequirementBackedCandidate(Candidate):
     is_installed = False
 
     def __init__(
-        self,
-        link,          # type: Link
-        source_link,   # type: Link
-        ireq,          # type: InstallRequirement
-        factory,       # type: Factory
-        name=None,     # type: Optional[str]
-        version=None,  # type: Optional[_BaseVersion]
+            self,
+            link,  # type: Link
+            source_link,  # type: Link
+            ireq,  # type: InstallRequirement
+            factory,  # type: Factory
+            name=None,  # type: Optional[str]
+            version=None,  # type: Optional[_BaseVersion]
     ):
         # type: (...) -> None
         self._link = link
@@ -297,12 +295,12 @@ class LinkCandidate(_InstallRequirementBackedCandidate):
     is_editable = False
 
     def __init__(
-        self,
-        link,          # type: Link
-        template,        # type: InstallRequirement
-        factory,       # type: Factory
-        name=None,     # type: Optional[str]
-        version=None,  # type: Optional[_BaseVersion]
+            self,
+            link,  # type: Link
+            template,  # type: InstallRequirement
+            factory,  # type: Factory
+            name=None,  # type: Optional[str]
+            version=None,  # type: Optional[_BaseVersion]
     ):
         # type: (...) -> None
         source_link = link
@@ -337,12 +335,12 @@ class EditableCandidate(_InstallRequirementBackedCandidate):
     is_editable = True
 
     def __init__(
-        self,
-        link,          # type: Link
-        template,        # type: InstallRequirement
-        factory,       # type: Factory
-        name=None,     # type: Optional[str]
-        version=None,  # type: Optional[_BaseVersion]
+            self,
+            link,  # type: Link
+            template,  # type: InstallRequirement
+            factory,  # type: Factory
+            name=None,  # type: Optional[str]
+            version=None,  # type: Optional[_BaseVersion]
     ):
         # type: (...) -> None
         super(EditableCandidate, self).__init__(
@@ -364,10 +362,10 @@ class AlreadyInstalledCandidate(Candidate):
     source_link = None
 
     def __init__(
-        self,
-        dist,  # type: Distribution
-        template,  # type: InstallRequirement
-        factory,  # type: Factory
+            self,
+            dist,  # type: Distribution
+            template,  # type: InstallRequirement
+            factory,  # type: Factory
     ):
         # type: (...) -> None
         self.dist = dist
@@ -458,10 +456,11 @@ class ExtrasCandidate(Candidate):
     version 2.0. Having those candidates depend on foo=1.0 and foo=2.0
     respectively forces the resolver to recognise that this is a conflict.
     """
+
     def __init__(
-        self,
-        base,  # type: BaseCandidate
-        extras,  # type: FrozenSet[str]
+            self,
+            base,  # type: BaseCandidate
+            extras,  # type: FrozenSet[str]
     ):
         # type: (...) -> None
         self.base = base

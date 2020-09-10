@@ -9,8 +9,6 @@ import mimetypes
 import os
 import shutil
 
-from pip._vendor.six import PY2
-
 from pip._internal.distributions import (
     make_distribution_for_install_requirement,
 )
@@ -37,6 +35,7 @@ from pip._internal.utils.temp_dir import TempDirectory
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.unpacking import unpack_file
 from pip._internal.vcs import vcs
+from pip._vendor.six import PY2
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -107,10 +106,10 @@ class File(object):
 
 
 def get_http_url(
-    link,  # type: Link
-    downloader,  # type: Downloader
-    download_dir=None,  # type: Optional[str]
-    hashes=None,  # type: Optional[Hashes]
+        link,  # type: Link
+        downloader,  # type: Downloader
+        download_dir=None,  # type: Optional[str]
+        hashes=None,  # type: Optional[Hashes]
 ):
     # type: (...) -> File
     temp_dir = TempDirectory(kind="unpack", globally_managed=True)
@@ -187,9 +186,9 @@ def _copy_source_tree(source, target):
 
 
 def get_file_url(
-    link,  # type: Link
-    download_dir=None,  # type: Optional[str]
-    hashes=None  # type: Optional[Hashes]
+        link,  # type: Link
+        download_dir=None,  # type: Optional[str]
+        hashes=None  # type: Optional[Hashes]
 ):
     # type: (...) -> File
     """Get file and optionally check its hash.
@@ -220,11 +219,11 @@ def get_file_url(
 
 
 def unpack_url(
-    link,  # type: Link
-    location,  # type: str
-    downloader,  # type: Downloader
-    download_dir=None,  # type: Optional[str]
-    hashes=None,  # type: Optional[Hashes]
+        link,  # type: Link
+        location,  # type: str
+        downloader,  # type: Downloader
+        download_dir=None,  # type: Optional[str]
+        hashes=None,  # type: Optional[Hashes]
 ):
     # type: (...) -> Optional[File]
     """Unpack link into location, downloading if required.
@@ -268,10 +267,10 @@ def unpack_url(
 
 
 def _download_http_url(
-    link,  # type: Link
-    downloader,  # type: Downloader
-    temp_dir,  # type: str
-    hashes,  # type: Optional[Hashes]
+        link,  # type: Link
+        downloader,  # type: Downloader
+        temp_dir,  # type: str
+        hashes,  # type: Optional[Hashes]
 ):
     # type: (...) -> Tuple[str, str]
     """Download link url into temp_dir using provided session"""
@@ -319,17 +318,17 @@ class RequirementPreparer(object):
     """
 
     def __init__(
-        self,
-        build_dir,  # type: str
-        download_dir,  # type: Optional[str]
-        src_dir,  # type: str
-        wheel_download_dir,  # type: Optional[str]
-        build_isolation,  # type: bool
-        req_tracker,  # type: RequirementTracker
-        downloader,  # type: Downloader
-        finder,  # type: PackageFinder
-        require_hashes,  # type: bool
-        use_user_site,  # type: bool
+            self,
+            build_dir,  # type: str
+            download_dir,  # type: Optional[str]
+            src_dir,  # type: str
+            wheel_download_dir,  # type: Optional[str]
+            build_isolation,  # type: bool
+            req_tracker,  # type: RequirementTracker
+            downloader,  # type: Downloader
+            finder,  # type: PackageFinder
+            require_hashes,  # type: bool
+            use_user_site,  # type: bool
     ):
         # type: (...) -> None
         super(RequirementPreparer, self).__init__()
@@ -375,7 +374,7 @@ class RequirementPreparer(object):
         logger.critical('Could not find download directory')
         raise InstallationError(
             "Could not find or access download directory '{}'"
-            .format(self.download_dir))
+                .format(self.download_dir))
 
     def _log_preparing_link(self, req):
         # type: (InstallRequirement) -> None
@@ -502,8 +501,8 @@ class RequirementPreparer(object):
         return abstract_dist
 
     def prepare_editable_requirement(
-        self,
-        req,  # type: InstallRequirement
+            self,
+            req,  # type: InstallRequirement
     ):
         # type: (...) -> AbstractDistribution
         """Prepare an editable requirement
@@ -533,9 +532,9 @@ class RequirementPreparer(object):
         return abstract_dist
 
     def prepare_installed_requirement(
-        self,
-        req,  # type: InstallRequirement
-        skip_reason  # type: str
+            self,
+            req,  # type: InstallRequirement
+            skip_reason  # type: str
     ):
         # type: (...) -> AbstractDistribution
         """Prepare an already-installed requirement

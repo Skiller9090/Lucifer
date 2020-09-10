@@ -14,7 +14,6 @@ if MYPY_CHECK_RUNNING:
     from optparse import Values
     from typing import Any, List
 
-
 logger = logging.getLogger(__name__)
 
 

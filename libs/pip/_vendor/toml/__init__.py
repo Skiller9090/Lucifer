@@ -3,8 +3,8 @@
 Released under the MIT license.
 """
 
-from pip._vendor.toml import encoder
 from pip._vendor.toml import decoder
+from pip._vendor.toml import encoder
 
 __version__ = "0.10.1"
 _spec_ = "0.5.0"

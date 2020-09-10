@@ -56,13 +56,13 @@ def _secure_open_write(filename, fmode):
 class FileCache(BaseCache):
 
     def __init__(
-        self,
-        directory,
-        forever=False,
-        filemode=0o0600,
-        dirmode=0o0700,
-        use_dir_lock=None,
-        lock_class=None,
+            self,
+            directory,
+            forever=False,
+            filemode=0o0600,
+            dirmode=0o0700,
+            use_dir_lock=None,
+            lock_class=None,
     ):
 
         if use_dir_lock is not None and lock_class is not None:

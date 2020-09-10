@@ -10,11 +10,12 @@ When any of these things occur, we emit a DataLossWarning
 """
 
 from __future__ import absolute_import, division, unicode_literals
-# pylint:disable=protected-access
 
-import warnings
 import re
 import sys
+import warnings
+
+# pylint:disable=protected-access
 
 try:
     from collections.abc import MutableMapping
@@ -29,7 +30,6 @@ from .. import _ihatexml
 
 import lxml.etree as etree
 from pip._vendor.six import PY3, binary_type
-
 
 fullTree = True
 tag_regexp = re.compile("{([^}]*)}(.*)")
@@ -136,6 +136,7 @@ def testSerializer(element):
                 serializeElement(child, indent)
             if hasattr(element, "tail") and element.tail:
                 rv.append("|%s\"%s\"" % (' ' * (indent - 2), element.tail))
+
     serializeElement(element, 0)
 
     return "\n".join(rv)
@@ -360,7 +361,8 @@ class TreeBuilder(base.TreeBuilder):
                     docStr += "''"
             docStr += ">"
             if self.doctype.name != token["name"]:
-                warnings.warn("lxml cannot represent doctype with a different name to the root element", DataLossWarning)
+                warnings.warn("lxml cannot represent doctype with a different name to the root element",
+                              DataLossWarning)
         docStr += "<THIS_SHOULD_NEVER_APPEAR_PUBLICLY/>"
         root = etree.fromstring(docStr)
 

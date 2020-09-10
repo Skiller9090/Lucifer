@@ -21,7 +21,6 @@ if MYPY_CHECK_RUNNING:
     from optparse import Values
     from typing import List
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -86,7 +85,7 @@ class WheelCommand(RequirementCommand):
             action='append',
             metavar='options',
             help="Extra global options to be supplied to the setup.py "
-            "call before the 'bdist_wheel' command.")
+                 "call before the 'bdist_wheel' command.")
 
         self.cmd_opts.add_option(
             '--pre',

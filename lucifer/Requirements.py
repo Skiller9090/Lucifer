@@ -1,5 +1,5 @@
 import pkg_resources
-from pkg_resources import DistributionNotFound, VersionConflict
+from pkg_resources import DistributionNotFound
 
 
 def check_requirements():

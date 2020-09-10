@@ -3,12 +3,10 @@ try:
 except ImportError:
     from urlparse import urljoin
 
-
 try:
     import cPickle as pickle
 except ImportError:
     import pickle
-
 
 # Handle the case where the requests module has been patched to not have
 # urllib3 bundled as part of its source.

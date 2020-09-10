@@ -21,10 +21,10 @@ _SETUPTOOLS_SHIM = (
 
 
 def make_setuptools_shim_args(
-    setup_py_path,  # type: str
-    global_options=None,  # type: Sequence[str]
-    no_user_config=False,  # type: bool
-    unbuffered_output=False  # type: bool
+        setup_py_path,  # type: str
+        global_options=None,  # type: Sequence[str]
+        no_user_config=False,  # type: bool
+        unbuffered_output=False  # type: bool
 ):
     # type: (...) -> List[str]
     """
@@ -48,10 +48,10 @@ def make_setuptools_shim_args(
 
 
 def make_setuptools_bdist_wheel_args(
-    setup_py_path,  # type: str
-    global_options,  # type: Sequence[str]
-    build_options,  # type: Sequence[str]
-    destination_dir,  # type: str
+        setup_py_path,  # type: str
+        global_options,  # type: Sequence[str]
+        build_options,  # type: Sequence[str]
+        destination_dir,  # type: str
 ):
     # type: (...) -> List[str]
     # NOTE: Eventually, we'd want to also -S to the flags here, when we're
@@ -69,8 +69,8 @@ def make_setuptools_bdist_wheel_args(
 
 
 def make_setuptools_clean_args(
-    setup_py_path,  # type: str
-    global_options,  # type: Sequence[str]
+        setup_py_path,  # type: str
+        global_options,  # type: Sequence[str]
 ):
     # type: (...) -> List[str]
     args = make_setuptools_shim_args(
@@ -83,13 +83,13 @@ def make_setuptools_clean_args(
 
 
 def make_setuptools_develop_args(
-    setup_py_path,  # type: str
-    global_options,  # type: Sequence[str]
-    install_options,  # type: Sequence[str]
-    no_user_config,  # type: bool
-    prefix,  # type: Optional[str]
-    home,  # type: Optional[str]
-    use_user_site,  # type: bool
+        setup_py_path,  # type: str
+        global_options,  # type: Sequence[str]
+        install_options,  # type: Sequence[str]
+        no_user_config,  # type: bool
+        prefix,  # type: Optional[str]
+        home,  # type: Optional[str]
+        use_user_site,  # type: bool
 ):
     # type: (...) -> List[str]
     assert not (use_user_site and prefix)
@@ -116,9 +116,9 @@ def make_setuptools_develop_args(
 
 
 def make_setuptools_egg_info_args(
-    setup_py_path,  # type: str
-    egg_info_dir,  # type: Optional[str]
-    no_user_config,  # type: bool
+        setup_py_path,  # type: str
+        egg_info_dir,  # type: Optional[str]
+        no_user_config,  # type: bool
 ):
     # type: (...) -> List[str]
     args = make_setuptools_shim_args(
@@ -134,17 +134,17 @@ def make_setuptools_egg_info_args(
 
 
 def make_setuptools_install_args(
-    setup_py_path,  # type: str
-    global_options,  # type: Sequence[str]
-    install_options,  # type: Sequence[str]
-    record_filename,  # type: str
-    root,  # type: Optional[str]
-    prefix,  # type: Optional[str]
-    header_dir,  # type: Optional[str]
-    home,  # type: Optional[str]
-    use_user_site,  # type: bool
-    no_user_config,  # type: bool
-    pycompile  # type: bool
+        setup_py_path,  # type: str
+        global_options,  # type: Sequence[str]
+        install_options,  # type: Sequence[str]
+        record_filename,  # type: str
+        root,  # type: Optional[str]
+        prefix,  # type: Optional[str]
+        header_dir,  # type: Optional[str]
+        home,  # type: Optional[str]
+        use_user_site,  # type: bool
+        no_user_config,  # type: bool
+        pycompile  # type: bool
 ):
     # type: (...) -> List[str]
     assert not (use_user_site and prefix)

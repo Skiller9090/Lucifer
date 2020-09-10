@@ -1,8 +1,9 @@
 from __future__ import absolute_import
+
 from base64 import b64encode
 
-from ..packages.six import b, integer_types
 from ..exceptions import UnrewindableBodyError
+from ..packages.six import b, integer_types
 
 ACCEPT_ENCODING = "gzip,deflate"
 try:
@@ -16,12 +17,12 @@ _FAILEDTELL = object()
 
 
 def make_headers(
-    keep_alive=None,
-    accept_encoding=None,
-    user_agent=None,
-    basic_auth=None,
-    proxy_basic_auth=None,
-    disable_cache=None,
+        keep_alive=None,
+        accept_encoding=None,
+        user_agent=None,
+        basic_auth=None,
+        proxy_basic_auth=None,
+        disable_cache=None,
 ):
     """
     Shortcuts for generating request headers.

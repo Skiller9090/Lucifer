@@ -40,11 +40,11 @@ def _find_egg_info(directory):
 
 
 def generate_metadata(
-    build_env,  # type: BuildEnvironment
-    setup_py_path,  # type: str
-    source_dir,  # type: str
-    isolated,  # type: bool
-    details,  # type: str
+        build_env,  # type: BuildEnvironment
+        setup_py_path,  # type: str
+        source_dir,  # type: str
+        isolated,  # type: bool
+        details,  # type: str
 ):
     # type: (...) -> str
     """Generate metadata using setup.py-based defacto mechanisms.

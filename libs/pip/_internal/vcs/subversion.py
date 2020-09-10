@@ -23,13 +23,11 @@ _svn_rev_re = re.compile(r'committed-rev="(\d+)"')
 _svn_info_xml_rev_re = re.compile(r'\s*revision="(\d+)"')
 _svn_info_xml_url_re = re.compile(r'<url>(.*)</url>')
 
-
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Tuple
     from pip._internal.utils.subprocess import CommandArgs
     from pip._internal.utils.misc import HiddenText
     from pip._internal.vcs.versioncontrol import AuthInfo, RevOptions
-
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +57,7 @@ class Subversion(VersionControl):
         for base, dirs, _ in os.walk(location):
             if cls.dirname not in dirs:
                 dirs[:] = []
-                continue    # no sense walking uncontrolled subdirs
+                continue  # no sense walking uncontrolled subdirs
             dirs.remove(cls.dirname)
             entries_fn = os.path.join(base, cls.dirname, 'entries')
             if not os.path.exists(entries_fn):
@@ -69,10 +67,10 @@ class Subversion(VersionControl):
             dirurl, localrev = cls._get_svn_url_rev(base)
 
             if base == location:
-                base = dirurl + '/'   # save the root url
+                base = dirurl + '/'  # save the root url
             elif not dirurl or not dirurl.startswith(base):
                 dirs[:] = []
-                continue    # not part of the same svn tree, skip it
+                continue  # not part of the same svn tree, skip it
             revision = max(revision, localrev)
         return revision
 
@@ -153,7 +151,7 @@ class Subversion(VersionControl):
             if not match:
                 raise ValueError(
                     'Badly formatted data: {data!r}'.format(**locals()))
-            url = match.group(1)    # get repository URL
+            url = match.group(1)  # get repository URL
             revs = [int(m.group(1)) for m in _svn_rev_re.finditer(data)] + [0]
         else:
             try:

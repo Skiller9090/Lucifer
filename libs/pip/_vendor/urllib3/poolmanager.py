@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+
 import collections
 import functools
 import logging
@@ -16,12 +17,10 @@ from .exceptions import (
 from .packages import six
 from .packages.six.moves.urllib.parse import urljoin
 from .request import RequestMethods
-from .util.url import parse_url
 from .util.retry import Retry
-
+from .util.url import parse_url
 
 __all__ = ["PoolManager", "ProxyManager", "proxy_from_url"]
-
 
 log = logging.getLogger(__name__)
 
@@ -354,7 +353,7 @@ class PoolManager(RequestMethods):
         # Check remove_headers_on_redirect to avoid a potential network call within
         # conn.is_same_host() which may use socket.gethostbyname() in the future.
         if retries.remove_headers_on_redirect and not conn.is_same_host(
-            redirect_location
+                redirect_location
         ):
             headers = list(six.iterkeys(kw["headers"]))
             for header in headers:
@@ -406,12 +405,12 @@ class ProxyManager(PoolManager):
     """
 
     def __init__(
-        self,
-        proxy_url,
-        num_pools=10,
-        headers=None,
-        proxy_headers=None,
-        **connection_pool_kw
+            self,
+            proxy_url,
+            num_pools=10,
+            headers=None,
+            proxy_headers=None,
+            **connection_pool_kw
     ):
 
         if isinstance(proxy_url, HTTPConnectionPool):

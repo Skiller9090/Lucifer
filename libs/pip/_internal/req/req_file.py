@@ -10,8 +10,6 @@ import re
 import shlex
 import sys
 
-from pip._vendor.six.moves.urllib import parse as urllib_parse
-
 from pip._internal.cli import cmdoptions
 from pip._internal.exceptions import (
     InstallationError,
@@ -22,6 +20,7 @@ from pip._internal.network.utils import raise_for_status
 from pip._internal.utils.encoding import auto_decode
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.urls import get_url_scheme
+from pip._vendor.six.moves.urllib import parse as urllib_parse
 
 if MYPY_CHECK_RUNNING:
     from optparse import Values
@@ -35,7 +34,6 @@ if MYPY_CHECK_RUNNING:
     ReqFileLines = Iterator[Tuple[int, Text]]
 
     LineParser = Callable[[Text], Tuple[str, Values]]
-
 
 __all__ = ['parse_requirements']
 
@@ -78,13 +76,13 @@ SUPPORTED_OPTIONS_REQ_DEST = [str(o().dest) for o in SUPPORTED_OPTIONS_REQ]
 
 class ParsedRequirement(object):
     def __init__(
-        self,
-        requirement,  # type:str
-        is_editable,  # type: bool
-        comes_from,  # type: str
-        constraint,  # type: bool
-        options=None,  # type: Optional[Dict[str, Any]]
-        line_source=None,  # type: Optional[str]
+            self,
+            requirement,  # type:str
+            is_editable,  # type: bool
+            comes_from,  # type: str
+            constraint,  # type: bool
+            options=None,  # type: Optional[Dict[str, Any]]
+            line_source=None,  # type: Optional[str]
     ):
         # type: (...) -> None
         self.requirement = requirement
@@ -97,13 +95,13 @@ class ParsedRequirement(object):
 
 class ParsedLine(object):
     def __init__(
-        self,
-        filename,  # type: str
-        lineno,  # type: int
-        comes_from,  # type: Optional[str]
-        args,  # type: str
-        opts,  # type: Values
-        constraint,  # type: bool
+            self,
+            filename,  # type: str
+            lineno,  # type: int
+            comes_from,  # type: Optional[str]
+            args,  # type: str
+            opts,  # type: Values
+            constraint,  # type: bool
     ):
         # type: (...) -> None
         self.filename = filename
@@ -126,12 +124,12 @@ class ParsedLine(object):
 
 
 def parse_requirements(
-    filename,  # type: str
-    session,  # type: PipSession
-    finder=None,  # type: Optional[PackageFinder]
-    comes_from=None,  # type: Optional[str]
-    options=None,  # type: Optional[optparse.Values]
-    constraint=False,  # type: bool
+        filename,  # type: str
+        session,  # type: PipSession
+        finder=None,  # type: Optional[PackageFinder]
+        comes_from=None,  # type: Optional[str]
+        options=None,  # type: Optional[optparse.Values]
+        constraint=False,  # type: bool
 ):
     # type: (...) -> Iterator[ParsedRequirement]
     """Parse a requirements file and yield ParsedRequirement instances.
@@ -172,8 +170,8 @@ def preprocess(content):
 
 
 def handle_requirement_line(
-    line,  # type: ParsedLine
-    options=None,  # type: Optional[optparse.Values]
+        line,  # type: ParsedLine
+        options=None,  # type: Optional[optparse.Values]
 ):
     # type: (...) -> ParsedRequirement
 
@@ -216,12 +214,12 @@ def handle_requirement_line(
 
 
 def handle_option_line(
-    opts,  # type: Values
-    filename,  # type: str
-    lineno,  # type: int
-    finder=None,  # type: Optional[PackageFinder]
-    options=None,  # type: Optional[optparse.Values]
-    session=None,  # type: Optional[PipSession]
+        opts,  # type: Values
+        filename,  # type: str
+        lineno,  # type: int
+        finder=None,  # type: Optional[PackageFinder]
+        options=None,  # type: Optional[optparse.Values]
+        session=None,  # type: Optional[PipSession]
 ):
     # type:  (...) -> None
 
@@ -275,10 +273,10 @@ def handle_option_line(
 
 
 def handle_line(
-    line,  # type: ParsedLine
-    options=None,  # type: Optional[optparse.Values]
-    finder=None,  # type: Optional[PackageFinder]
-    session=None,  # type: Optional[PipSession]
+        line,  # type: ParsedLine
+        options=None,  # type: Optional[optparse.Values]
+        finder=None,  # type: Optional[PackageFinder]
+        session=None,  # type: Optional[PipSession]
 ):
     # type: (...) -> Optional[ParsedRequirement]
     """Handle a single parsed requirements line; This can result in
@@ -321,10 +319,10 @@ def handle_line(
 
 class RequirementsFileParser(object):
     def __init__(
-        self,
-        session,  # type: PipSession
-        line_parser,  # type: LineParser
-        comes_from,  # type: Optional[str]
+            self,
+            session,  # type: PipSession
+            line_parser,  # type: LineParser
+            comes_from,  # type: Optional[str]
     ):
         # type: (...) -> None
         self._session = session
@@ -342,8 +340,8 @@ class RequirementsFileParser(object):
         # type: (str, bool) -> Iterator[ParsedLine]
         for line in self._parse_file(filename, constraint):
             if (
-                not line.is_requirement and
-                (line.opts.requirements or line.opts.constraints)
+                    not line.is_requirement and
+                    (line.opts.requirements or line.opts.constraints)
             ):
                 # parse a nested requirements file
                 if line.opts.requirements:
@@ -365,7 +363,7 @@ class RequirementsFileParser(object):
                     )
 
                 for inner_line in self._parse_and_recurse(
-                    req_path, nested_constraint,
+                        req_path, nested_constraint,
                 ):
                     yield inner_line
             else:
@@ -465,6 +463,7 @@ def build_parser():
     def parser_exit(self, msg):
         # type: (Any, str) -> NoReturn
         raise OptionParsingError(msg)
+
     # NOTE: mypy disallows assigning to a method
     #       https://github.com/python/mypy/issues/2427
     parser.exit = parser_exit  # type: ignore

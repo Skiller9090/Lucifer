@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+
 import email.utils
 import mimetypes
 import re
@@ -140,12 +141,12 @@ class RequestField(object):
     """
 
     def __init__(
-        self,
-        name,
-        data,
-        filename=None,
-        headers=None,
-        header_formatter=format_header_param_html5,
+            self,
+            name,
+            data,
+            filename=None,
+            headers=None,
+            header_formatter=format_header_param_html5,
     ):
         self._name = name
         self._filename = filename
@@ -246,7 +247,7 @@ class RequestField(object):
         return u"\r\n".join(lines)
 
     def make_multipart(
-        self, content_disposition=None, content_type=None, content_location=None
+            self, content_disposition=None, content_type=None, content_location=None
     ):
         """
         Makes this request field into a multipart request field.

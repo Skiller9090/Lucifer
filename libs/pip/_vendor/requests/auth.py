@@ -7,18 +7,17 @@ requests.auth
 This module contains the authentication handlers for Requests.
 """
 
+import hashlib
 import os
 import re
-import time
-import hashlib
 import threading
+import time
 import warnings
-
 from base64 import b64encode
 
+from ._internal_utils import to_native_string
 from .compat import urlparse, str, basestring
 from .cookies import extract_cookies_to_jar
-from ._internal_utils import to_native_string
 from .utils import parse_dict_header
 
 CONTENT_TYPE_FORM_URLENCODED = 'application/x-www-form-urlencoded'
@@ -146,24 +145,28 @@ class HTTPDigestAuth(AuthBase):
                 if isinstance(x, str):
                     x = x.encode('utf-8')
                 return hashlib.md5(x).hexdigest()
+
             hash_utf8 = md5_utf8
         elif _algorithm == 'SHA':
             def sha_utf8(x):
                 if isinstance(x, str):
                     x = x.encode('utf-8')
                 return hashlib.sha1(x).hexdigest()
+
             hash_utf8 = sha_utf8
         elif _algorithm == 'SHA-256':
             def sha256_utf8(x):
                 if isinstance(x, str):
                     x = x.encode('utf-8')
                 return hashlib.sha256(x).hexdigest()
+
             hash_utf8 = sha256_utf8
         elif _algorithm == 'SHA-512':
             def sha512_utf8(x):
                 if isinstance(x, str):
                     x = x.encode('utf-8')
                 return hashlib.sha512(x).hexdigest()
+
             hash_utf8 = sha512_utf8
 
         KD = lambda s, d: hash_utf8("%s:%s" % (s, d))
@@ -251,7 +254,6 @@ class HTTPDigestAuth(AuthBase):
         s_auth = r.headers.get('www-authenticate', '')
 
         if 'digest' in s_auth.lower() and self._thread_local.num_401_calls < 2:
-
             self._thread_local.num_401_calls += 1
             pat = re.compile(r'digest ', flags=re.IGNORECASE)
             self._thread_local.chal = parse_dict_header(pat.sub('', s_auth, count=1))

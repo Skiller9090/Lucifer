@@ -10,7 +10,6 @@ and networks.
 
 from __future__ import unicode_literals
 
-
 import itertools
 import struct
 
@@ -350,7 +349,7 @@ def summarize_address_range(first, last):
         raise TypeError('first and last must be IP addresses, not networks')
     if first.version != last.version:
         raise TypeError("%s and %s are not of the same version" % (
-                        first, last))
+            first, last))
     if first > last:
         raise ValueError('last IP address must be greater than first')
 
@@ -450,12 +449,12 @@ def collapse_addresses(addresses):
         if isinstance(ip, _BaseAddress):
             if ips and ips[-1]._version != ip._version:
                 raise TypeError("%s and %s are not of the same version" % (
-                                ip, ips[-1]))
+                    ip, ips[-1]))
             ips.append(ip)
         elif ip._prefixlen == ip._max_prefixlen:
             if ips and ips[-1]._version != ip._version:
                 raise TypeError("%s and %s are not of the same version" % (
-                                ip, ips[-1]))
+                    ip, ips[-1]))
             try:
                 ips.append(ip.ip)
             except AttributeError:
@@ -463,7 +462,7 @@ def collapse_addresses(addresses):
         else:
             if nets and nets[-1]._version != ip._version:
                 raise TypeError("%s and %s are not of the same version" % (
-                                ip, nets[-1]))
+                    ip, nets[-1]))
             nets.append(ip)
 
     # sort and dedup
@@ -503,7 +502,6 @@ def get_mixed_type_key(obj):
 
 
 class _IPAddressBase(_TotalOrderingMixin):
-
     """The mother class."""
 
     __slots__ = ()
@@ -660,7 +658,6 @@ class _IPAddressBase(_TotalOrderingMixin):
 
 
 class _BaseAddress(_IPAddressBase):
-
     """A generic IP object.
 
     This IP class contains the version independent methods which are
@@ -721,13 +718,13 @@ class _BaseAddress(_IPAddressBase):
 
 
 class _BaseNetwork(_IPAddressBase):
-
     """A generic IP network object.
 
     This IP class contains the version independent methods which are
     used by networks.
 
     """
+
     def __init__(self, address):
         self._cache = {}
 
@@ -773,10 +770,10 @@ class _BaseNetwork(_IPAddressBase):
             return NotImplemented
         if not isinstance(other, _BaseNetwork):
             raise TypeError('%s and %s are not of the same type' % (
-                            self, other))
+                self, other))
         if self._version != other._version:
             raise TypeError('%s and %s are not of the same version' % (
-                            self, other))
+                self, other))
         if self.network_address != other.network_address:
             return self.network_address < other.network_address
         if self.netmask != other.netmask:
@@ -810,9 +807,9 @@ class _BaseNetwork(_IPAddressBase):
     def overlaps(self, other):
         """Tell if self is partly contained in other."""
         return self.network_address in other or (
-            self.broadcast_address in other or (
+                self.broadcast_address in other or (
                 other.network_address in self or (
-                    other.broadcast_address in self)))
+                other.broadcast_address in self)))
 
     @property
     def broadcast_address(self):
@@ -898,7 +895,7 @@ class _BaseNetwork(_IPAddressBase):
         """
         if not self._version == other._version:
             raise TypeError("%s and %s are not of the same version" % (
-                            self, other))
+                self, other))
 
         if not isinstance(other, _BaseNetwork):
             raise TypeError("%s is not a network object" % other)
@@ -970,7 +967,7 @@ class _BaseNetwork(_IPAddressBase):
         # does this need to raise a ValueError?
         if self._version != other._version:
             raise TypeError('%s and %s are not of the same type' % (
-                            self, other))
+                self, other))
         # self._version == other._version below here:
         if self.network_address < other.network_address:
             return -1
@@ -1191,7 +1188,6 @@ class _BaseNetwork(_IPAddressBase):
 
 
 class _BaseV4(object):
-
     """Base IPv4 object.
 
     The following methods are used by IPv4 objects in both single IP
@@ -1360,7 +1356,6 @@ class _BaseV4(object):
 
 
 class IPv4Address(_BaseV4, _BaseAddress):
-
     """Represent and manipulate single IPv4 Addresses."""
 
     __slots__ = ('_ip', '__weakref__')
@@ -1431,8 +1426,8 @@ class IPv4Address(_BaseV4, _BaseAddress):
     @property
     def is_global(self):
         return (
-            self not in self._constants._public_network and
-            not self.is_private)
+                self not in self._constants._public_network and
+                not self.is_private)
 
     @property
     def is_multicast(self):
@@ -1561,7 +1556,6 @@ class IPv4Interface(IPv4Address):
 
 
 class IPv4Network(_BaseV4, _BaseNetwork):
-
     """This class represents and manipulates 32-bit IPv4 network + addresses..
 
     Attributes: [examples for IPv4Network('192.0.2.0/27')]
@@ -1670,12 +1664,11 @@ class IPv4Network(_BaseV4, _BaseNetwork):
 
         """
         return (not (self.network_address in IPv4Network('100.64.0.0/10') and
-                self.broadcast_address in IPv4Network('100.64.0.0/10')) and
+                     self.broadcast_address in IPv4Network('100.64.0.0/10')) and
                 not self.is_private)
 
 
 class _IPv4Constants(object):
-
     _linklocal_network = IPv4Network('169.254.0.0/16')
 
     _loopback_network = IPv4Network('127.0.0.0/8')
@@ -1710,7 +1703,6 @@ IPv4Address._constants = _IPv4Constants
 
 
 class _BaseV6(object):
-
     """Base IPv6 object.
 
     The following methods are used by IPv6 objects in both single IP
@@ -1995,7 +1987,6 @@ class _BaseV6(object):
 
 
 class IPv6Address(_BaseV6, _BaseAddress):
-
     """Represent and manipulate single IPv6 Addresses."""
 
     __slots__ = ('_ip', '__weakref__')
@@ -2262,7 +2253,6 @@ class IPv6Interface(IPv6Address):
 
 
 class IPv6Network(_BaseV6, _BaseNetwork):
-
     """This class represents and manipulates 128-bit IPv6 networks.
 
     Attributes: [examples for IPv6('2001:db8::1000/124')]
@@ -2385,7 +2375,6 @@ class IPv6Network(_BaseV6, _BaseNetwork):
 
 
 class _IPv6Constants(object):
-
     _linklocal_network = IPv6Network('fe80::/10')
 
     _multicast_network = IPv6Network('ff00::/8')

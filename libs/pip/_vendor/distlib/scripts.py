@@ -4,12 +4,12 @@
 # Licensed to the Python Software Foundation under a contributor agreement.
 # See LICENSE.txt and CONTRIBUTORS.txt.
 #
-from io import BytesIO
 import logging
 import os
 import re
 import struct
 import sys
+from io import BytesIO
 
 from .compat import sysconfig, detect_encoding, ZipFile
 from .resources import finder
@@ -63,8 +63,10 @@ def enquote_executable(executable):
                 executable = '"%s"' % executable
     return executable
 
+
 # Keep the old name around (for now), as there is at least one project using it!
 _enquote_executable = enquote_executable
+
 
 class ScriptMaker(object):
     """
@@ -89,7 +91,7 @@ class ScriptMaker(object):
         self._fileop = fileop or FileOperator(dry_run)
 
         self._is_nt = os.name == 'nt' or (
-            os.name == 'java' and os._name == 'nt')
+                os.name == 'java' and os._name == 'nt')
         self.version_info = sys.version_info
 
     def _get_alternate_executable(self, executable, options):
@@ -159,17 +161,17 @@ class ScriptMaker(object):
         enquote = True
         if self.executable:
             executable = self.executable
-            enquote = False     # assume this will be taken care of
+            enquote = False  # assume this will be taken care of
         elif not sysconfig.is_python_build():
             executable = get_executable()
         elif in_venv():  # pragma: no cover
             executable = os.path.join(sysconfig.get_path('scripts'),
-                            'python%s' % sysconfig.get_config_var('EXE'))
+                                      'python%s' % sysconfig.get_config_var('EXE'))
         else:  # pragma: no cover
             executable = os.path.join(
                 sysconfig.get_config_var('BINDIR'),
-               'python%s%s' % (sysconfig.get_config_var('VERSION'),
-                               sysconfig.get_config_var('EXE')))
+                'python%s%s' % (sysconfig.get_config_var('VERSION'),
+                                sysconfig.get_config_var('EXE')))
         if options:
             executable = self._get_alternate_executable(executable, options)
 
@@ -194,7 +196,7 @@ class ScriptMaker(object):
         executable = executable.encode('utf-8')
         # in case of IronPython, play safe and enable frames support
         if (sys.platform == 'cli' and '-X:Frames' not in post_interp
-            and '-X:FullFrames' not in post_interp):  # pragma: no cover
+                and '-X:FullFrames' not in post_interp):  # pragma: no cover
             post_interp += b' -X:Frames'
         shebang = self._build_shebang(executable, post_interp)
         # Python parser starts to read a script using UTF-8 until
@@ -262,7 +264,7 @@ class ScriptMaker(object):
                                    'use .deleteme logic')
                     dfname = '%s.deleteme' % outname
                     if os.path.exists(dfname):
-                        os.remove(dfname)       # Not allowed to fail here
+                        os.remove(dfname)  # Not allowed to fail here
                     os.rename(outname, dfname)  # nor here
                     self._fileop.write_binary_file(outname, script_bytes)
                     logger.debug('Able to replace executable using '
@@ -270,7 +272,7 @@ class ScriptMaker(object):
                     try:
                         os.remove(dfname)
                     except Exception:
-                        pass    # still in use - ignore error
+                        pass  # still in use - ignore error
             else:
                 if self._is_nt and not outname.endswith('.' + ext):  # pragma: no cover
                     outname = '%s.%s' % (outname, ext)
@@ -327,7 +329,7 @@ class ScriptMaker(object):
             first_line = f.readline()
             if not first_line:  # pragma: no cover
                 logger.warning('%s: %s is an empty file (skipping)',
-                               self.get_command_name(),  script)
+                               self.get_command_name(), script)
                 return
 
             match = FIRST_LINE_RE.match(first_line.replace(b'\r\n', b'\n'))
@@ -371,7 +373,7 @@ class ScriptMaker(object):
         # Launchers are from https://bitbucket.org/vinay.sajip/simple_launcher/
 
         def _get_launcher(self, kind):
-            if struct.calcsize('P') == 8:   # 64-bit
+            if struct.calcsize('P') == 8:  # 64-bit
                 bits = '64'
             else:
                 bits = '32'
@@ -382,7 +384,7 @@ class ScriptMaker(object):
             resource = finder(distlib_package).find(name)
             if not resource:
                 msg = ('Unable to find resource %s in package %s' % (name,
-                       distlib_package))
+                                                                     distlib_package))
                 raise ValueError(msg)
             return resource.bytes
 

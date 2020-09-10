@@ -39,6 +39,3 @@ def index_modules():
                     }
             current_node = current_node[dir_name]["folders"]
     return tree, modules, sub_folders
-
-
-
