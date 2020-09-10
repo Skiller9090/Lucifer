@@ -1,4 +1,7 @@
 # Lucifer
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/066ed76111cd49d98ba5dad52240b2bd)](https://app.codacy.com/manual/alexspam9090/Lucifer?utm_source=github.com&utm_medium=referral&utm_content=Skiller9090/Lucifer&utm_campaign=Badge_Grade_Dashboard)
+
 09/09/2020
 ## Commands
 
