@@ -1,13 +1,13 @@
 """Fallback pure Python implementation of msgpack"""
 
-from datetime import datetime as _DateTime
-import sys
 import struct
-
+import sys
+from datetime import datetime as _DateTime
 
 PY2 = sys.version_info[0] == 2
 if PY2:
     int_types = (int, long)
+
 
     def dict_iteritems(d):
         return d.iteritems()
@@ -18,19 +18,20 @@ else:
     unicode = str
     xrange = range
 
+
     def dict_iteritems(d):
         return d.items()
-
 
 if sys.version_info < (3, 5):
     # Ugly hack...
     RecursionError = RuntimeError
 
+
     def _is_recursionerror(e):
         return (
-            len(e.args) == 1
-            and isinstance(e.args[0], str)
-            and e.args[0].startswith("maximum recursion depth exceeded")
+                len(e.args) == 1
+                and isinstance(e.args[0], str)
+                and e.args[0].startswith("maximum recursion depth exceeded")
         )
 
 
@@ -38,7 +39,6 @@ else:
 
     def _is_recursionerror(e):
         return True
-
 
 if hasattr(sys, "pypy_version_info"):
     # StringIO is slow on PyPy, StringIO is faster.  However: PyPy's own
@@ -50,6 +50,7 @@ if hasattr(sys, "pypy_version_info"):
     except ImportError:
         from __pypy__.builders import StringBuilder
     USING_STRINGBUILDER = True
+
 
     class StringIO(object):
         def __init__(self, s=b""):
@@ -76,11 +77,9 @@ else:
 
     newlist_hint = lambda size: []
 
-
 from .exceptions import BufferFull, OutOfData, ExtraData, FormatError, StackError
 
 from .ext import ExtType, Timestamp
-
 
 EX_SKIP = 0
 EX_CONSTRUCT = 1
@@ -246,24 +245,24 @@ class Unpacker(object):
     """
 
     def __init__(
-        self,
-        file_like=None,
-        read_size=0,
-        use_list=True,
-        raw=False,
-        timestamp=0,
-        strict_map_key=True,
-        object_hook=None,
-        object_pairs_hook=None,
-        list_hook=None,
-        unicode_errors=None,
-        max_buffer_size=100 * 1024 * 1024,
-        ext_hook=ExtType,
-        max_str_len=-1,
-        max_bin_len=-1,
-        max_array_len=-1,
-        max_map_len=-1,
-        max_ext_len=-1,
+            self,
+            file_like=None,
+            read_size=0,
+            use_list=True,
+            raw=False,
+            timestamp=0,
+            strict_map_key=True,
+            object_hook=None,
+            object_pairs_hook=None,
+            list_hook=None,
+            unicode_errors=None,
+            max_buffer_size=100 * 1024 * 1024,
+            ext_hook=ExtType,
+            max_str_len=-1,
+            max_bin_len=-1,
+            max_array_len=-1,
+            max_map_len=-1,
+            max_ext_len=-1,
     ):
         if unicode_errors is None:
             unicode_errors = "strict"
@@ -362,7 +361,7 @@ class Unpacker(object):
         return self._buff_i < len(self._buffer)
 
     def _get_extradata(self):
-        return self._buffer[self._buff_i :]
+        return self._buffer[self._buff_i:]
 
     def read_bytes(self, n):
         ret = self._read(n)
@@ -374,7 +373,7 @@ class Unpacker(object):
         self._reserve(n)
         i = self._buff_i
         self._buff_i = i + n
-        return self._buffer[i : i + n]
+        return self._buffer[i: i + n]
 
     def _reserve(self, n):
         remain_bytes = len(self._buffer) - self._buff_i - n
@@ -786,14 +785,14 @@ class Packer(object):
     """
 
     def __init__(
-        self,
-        default=None,
-        use_single_float=False,
-        autoreset=True,
-        use_bin_type=True,
-        strict_types=False,
-        datetime=False,
-        unicode_errors=None,
+            self,
+            default=None,
+            use_single_float=False,
+            autoreset=True,
+            use_bin_type=True,
+            strict_types=False,
+            datetime=False,
+            unicode_errors=None,
     ):
         self._strict_types = strict_types
         self._use_float = use_single_float
@@ -810,11 +809,11 @@ class Packer(object):
         self._default = default
 
     def _pack(
-        self,
-        obj,
-        nest_limit=DEFAULT_RECURSE_LIMIT,
-        check=isinstance,
-        check_type_strict=_check_type_strict,
+            self,
+            obj,
+            nest_limit=DEFAULT_RECURSE_LIMIT,
+            check=isinstance,
+            check_type_strict=_check_type_strict,
     ):
         default_used = False
         if self._strict_types:

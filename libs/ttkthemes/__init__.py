@@ -3,8 +3,8 @@ Author: RedFantom
 License: GNU GPLv3
 Copyright (c) 2017-2018 RedFantom
 """
-from libs.ttkthemes.themed_tk import ThemedTk
 from libs.ttkthemes.themed_style import ThemedStyle
+from libs.ttkthemes.themed_tk import ThemedTk
 
 THEMES = [
     "aquativo",

@@ -105,7 +105,7 @@ class Matcher(object):
         if not r:
             raise ValueError('Not valid: %r' % s)
         self.name = r.name
-        self.key = self.name.lower()    # for case-insensitive comparisons
+        self.key = self.name.lower()  # for case-insensitive comparisons
         clist = []
         if r.constraints:
             # import pdb; pdb.set_trace()
@@ -229,16 +229,16 @@ def _pep_440_key(s):
         # either before pre-release, or final release and after
         if not post and dev:
             # before pre-release
-            pre = ('a', -1)     # to sort before a0
+            pre = ('a', -1)  # to sort before a0
         else:
-            pre = ('z',)        # to sort after all pre-releases
+            pre = ('z',)  # to sort after all pre-releases
     # now look at the state of post and dev.
     if not post:
-        post = ('_',)   # sort before 'a'
+        post = ('_',)  # sort before 'a'
     if not dev:
         dev = ('final',)
 
-    #print('%s -> %s' % (s, m.groups()))
+    # print('%s -> %s' % (s, m.groups()))
     return epoch, nums, pre, post, dev, local
 
 
@@ -263,13 +263,14 @@ class NormalizedVersion(Version):
         1.2a        # release level must have a release serial
         1.2.3b
     """
+
     def parse(self, s):
         result = _normalized_key(s)
         # _normalized_key loses trailing zeroes in the release
         # clause, since that's needed to ensure that X.Y == X.Y.0 == X.Y.0.0
         # However, PEP 440 prefix matching needs it: for example,
         # (~= 1.4.5.0) matches differently to (~= 1.4.5.0.0).
-        m = PEP440_VERSION_RE.match(s)      # must succeed
+        m = PEP440_VERSION_RE.match(s)  # must succeed
         groups = m.groups()
         self._release_clause = tuple(int(v) for v in groups[1].split('.'))
         return result
@@ -370,34 +371,35 @@ class NormalizedMatcher(Matcher):
             return True
         if version < constraint:
             return False
-#        if not prefix:
-#            return True
+        #        if not prefix:
+        #            return True
         release_clause = constraint._release_clause
         if len(release_clause) > 1:
             release_clause = release_clause[:-1]
         pfx = '.'.join([str(i) for i in release_clause])
         return _match_prefix(version, pfx)
 
+
 _REPLACEMENTS = (
-    (re.compile('[.+-]$'), ''),                     # remove trailing puncts
-    (re.compile(r'^[.](\d)'), r'0.\1'),             # .N -> 0.N at start
-    (re.compile('^[.-]'), ''),                      # remove leading puncts
-    (re.compile(r'^\((.*)\)$'), r'\1'),             # remove parentheses
-    (re.compile(r'^v(ersion)?\s*(\d+)'), r'\2'),    # remove leading v(ersion)
-    (re.compile(r'^r(ev)?\s*(\d+)'), r'\2'),        # remove leading v(ersion)
-    (re.compile('[.]{2,}'), '.'),                   # multiple runs of '.'
-    (re.compile(r'\b(alfa|apha)\b'), 'alpha'),      # misspelt alpha
+    (re.compile('[.+-]$'), ''),  # remove trailing puncts
+    (re.compile(r'^[.](\d)'), r'0.\1'),  # .N -> 0.N at start
+    (re.compile('^[.-]'), ''),  # remove leading puncts
+    (re.compile(r'^\((.*)\)$'), r'\1'),  # remove parentheses
+    (re.compile(r'^v(ersion)?\s*(\d+)'), r'\2'),  # remove leading v(ersion)
+    (re.compile(r'^r(ev)?\s*(\d+)'), r'\2'),  # remove leading v(ersion)
+    (re.compile('[.]{2,}'), '.'),  # multiple runs of '.'
+    (re.compile(r'\b(alfa|apha)\b'), 'alpha'),  # misspelt alpha
     (re.compile(r'\b(pre-alpha|prealpha)\b'),
-                'pre.alpha'),                       # standardise
-    (re.compile(r'\(beta\)$'), 'beta'),             # remove parentheses
+     'pre.alpha'),  # standardise
+    (re.compile(r'\(beta\)$'), 'beta'),  # remove parentheses
 )
 
 _SUFFIX_REPLACEMENTS = (
-    (re.compile('^[:~._+-]+'), ''),                   # remove leading puncts
-    (re.compile('[,*")([\\]]'), ''),                  # remove unwanted chars
-    (re.compile('[~:+_ -]'), '.'),                    # replace illegal chars
-    (re.compile('[.]{2,}'), '.'),                   # multiple runs of '.'
-    (re.compile(r'\.$'), ''),                       # trailing '.'
+    (re.compile('^[:~._+-]+'), ''),  # remove leading puncts
+    (re.compile('[,*")([\\]]'), ''),  # remove unwanted chars
+    (re.compile('[~:+_ -]'), '.'),  # replace illegal chars
+    (re.compile('[.]{2,}'), '.'),  # multiple runs of '.'
+    (re.compile(r'\.$'), ''),  # trailing '.'
 )
 
 _NUMERIC_PREFIX = re.compile(r'(\d+(\.\d+)*)')
@@ -416,7 +418,7 @@ def _suggest_semantic_version(s):
 
     # Now look for numeric prefix, and separate it out from
     # the rest.
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     m = _NUMERIC_PREFIX.match(result)
     if not m:
         prefix = '0.0.0'
@@ -434,7 +436,7 @@ def _suggest_semantic_version(s):
         prefix = '.'.join([str(i) for i in prefix])
         suffix = suffix.strip()
     if suffix:
-        #import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         # massage the suffix.
         for pat, repl in _SUFFIX_REPLACEMENTS:
             suffix = pat.sub(repl, suffix)
@@ -468,7 +470,7 @@ def _suggest_normalized_version(s):
     """
     try:
         _normalized_key(s)
-        return s   # already rational
+        return s  # already rational
     except UnsupportedVersionError:
         pass
 
@@ -504,7 +506,7 @@ def _suggest_normalized_version(s):
         rs = rs[1:]
 
     # Clean leading '0's on numbers.
-    #TODO: unintended side-effect on, e.g., "2003.05.09"
+    # TODO: unintended side-effect on, e.g., "2003.05.09"
     # PyPI stats: 77 (~2%) better
     rs = re.sub(r"\b0+(\d+)(?!\d)", r"\1", rs)
 
@@ -559,6 +561,7 @@ def _suggest_normalized_version(s):
         rs = None
     return rs
 
+
 #
 #   Legacy version processing (distribute-compatible)
 #
@@ -610,7 +613,7 @@ class LegacyVersion(Version):
         result = False
         for x in self._parts:
             if (isinstance(x, string_types) and x.startswith('*') and
-                x < '*final'):
+                    x < '*final'):
                 result = True
                 break
         return result
@@ -636,6 +639,7 @@ class LegacyMatcher(Matcher):
         if '.' in s:
             s = s.rsplit('.', 1)[0]
         return _match_prefix(version, s)
+
 
 #
 #   Semantic versioning
@@ -718,6 +722,7 @@ class VersionScheme(object):
         else:
             result = self.suggester(s)
         return result
+
 
 _SCHEMES = {
     'normalized': VersionScheme(_normalized_key, NormalizedMatcher,

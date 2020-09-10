@@ -6,10 +6,6 @@ providing credentials in the context of network requests.
 
 import logging
 
-from pip._vendor.requests.auth import AuthBase, HTTPBasicAuth
-from pip._vendor.requests.utils import get_netrc_auth
-from pip._vendor.six.moves.urllib import parse as urllib_parse
-
 from pip._internal.utils.misc import (
     ask,
     ask_input,
@@ -18,6 +14,9 @@ from pip._internal.utils.misc import (
     split_auth_netloc_from_url,
 )
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.requests.auth import AuthBase, HTTPBasicAuth
+from pip._vendor.requests.utils import get_netrc_auth
+from pip._vendor.six.moves.urllib import parse as urllib_parse
 
 if MYPY_CHECK_RUNNING:
     from typing import Dict, Optional, Tuple, List, Any
@@ -153,8 +152,8 @@ class MultiDomainBasicAuth(AuthBase):
         if allow_keyring:
             # The index url is more specific than the netloc, so try it first
             kr_auth = (
-                get_keyring_auth(index_url, username) or
-                get_keyring_auth(netloc, username)
+                    get_keyring_auth(index_url, username) or
+                    get_keyring_auth(netloc, username)
             )
             if kr_auth:
                 logger.debug("Found credentials in keyring for %s", netloc)
@@ -196,9 +195,9 @@ class MultiDomainBasicAuth(AuthBase):
 
         assert (
             # Credentials were found
-            (username is not None and password is not None) or
-            # Credentials were not found
-            (username is None and password is None)
+                (username is not None and password is not None) or
+                # Credentials were not found
+                (username is None and password is None)
         ), "Could not load credentials from url: {}".format(original_url)
 
         return url, username, password

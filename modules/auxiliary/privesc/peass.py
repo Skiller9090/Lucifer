@@ -1,9 +1,9 @@
-from modules.Module import BaseModule
-from lucifer.Errors import IncompatibleSystemError
-from subprocess import Popen, PIPE, STDOUT
-import platform
 import os
-import sys
+import platform
+from subprocess import Popen, PIPE
+
+from lucifer.Errors import IncompatibleSystemError
+from modules.Module import BaseModule
 
 
 # use auxiliary/privesc/peass

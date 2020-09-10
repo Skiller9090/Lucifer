@@ -10,32 +10,28 @@ requests (cookies, auth, proxies).
 import os
 import sys
 import time
-from datetime import timedelta
 from collections import OrderedDict
+from datetime import timedelta
 
+from ._internal_utils import to_native_string
+from .adapters import HTTPAdapter
 from .auth import _basic_auth_str
 from .compat import cookielib, is_py3, urljoin, urlparse, Mapping
 from .cookies import (
     cookiejar_from_dict, extract_cookies_to_jar, RequestsCookieJar, merge_cookies)
-from .models import Request, PreparedRequest, DEFAULT_REDIRECT_LIMIT
-from .hooks import default_hooks, dispatch_hook
-from ._internal_utils import to_native_string
-from .utils import to_key_val_list, default_headers, DEFAULT_PORTS
 from .exceptions import (
     TooManyRedirects, InvalidSchema, ChunkedEncodingError, ContentDecodingError)
-
+from .hooks import default_hooks, dispatch_hook
+from .models import Request, PreparedRequest, DEFAULT_REDIRECT_LIMIT
+from .status_codes import codes
 from .structures import CaseInsensitiveDict
-from .adapters import HTTPAdapter
-
 from .utils import (
     requote_uri, get_environ_proxies, get_netrc_auth, should_bypass_proxies,
     get_auth_from_url, rewind_body
 )
-
-from .status_codes import codes
+from .utils import to_key_val_list, default_headers, DEFAULT_PORTS
 
 # formerly defined here, reexposed here for backward compatibility
-from .models import REDIRECT_STATI
 
 # Preferred clock, based on which one is more accurate on a given system.
 if sys.platform == 'win32':
@@ -219,8 +215,8 @@ class SessionRedirectMixin(object):
             # value ensures `rewindable` will be True, allowing us to raise an
             # UnrewindableBodyError, instead of hanging the connection.
             rewindable = (
-                prepared_request._body_position is not None and
-                ('Content-Length' in headers or 'Transfer-Encoding' in headers)
+                    prepared_request._body_position is not None and
+                    ('Content-Length' in headers or 'Transfer-Encoding' in headers)
             )
 
             # Attempt to rewind consumed file-like object.
@@ -268,7 +264,6 @@ class SessionRedirectMixin(object):
         new_auth = get_netrc_auth(url) if self.trust_env else None
         if new_auth is not None:
             prepared_request.prepare_auth(new_auth)
-
 
     def rebuild_proxies(self, prepared_request, proxies):
         """This method re-evaluates the proxy configuration by considering the
@@ -461,9 +456,9 @@ class Session(SessionRedirectMixin):
         return p
 
     def request(self, method, url,
-            params=None, data=None, headers=None, cookies=None, files=None,
-            auth=None, timeout=None, allow_redirects=True, proxies=None,
-            hooks=None, stream=None, verify=None, cert=None, json=None):
+                params=None, data=None, headers=None, cookies=None, files=None,
+                auth=None, timeout=None, allow_redirects=True, proxies=None,
+                hooks=None, stream=None, verify=None, cert=None, json=None):
         """Constructs a :class:`Request <Request>`, prepares it and sends it.
         Returns :class:`Response <Response>` object.
 

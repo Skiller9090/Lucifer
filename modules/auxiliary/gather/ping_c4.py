@@ -1,6 +1,7 @@
-from modules.Module import BaseModule
-from lucifer.Errors import ArgumentUndefinedError
 import os
+
+from lucifer.Errors import ArgumentUndefinedError
+from modules.Module import BaseModule
 
 
 def ping_response(host):

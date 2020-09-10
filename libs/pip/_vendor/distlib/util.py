@@ -3,10 +3,8 @@
 # See LICENSE.txt and CONTRIBUTORS.txt.
 #
 import codecs
-from collections import deque
 import contextlib
 import csv
-from glob import iglob as std_iglob
 import io
 import json
 import logging
@@ -14,6 +12,9 @@ import os
 import py_compile
 import re
 import socket
+from collections import deque
+from glob import iglob as std_iglob
+
 try:
     import ssl
 except ImportError:  # pragma: no cover
@@ -62,6 +63,7 @@ def parse_marker(marker_string):
     interpreted as a literal string, and a string not contained in quotes is a
     variable (such as os_name).
     """
+
     def marker_var(remaining):
         # either identifier, or literal string
         m = IDENTIFIER.match(remaining)
@@ -95,7 +97,7 @@ def parse_marker(marker_string):
                 raise SyntaxError('unterminated string: %s' % s)
             parts.append(q)
             result = ''.join(parts)
-            remaining = remaining[1:].lstrip() # skip past closing quote
+            remaining = remaining[1:].lstrip()  # skip past closing quote
         return result, remaining
 
     def marker_expr(remaining):
@@ -300,15 +302,15 @@ def in_venv():
 
 
 def get_executable():
-# The __PYVENV_LAUNCHER__ dance is apparently no longer needed, as
-# changes to the stub launcher mean that sys.executable always points
-# to the stub on OS X
-#    if sys.platform == 'darwin' and ('__PYVENV_LAUNCHER__'
-#                                     in os.environ):
-#        result =  os.environ['__PYVENV_LAUNCHER__']
-#    else:
-#        result = sys.executable
-#    return result
+    # The __PYVENV_LAUNCHER__ dance is apparently no longer needed, as
+    # changes to the stub launcher mean that sys.executable always points
+    # to the stub on OS X
+    #    if sys.platform == 'darwin' and ('__PYVENV_LAUNCHER__'
+    #                                     in os.environ):
+    #        result =  os.environ['__PYVENV_LAUNCHER__']
+    #    else:
+    #        result = sys.executable
+    #    return result
     result = os.path.normcase(sys.executable)
     if not isinstance(result, text_type):
         result = fsdecode(result)
@@ -339,6 +341,7 @@ def extract_by_key(d, keys):
         if key in d:
             result[key] = d[key]
     return result
+
 
 def read_exports(stream):
     if sys.version_info[0] >= 3:
@@ -382,7 +385,7 @@ def read_exports(stream):
             s = '%s = %s' % (name, value)
             entry = get_export_entry(s)
             assert entry is not None
-            #entry.dist = self
+            # entry.dist = self
             entries[name] = entry
     return result
 
@@ -414,6 +417,7 @@ def tempdir():
     finally:
         shutil.rmtree(td)
 
+
 @contextlib.contextmanager
 def chdir(d):
     cwd = os.getcwd()
@@ -437,7 +441,7 @@ def socket_timeout(seconds=15):
 class cached_property(object):
     def __init__(self, func):
         self.func = func
-        #for attr in ('__name__', '__module__', '__doc__'):
+        # for attr in ('__name__', '__module__', '__doc__'):
         #    setattr(self, attr, getattr(func, attr, None))
 
     def __get__(self, obj, cls=None):
@@ -445,8 +449,9 @@ class cached_property(object):
             return self
         value = self.func(obj)
         object.__setattr__(obj, self.func.__name__, value)
-        #obj.__dict__[self.func.__name__] = value = self.func(obj)
+        # obj.__dict__[self.func.__name__] = value = self.func(obj)
         return value
+
 
 def convert_path(pathname):
     """Return 'pathname' as a name that will work on the native filesystem.
@@ -593,7 +598,7 @@ class FileOperator(object):
             compile_kwargs = {}
             if hashed_invalidation and hasattr(py_compile, 'PycInvalidationMode'):
                 compile_kwargs['invalidation_mode'] = py_compile.PycInvalidationMode.CHECKED_HASH
-            py_compile.compile(path, dpath, diagpath, True, **compile_kwargs)     # raise error
+            py_compile.compile(path, dpath, diagpath, True, **compile_kwargs)  # raise error
         self.record_as_written(dpath)
         return dpath
 
@@ -655,8 +660,9 @@ class FileOperator(object):
                     assert flist == ['__pycache__']
                     sd = os.path.join(d, flist[0])
                     os.rmdir(sd)
-                os.rmdir(d)     # should fail if non-empty
+                os.rmdir(d)  # should fail if non-empty
         self._init_record()
+
 
 def resolve(module_name, dotted_path):
     if module_name in sys.modules:
@@ -705,6 +711,7 @@ ENTRY_RE = re.compile(r'''(?P<name>(\w|[-.+])+)
                       \s*=\s*(?P<callable>(\w+)([:\.]\w+)*)
                       \s*(\[\s*(?P<flags>[\w-]+(=\w+)?(,\s*\w+(=\w+)?)*)\s*\])?
                       ''', re.VERBOSE)
+
 
 def get_export_entry(specification):
     m = ENTRY_RE.search(specification)
@@ -821,6 +828,7 @@ def get_process_umask():
     os.umask(result)
     return result
 
+
 def is_string_sequence(seq):
     result = True
     i = None
@@ -830,6 +838,7 @@ def is_string_sequence(seq):
             break
     assert i is not None
     return result
+
 
 PROJECT_NAME_AND_VERSION = re.compile('([a-z0-9_]+([.-][a-z_][a-z0-9_]*)*)-'
                                       '([a-z0-9_.+-]+)', re.I)
@@ -860,9 +869,11 @@ def split_filename(filename, project_name=None):
             result = m.group(1), m.group(3), pyver
     return result
 
+
 # Allow spaces in name because of legacy dists like "Twisted Core"
 NAME_VERSION_RE = re.compile(r'(?P<name>[\w .-]+)\s*'
                              r'\(\s*(?P<ver>[^\s)]+)\)$')
+
 
 def parse_name_and_version(p):
     """
@@ -878,6 +889,7 @@ def parse_name_and_version(p):
         raise DistlibException('Ill-formed name/version string: \'%s\'' % p)
     d = m.groupdict()
     return d['name'].strip().lower(), d['ver']
+
 
 def get_extras(requested, available):
     result = set()
@@ -900,6 +912,8 @@ def get_extras(requested, available):
                 logger.warning('undeclared extra: %s' % r)
             result.add(r)
     return result
+
+
 #
 # Extended metadata functionality
 #
@@ -917,20 +931,23 @@ def _get_external_data(url):
             logger.debug('Unexpected response for JSON request: %s', ct)
         else:
             reader = codecs.getreader('utf-8')(resp)
-            #data = reader.read().decode('utf-8')
-            #result = json.loads(data)
+            # data = reader.read().decode('utf-8')
+            # result = json.loads(data)
             result = json.load(reader)
     except Exception as e:
         logger.exception('Failed to get external data for %s: %s', url, e)
     return result
 
+
 _external_data_base_url = 'https://www.red-dove.com/pypi/projects/'
+
 
 def get_project_data(name):
     url = '%s/%s/project.json' % (name[0].upper(), name)
     url = urljoin(_external_data_base_url, url)
     result = _get_external_data(url)
     return result
+
 
 def get_package_data(name, version):
     url = '%s/%s/package-%s.json' % (name[0].upper(), name, version)
@@ -986,6 +1003,7 @@ class EventMixin(object):
     """
     A very simple publish/subscribe system.
     """
+
     def __init__(self):
         self._subscribers = {}
 
@@ -1051,6 +1069,7 @@ class EventMixin(object):
                      event, args, kwargs, result)
         return result
 
+
 #
 # Simple sequencing
 #
@@ -1058,7 +1077,7 @@ class Sequencer(object):
     def __init__(self):
         self._preds = {}
         self._succs = {}
-        self._nodes = set()     # nodes with no preds/succs
+        self._nodes = set()  # nodes with no preds/succs
 
     def add_node(self, node):
         self._nodes.add(node)
@@ -1128,7 +1147,7 @@ class Sequencer(object):
 
     @property
     def strong_connections(self):
-        #http://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
+        # http://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
         index_counter = [0]
         stack = []
         lowlinks = {}
@@ -1153,11 +1172,11 @@ class Sequencer(object):
                 if successor not in lowlinks:
                     # Successor has not yet been visited
                     strongconnect(successor)
-                    lowlinks[node] = min(lowlinks[node],lowlinks[successor])
+                    lowlinks[node] = min(lowlinks[node], lowlinks[successor])
                 elif successor in stack:
                     # the successor is in the stack and hence in the current
                     # strongly connected component (SCC)
-                    lowlinks[node] = min(lowlinks[node],index[successor])
+                    lowlinks[node] = min(lowlinks[node], index[successor])
 
             # If `node` is a root node, pop the stack and generate an SCC
             if lowlinks[node] == index[node]:
@@ -1189,6 +1208,7 @@ class Sequencer(object):
         result.append('}')
         return '\n'.join(result)
 
+
 #
 # Unarchiving functionality for zip, tar, tgz, tbz, whl
 #
@@ -1196,8 +1216,8 @@ class Sequencer(object):
 ARCHIVE_EXTENSIONS = ('.tar.gz', '.tar.bz2', '.tar', '.zip',
                       '.tgz', '.tbz', '.whl')
 
-def unarchive(archive_filename, dest_dir, format=None, check=True):
 
+def unarchive(archive_filename, dest_dir, format=None, check=True):
     def check_path(path):
         if not isinstance(path, text_type):
             path = path.decode('utf-8')
@@ -1263,11 +1283,12 @@ def zip_dir(directory):
                 zf.write(full, dest)
     return result
 
+
 #
 # Simple progress bar
 #
 
-UNITS = ('', 'K', 'M', 'G','T','P')
+UNITS = ('', 'K', 'M', 'G', 'T', 'P')
 
 
 class Progress(object):
@@ -1322,7 +1343,7 @@ class Progress(object):
     def format_duration(self, duration):
         if (duration <= 0) and self.max is None or self.cur == self.min:
             result = '??:??:??'
-        #elif duration < 1:
+        # elif duration < 1:
         #    result = '--:--:--'
         else:
             result = time.strftime('%H:%M:%S', time.gmtime(duration))
@@ -1333,7 +1354,7 @@ class Progress(object):
         if self.done:
             prefix = 'Done'
             t = self.elapsed
-            #import pdb; pdb.set_trace()
+            # import pdb; pdb.set_trace()
         else:
             prefix = 'ETA '
             if self.max is None:
@@ -1341,7 +1362,7 @@ class Progress(object):
             elif self.elapsed == 0 or (self.cur == self.min):
                 t = 0
             else:
-                #import pdb; pdb.set_trace()
+                # import pdb; pdb.set_trace()
                 t = float(self.max - self.min)
                 t /= self.cur - self.min
                 t = (t - 1) * self.elapsed
@@ -1358,6 +1379,7 @@ class Progress(object):
                 break
             result /= 1000.0
         return '%d %sB/s' % (result, unit)
+
 
 #
 # Glob functionality
@@ -1406,18 +1428,19 @@ def _iglob(path_glob):
                 for fn in _iglob(os.path.join(path, radical)):
                     yield fn
 
+
 if ssl:
     from .compat import (HTTPSHandler as BaseHTTPSHandler, match_hostname,
                          CertificateError)
 
 
-#
-# HTTPSConnection which verifies certificates/matches domains
-#
+    #
+    # HTTPSConnection which verifies certificates/matches domains
+    #
 
     class HTTPSConnection(httplib.HTTPSConnection):
-        ca_certs = None # set this to the path to the certs file (.pem)
-        check_domain = True # only used if ca_certs is not None
+        ca_certs = None  # set this to the path to the certs file (.pem)
+        check_domain = True  # only used if ca_certs is not None
 
         # noinspection PyPropertyAccess
         def connect(self):
@@ -1458,6 +1481,7 @@ if ssl:
                     self.sock.close()
                     raise
 
+
     class HTTPSHandler(BaseHTTPSHandler):
         def __init__(self, ca_certs, check_domain=True):
             BaseHTTPSHandler.__init__(self)
@@ -1490,6 +1514,7 @@ if ssl:
                 else:
                     raise
 
+
     #
     # To prevent against mixing HTTP traffic with HTTPS (examples: A Man-In-The-
     # Middle proxy using HTTP listens on port 443, or an index mistakenly serves
@@ -1513,7 +1538,7 @@ _ver_info = sys.version_info[:2]
 if _ver_info == (2, 6):
     class HTTP(httplib.HTTP):
         def __init__(self, host='', port=None, **kwargs):
-            if port == 0:   # 0 means use port 0, not the default port
+            if port == 0:  # 0 means use port 0, not the default port
                 port = None
             self._setup(self._connection_class(host, port, **kwargs))
 
@@ -1521,7 +1546,7 @@ if _ver_info == (2, 6):
     if ssl:
         class HTTPS(httplib.HTTPS):
             def __init__(self, host='', port=None, **kwargs):
-                if port == 0:   # 0 means use port 0, not the default port
+                if port == 0:  # 0 means use port 0, not the default port
                     port = None
                 self._setup(self._connection_class(host, port, **kwargs))
 
@@ -1541,6 +1566,7 @@ class Transport(xmlrpclib.Transport):
                 self._connection = host, httplib.HTTPConnection(h)
             result = self._connection[1]
         return result
+
 
 if ssl:
     class SafeTransport(xmlrpclib.SafeTransport):
@@ -1580,6 +1606,7 @@ class ServerProxy(xmlrpclib.ServerProxy):
             self.transport = t
         xmlrpclib.ServerProxy.__init__(self, uri, **kwargs)
 
+
 #
 # CSV functionality. This is provided because on 2.x, the csv module can't
 # handle Unicode. However, we need to deal with Unicode in e.g. RECORD files.
@@ -1598,9 +1625,9 @@ def _csv_open(fn, mode, **kwargs):
 
 class CSVBase(object):
     defaults = {
-        'delimiter': str(','),      # The strs are used because we need native
-        'quotechar': str('"'),      # str in the csv API (2.x won't take
-        'lineterminator': str('\n') # Unicode)
+        'delimiter': str(','),  # The strs are used because we need native
+        'quotechar': str('"'),  # str in the csv API (2.x won't take
+        'lineterminator': str('\n')  # Unicode)
     }
 
     def __enter__(self):
@@ -1635,6 +1662,7 @@ class CSVReader(CSVBase):
 
     __next__ = next
 
+
 class CSVWriter(CSVBase):
     def __init__(self, fn, **kwargs):
         self.stream = _csv_open(fn, 'w')
@@ -1650,12 +1678,12 @@ class CSVWriter(CSVBase):
             row = r
         self.writer.writerow(row)
 
+
 #
 #   Configurator functionality
 #
 
 class Configurator(BaseConfigurator):
-
     value_converters = dict(BaseConfigurator.value_converters)
     value_converters['inc'] = 'inc_convert'
 
@@ -1713,6 +1741,7 @@ class SubprocessMixin(object):
     """
     Mixin for running subprocesses and capturing their output
     """
+
     def __init__(self, verbose=False, progress=None):
         self.verbose = verbose
         self.progress = progress

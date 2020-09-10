@@ -10,11 +10,11 @@ import os
 import re
 import sys
 from os.path import pardir, realpath
+
 try:
     import configparser
 except ImportError:
     import ConfigParser as configparser
-
 
 __all__ = [
     'get_config_h_filename',
@@ -61,9 +61,11 @@ def is_python_build():
             return True
     return False
 
+
 _PYTHON_BUILD = is_python_build()
 
 _cfg_read = False
+
 
 def _ensure_cfg_read():
     global _cfg_read
@@ -85,6 +87,7 @@ def _ensure_cfg_read():
 
 _SCHEMES = configparser.RawConfigParser()
 _VAR_REPL = re.compile(r'\{([^{]*?)\}')
+
 
 def _expand_globals(config):
     _ensure_cfg_read()
@@ -117,7 +120,8 @@ def _expand_globals(config):
         for option, value in config.items(section):
             config.set(section, option, _VAR_REPL.sub(_replacer, value))
 
-#_expand_globals(_SCHEMES)
+
+# _expand_globals(_SCHEMES)
 
 _PY_VERSION = '%s.%s.%s' % sys.version_info[:3]
 _PY_VERSION_SHORT = '%s.%s' % sys.version_info[:2]
@@ -134,6 +138,7 @@ def _subst_vars(path, local_vars):
 
     If there is no corresponding value, leave the token unchanged.
     """
+
     def _replacer(matchobj):
         name = matchobj.group(1)
         if name in local_vars:
@@ -141,6 +146,7 @@ def _subst_vars(path, local_vars):
         elif name in os.environ:
             return os.environ[name]
         return matchobj.group(0)
+
     return _VAR_REPL.sub(_replacer, path)
 
 
@@ -171,6 +177,7 @@ def format_value(value, vars):
         if name in vars:
             return vars[name]
         return matchobj.group(0)
+
     return _VAR_REPL.sub(_replacer, value)
 
 
@@ -279,7 +286,7 @@ def _parse_makefile(filename, vars=None):
 
                 elif n in renamed_variables:
                     if (name.startswith('PY_') and
-                        name[3:] in renamed_variables):
+                            name[3:] in renamed_variables):
                         item = ""
 
                     elif 'PY_' + n in notdone:
@@ -306,7 +313,7 @@ def _parse_makefile(filename, vars=None):
                         variables.remove(name)
 
                         if (name.startswith('PY_') and
-                            name[3:] in renamed_variables):
+                                name[3:] in renamed_variables):
 
                             name = name[3:]
                             if name not in done:
@@ -377,6 +384,7 @@ def _init_non_posix(vars):
     vars['EXE'] = '.exe'
     vars['VERSION'] = _PY_VERSION_SHORT_NO_DOT
     vars['BINDIR'] = os.path.dirname(_safe_realpath(sys.executable))
+
 
 #
 # public APIs
@@ -514,7 +522,7 @@ def get_config_vars(*args):
             except OSError:
                 cwd = None
             if (not os.path.isabs(_CONFIG_VARS['srcdir']) and
-                base != cwd):
+                    base != cwd):
                 # srcdir is relative and we are not in the same directory
                 # as the executable. Assume executable is in the build
                 # directory and make srcdir absolute.
@@ -531,9 +539,9 @@ def get_config_vars(*args):
                 # This is needed when building extensions on a 10.3 system
                 # using a universal build of python.
                 for key in ('LDFLAGS', 'BASECFLAGS',
-                        # a number of derived variables. These need to be
-                        # patched up as well.
-                        'CFLAGS', 'PY_CFLAGS', 'BLDSHARED'):
+                            # a number of derived variables. These need to be
+                            # patched up as well.
+                            'CFLAGS', 'PY_CFLAGS', 'BLDSHARED'):
                     flags = _CONFIG_VARS[key]
                     flags = re.sub(r'-arch\s+\w+\s', ' ', flags)
                     flags = re.sub('-isysroot [^ \t]*', ' ', flags)
@@ -547,10 +555,9 @@ def get_config_vars(*args):
                 if 'ARCHFLAGS' in os.environ:
                     arch = os.environ['ARCHFLAGS']
                     for key in ('LDFLAGS', 'BASECFLAGS',
-                        # a number of derived variables. These need to be
-                        # patched up as well.
-                        'CFLAGS', 'PY_CFLAGS', 'BLDSHARED'):
-
+                                # a number of derived variables. These need to be
+                                # patched up as well.
+                                'CFLAGS', 'PY_CFLAGS', 'BLDSHARED'):
                         flags = _CONFIG_VARS[key]
                         flags = re.sub(r'-arch\s+\w+\s', ' ', flags)
                         flags = flags + ' ' + arch
@@ -572,10 +579,9 @@ def get_config_vars(*args):
                     sdk = m.group(1)
                     if not os.path.exists(sdk):
                         for key in ('LDFLAGS', 'BASECFLAGS',
-                             # a number of derived variables. These need to be
-                             # patched up as well.
-                            'CFLAGS', 'PY_CFLAGS', 'BLDSHARED'):
-
+                                    # a number of derived variables. These need to be
+                                    # patched up as well.
+                                    'CFLAGS', 'PY_CFLAGS', 'BLDSHARED'):
                             flags = _CONFIG_VARS[key]
                             flags = re.sub(r'-isysroot\s+\S+(\s|$)', ' ', flags)
                             _CONFIG_VARS[key] = flags
@@ -630,7 +636,7 @@ def get_platform():
         if i == -1:
             return sys.platform
         j = sys.version.find(")", i)
-        look = sys.version[i+len(prefix):j].lower()
+        look = sys.version[i + len(prefix):j].lower()
         if look == 'amd64':
             return 'win-amd64'
         if look == 'itanium':
@@ -655,13 +661,13 @@ def get_platform():
         # At least on Linux/Intel, 'machine' is the processor --
         # i386, etc.
         # XXX what about Alpha, SPARC, etc?
-        return  "%s-%s" % (osname, machine)
+        return "%s-%s" % (osname, machine)
     elif osname[:5] == "sunos":
-        if release[0] >= "5":           # SunOS 5 == Solaris 2
+        if release[0] >= "5":  # SunOS 5 == Solaris 2
             osname = "solaris"
             release = "%d.%s" % (int(release[0]) - 3, release[2:])
         # fall through to standard osname-release-machine representation
-    elif osname[:4] == "irix":              # could be "irix64"!
+    elif osname[:4] == "irix":  # could be "irix64"!
         return "%s-%s" % (osname, release)
     elif osname[:3] == "aix":
         return "%s-%s.%s" % (osname, version, release)
@@ -713,7 +719,7 @@ def get_platform():
             osname = "macosx"
 
             if ((macrelease + '.') >= '10.4.' and
-                '-arch' in get_config_vars().get('CFLAGS', '').strip()):
+                    '-arch' in get_config_vars().get('CFLAGS', '').strip()):
                 # The universal build will build fat binaries, but not on
                 # systems before 10.4
                 #
@@ -740,19 +746,19 @@ def get_platform():
                     machine = 'universal'
                 else:
                     raise ValueError(
-                       "Don't know machine value for archs=%r" % (archs,))
+                        "Don't know machine value for archs=%r" % (archs,))
 
             elif machine == 'i386':
                 # On OSX the machine type returned by uname is always the
                 # 32-bit variant, even if the executable architecture is
                 # the 64-bit variant
-                if sys.maxsize >= 2**32:
+                if sys.maxsize >= 2 ** 32:
                     machine = 'x86_64'
 
             elif machine in ('PowerPC', 'Power_Macintosh'):
                 # Pick a sane name for the PPC architecture.
                 # See 'i386' case
-                if sys.maxsize >= 2**32:
+                if sys.maxsize >= 2 ** 32:
                     machine = 'ppc64'
                 else:
                     machine = 'ppc'

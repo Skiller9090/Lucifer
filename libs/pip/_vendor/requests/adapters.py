@@ -11,34 +11,34 @@ and maintain connections.
 import os.path
 import socket
 
-from pip._vendor.urllib3.poolmanager import PoolManager, proxy_from_url
-from pip._vendor.urllib3.response import HTTPResponse
-from pip._vendor.urllib3.util import parse_url
-from pip._vendor.urllib3.util import Timeout as TimeoutSauce
-from pip._vendor.urllib3.util.retry import Retry
 from pip._vendor.urllib3.exceptions import ClosedPoolError
 from pip._vendor.urllib3.exceptions import ConnectTimeoutError
 from pip._vendor.urllib3.exceptions import HTTPError as _HTTPError
+from pip._vendor.urllib3.exceptions import LocationValueError
 from pip._vendor.urllib3.exceptions import MaxRetryError
 from pip._vendor.urllib3.exceptions import NewConnectionError
-from pip._vendor.urllib3.exceptions import ProxyError as _ProxyError
 from pip._vendor.urllib3.exceptions import ProtocolError
+from pip._vendor.urllib3.exceptions import ProxyError as _ProxyError
 from pip._vendor.urllib3.exceptions import ReadTimeoutError
-from pip._vendor.urllib3.exceptions import SSLError as _SSLError
 from pip._vendor.urllib3.exceptions import ResponseError
-from pip._vendor.urllib3.exceptions import LocationValueError
+from pip._vendor.urllib3.exceptions import SSLError as _SSLError
+from pip._vendor.urllib3.poolmanager import PoolManager, proxy_from_url
+from pip._vendor.urllib3.response import HTTPResponse
+from pip._vendor.urllib3.util import Timeout as TimeoutSauce
+from pip._vendor.urllib3.util import parse_url
+from pip._vendor.urllib3.util.retry import Retry
 
-from .models import Response
+from .auth import _basic_auth_str
 from .compat import urlparse, basestring
-from .utils import (DEFAULT_CA_BUNDLE_PATH, extract_zipped_paths,
-                    get_encoding_from_headers, prepend_scheme_if_needed,
-                    get_auth_from_url, urldefragauth, select_proxy)
-from .structures import CaseInsensitiveDict
 from .cookies import extract_cookies_to_jar
 from .exceptions import (ConnectionError, ConnectTimeout, ReadTimeout, SSLError,
                          ProxyError, RetryError, InvalidSchema, InvalidProxyURL,
                          InvalidURL)
-from .auth import _basic_auth_str
+from .models import Response
+from .structures import CaseInsensitiveDict
+from .utils import (DEFAULT_CA_BUNDLE_PATH, extract_zipped_paths,
+                    get_encoding_from_headers, prepend_scheme_if_needed,
+                    get_auth_from_url, urldefragauth, select_proxy)
 
 try:
     from pip._vendor.urllib3.contrib.socks import SOCKSProxyManager

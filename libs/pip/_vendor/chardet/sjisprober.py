@@ -25,12 +25,12 @@
 # 02110-1301  USA
 ######################### END LICENSE BLOCK #########################
 
-from .mbcharsetprober import MultiByteCharSetProber
-from .codingstatemachine import CodingStateMachine
 from .chardistribution import SJISDistributionAnalysis
-from .jpcntx import SJISContextAnalysis
-from .mbcssm import SJIS_SM_MODEL
+from .codingstatemachine import CodingStateMachine
 from .enums import ProbingState, MachineState
+from .jpcntx import SJISContextAnalysis
+from .mbcharsetprober import MultiByteCharSetProber
+from .mbcssm import SJIS_SM_MODEL
 
 
 class SJISProber(MultiByteCharSetProber):
@@ -73,7 +73,7 @@ class SJISProber(MultiByteCharSetProber):
                     self.distribution_analyzer.feed(self._last_char, char_len)
                 else:
                     self.context_analyzer.feed(byte_str[i + 1 - char_len:i + 3
-                                                        - char_len], char_len)
+                                                                         - char_len], char_len)
                     self.distribution_analyzer.feed(byte_str[i - 1:i + 1],
                                                     char_len)
 
@@ -81,7 +81,7 @@ class SJISProber(MultiByteCharSetProber):
 
         if self.state == ProbingState.DETECTING:
             if (self.context_analyzer.got_enough_data() and
-               (self.get_confidence() > self.SHORTCUT_THRESHOLD)):
+                    (self.get_confidence() > self.SHORTCUT_THRESHOLD)):
                 self._state = ProbingState.FOUND_IT
 
         return self.state

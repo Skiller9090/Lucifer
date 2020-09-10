@@ -2,10 +2,9 @@
 import json
 import re
 
+from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._vendor import six
 from pip._vendor.six.moves.urllib import parse as urllib_parse
-
-from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -13,7 +12,6 @@ if MYPY_CHECK_RUNNING:
     )
 
     T = TypeVar("T")
-
 
 DIRECT_URL_METADATA_NAME = "direct_url.json"
 ENV_VAR_RE = re.compile(r"^\$\{[A-Za-z0-9-_]+\}(:\$\{[A-Za-z0-9-_]+\})?$")
@@ -81,12 +79,12 @@ class VcsInfo(object):
     name = "vcs_info"
 
     def __init__(
-        self,
-        vcs,  # type: str
-        commit_id,  # type: str
-        requested_revision=None,  # type: Optional[str]
-        resolved_revision=None,  # type: Optional[str]
-        resolved_revision_type=None,  # type: Optional[str]
+            self,
+            vcs,  # type: str
+            commit_id,  # type: str
+            requested_revision=None,  # type: Optional[str]
+            resolved_revision=None,  # type: Optional[str]
+            resolved_revision_type=None,  # type: Optional[str]
     ):
         self.vcs = vcs
         self.requested_revision = requested_revision
@@ -122,8 +120,8 @@ class ArchiveInfo(object):
     name = "archive_info"
 
     def __init__(
-        self,
-        hash=None,  # type: Optional[str]
+            self,
+            hash=None,  # type: Optional[str]
     ):
         self.hash = hash
 
@@ -143,8 +141,8 @@ class DirInfo(object):
     name = "dir_info"
 
     def __init__(
-        self,
-        editable=False,  # type: bool
+            self,
+            editable=False,  # type: bool
     ):
         self.editable = editable
 
@@ -169,10 +167,10 @@ if MYPY_CHECK_RUNNING:
 class DirectUrl(object):
 
     def __init__(
-        self,
-        url,  # type: str
-        info,  # type: InfoType
-        subdirectory=None,  # type: Optional[str]
+            self,
+            url,  # type: str
+            info,  # type: InfoType
+            subdirectory=None,  # type: Optional[str]
     ):
         self.url = url
         self.info = info
@@ -184,9 +182,9 @@ class DirectUrl(object):
             return netloc
         user_pass, netloc_no_user_pass = netloc.split("@", 1)
         if (
-            isinstance(self.info, VcsInfo) and
-            self.info.vcs == "git" and
-            user_pass == "git"
+                isinstance(self.info, VcsInfo) and
+                self.info.vcs == "git" and
+                user_pass == "git"
         ):
             return netloc
         if ENV_VAR_RE.match(user_pass):

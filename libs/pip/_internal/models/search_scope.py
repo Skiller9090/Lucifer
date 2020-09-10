@@ -3,23 +3,20 @@ import logging
 import os
 import posixpath
 
-from pip._vendor.packaging.utils import canonicalize_name
-from pip._vendor.six.moves.urllib import parse as urllib_parse
-
 from pip._internal.models.index import PyPI
 from pip._internal.utils.compat import has_tls
 from pip._internal.utils.misc import normalize_path, redact_auth_from_url
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.packaging.utils import canonicalize_name
+from pip._vendor.six.moves.urllib import parse as urllib_parse
 
 if MYPY_CHECK_RUNNING:
     from typing import List
-
 
 logger = logging.getLogger(__name__)
 
 
 class SearchScope(object):
-
     """
     Encapsulates the locations that pip is configured to search.
     """
@@ -28,9 +25,9 @@ class SearchScope(object):
 
     @classmethod
     def create(
-        cls,
-        find_links,  # type: List[str]
-        index_urls,  # type: List[str]
+            cls,
+            find_links,  # type: List[str]
+            index_urls,  # type: List[str]
     ):
         # type: (...) -> SearchScope
         """
@@ -68,9 +65,9 @@ class SearchScope(object):
         )
 
     def __init__(
-        self,
-        find_links,  # type: List[str]
-        index_urls,  # type: List[str]
+            self,
+            find_links,  # type: List[str]
+            index_urls,  # type: List[str]
     ):
         # type: (...) -> None
         self.find_links = find_links

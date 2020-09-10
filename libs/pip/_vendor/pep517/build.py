@@ -3,13 +3,14 @@
 import argparse
 import logging
 import os
-from pip._vendor import toml
 import shutil
 
+from pip._vendor import toml
+
+from .compat import FileNotFoundError
+from .dirtools import tempdir, mkdir_p
 from .envbuild import BuildEnvironment
 from .wrappers import Pep517HookCaller
-from .dirtools import tempdir, mkdir_p
-from .compat import FileNotFoundError
 
 log = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ def validate_system(system):
     required = {'requires', 'build-backend'}
     if not (required <= set(system)):
         message = "Missing required fields: {missing}".format(
-            missing=required-set(system),
+            missing=required - set(system),
         )
         raise ValueError(message)
 

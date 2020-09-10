@@ -1,9 +1,9 @@
 """
 The httplib2 algorithms ported for use with requests.
 """
+import calendar
 import logging
 import re
-import calendar
 import time
 from email.utils import parsedate_tz
 
@@ -11,7 +11,6 @@ from pip._vendor.requests.structures import CaseInsensitiveDict
 
 from .cache import DictCache
 from .serialize import Serializer
-
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +31,7 @@ class CacheController(object):
     """
 
     def __init__(
-        self, cache=None, cache_etags=True, serializer=None, status_codes=None
+            self, cache=None, cache_etags=True, serializer=None, status_codes=None
     ):
         self.cache = DictCache() if cache is None else cache
         self.cache_etags = cache_etags
@@ -266,10 +265,10 @@ class CacheController(object):
         # been given matches the expected size, and if it doesn't we'll just
         # skip trying to cache it.
         if (
-            body is not None
-            and "content-length" in response_headers
-            and response_headers["content-length"].isdigit()
-            and int(response_headers["content-length"]) != len(body)
+                body is not None
+                and "content-length" in response_headers
+                and response_headers["content-length"].isdigit()
+                and int(response_headers["content-length"]) != len(body)
         ):
             return
 

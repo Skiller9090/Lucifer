@@ -28,15 +28,14 @@ is needed. See `Python issue 1322 <https://bugs.python.org/issue1322>`_ for
 more information.
 """
 
+import argparse
+import json
+import logging
 import os
 import re
-import sys
-import json
 import shlex
-import logging
-import argparse
 import subprocess
-
+import sys
 
 _UNIXCONFDIR = os.environ.get('UNIXCONFDIR', '/etc')
 _OS_RELEASE_BASENAME = 'os-release'
@@ -547,6 +546,7 @@ class cached_property(object):
     underlying function and sets the value in `__dict__` so future accesses
     will not re-call the property.
     """
+
     def __init__(self, f):
         self._fname = f.__name__
         self._f = f
@@ -648,7 +648,7 @@ class LinuxDistribution(object):
           uses an unexpected encoding.
         """
         self.os_release_file = os_release_file or \
-            os.path.join(_UNIXCONFDIR, _OS_RELEASE_BASENAME)
+                               os.path.join(_UNIXCONFDIR, _OS_RELEASE_BASENAME)
         self.distro_release_file = distro_release_file or ''  # updated later
         self.include_lsb = include_lsb
         self.include_uname = include_uname
@@ -687,6 +687,7 @@ class LinuxDistribution(object):
 
         For details, see :func:`distro.id`.
         """
+
         def normalize(distro_id, table):
             distro_id = distro_id.lower().replace(' ', '_')
             return table.get(distro_id, distro_id)
@@ -716,12 +717,12 @@ class LinuxDistribution(object):
         For details, see :func:`distro.name`.
         """
         name = self.os_release_attr('name') \
-            or self.lsb_release_attr('distributor_id') \
-            or self.distro_release_attr('name') \
-            or self.uname_attr('name')
+               or self.lsb_release_attr('distributor_id') \
+               or self.distro_release_attr('name') \
+               or self.uname_attr('name')
         if pretty:
             name = self.os_release_attr('pretty_name') \
-                or self.lsb_release_attr('description')
+                   or self.lsb_release_attr('description')
             if not name:
                 name = self.distro_release_attr('name') \
                        or self.uname_attr('name')
@@ -824,8 +825,8 @@ class LinuxDistribution(object):
             return self._os_release_info['codename']
         except KeyError:
             return self.lsb_release_attr('codename') \
-                or self.distro_release_attr('codename') \
-                or ''
+                   or self.distro_release_attr('codename') \
+                   or ''
 
     def info(self, pretty=False, best=False):
         """
@@ -1103,7 +1104,7 @@ class LinuxDistribution(object):
             # possible.
             match = _DISTRO_RELEASE_BASENAME_PATTERN.match(basename)
             if 'name' in distro_info \
-               and 'cloudlinux' in distro_info['name'].lower():
+                    and 'cloudlinux' in distro_info['name'].lower():
                 distro_info['id'] = 'cloudlinux'
             elif match:
                 distro_info['id'] = match.group(1)

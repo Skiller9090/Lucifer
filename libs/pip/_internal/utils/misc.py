@@ -18,16 +18,6 @@ import sys
 from collections import deque
 from itertools import tee
 
-from pip._vendor import pkg_resources
-from pip._vendor.packaging.utils import canonicalize_name
-# NOTE: retrying is not annotated in typeshed as on 2017-07-17, which is
-#       why we ignore the type on this import.
-from pip._vendor.retrying import retry  # type: ignore
-from pip._vendor.six import PY2, text_type
-from pip._vendor.six.moves import filter, filterfalse, input, map, zip_longest
-from pip._vendor.six.moves.urllib import parse as urllib_parse
-from pip._vendor.six.moves.urllib.parse import unquote as urllib_unquote
-
 from pip import __version__
 from pip._internal.exceptions import CommandError
 from pip._internal.locations import (
@@ -46,6 +36,15 @@ from pip._internal.utils.virtualenv import (
     running_under_virtualenv,
     virtualenv_no_global,
 )
+from pip._vendor import pkg_resources
+from pip._vendor.packaging.utils import canonicalize_name
+# NOTE: retrying is not annotated in typeshed as on 2017-07-17, which is
+#       why we ignore the type on this import.
+from pip._vendor.retrying import retry  # type: ignore
+from pip._vendor.six import PY2, text_type
+from pip._vendor.six.moves import filter, filterfalse, input, map, zip_longest
+from pip._vendor.six.moves.urllib import parse as urllib_parse
+from pip._vendor.six.moves.urllib.parse import unquote as urllib_unquote
 
 if PY2:
     from io import BytesIO as StringIO
@@ -62,7 +61,6 @@ if MYPY_CHECK_RUNNING:
     VersionInfo = Tuple[int, int, int]
     T = TypeVar("T")
 
-
 __all__ = ['rmtree', 'display_path', 'backup_dir',
            'ask', 'splitext',
            'format_size', 'is_installable_dir',
@@ -70,7 +68,6 @@ __all__ = ['rmtree', 'display_path', 'backup_dir',
            'renames', 'get_prog',
            'captured_stdout', 'ensure_dir',
            'get_installed_version', 'remove_auth_from_url']
-
 
 logger = logging.getLogger(__name__)
 
@@ -594,6 +591,7 @@ def write_output(msg, *args):
 class FakeFile(object):
     """Wrap a list of lines in an object with readline() to make
     ConfigParser happy."""
+
     def __init__(self, lines):
         self._gen = iter(lines)
 
@@ -825,9 +823,9 @@ def redact_auth_from_url(url):
 
 class HiddenText(object):
     def __init__(
-        self,
-        secret,    # type: str
-        redacted,  # type: str
+            self,
+            secret,  # type: str
+            redacted,  # type: str
     ):
         # type: (...) -> None
         self.secret = secret
@@ -884,18 +882,18 @@ def protect_pip_from_modification_on_windows(modifying_pip):
 
     # See https://github.com/pypa/pip/issues/1299 for more discussion
     should_show_use_python_msg = (
-        modifying_pip and
-        WINDOWS and
-        os.path.basename(sys.argv[0]) in pip_names
+            modifying_pip and
+            WINDOWS and
+            os.path.basename(sys.argv[0]) in pip_names
     )
 
     if should_show_use_python_msg:
         new_command = [
-            sys.executable, "-m", "pip"
-        ] + sys.argv[1:]
+                          sys.executable, "-m", "pip"
+                      ] + sys.argv[1:]
         raise CommandError(
             'To modify pip, please run the following command:\n{}'
-            .format(" ".join(new_command))
+                .format(" ".join(new_command))
         )
 
 
@@ -945,8 +943,8 @@ def pairwise(iterable):
 
 
 def partition(
-    pred,  # type: Callable[[T], bool]
-    iterable,  # type: Iterable[T]
+        pred,  # type: Callable[[T], bool]
+        iterable,  # type: Iterable[T]
 ):
     # type: (...) -> Tuple[Iterable[T], Iterable[T]]
     """

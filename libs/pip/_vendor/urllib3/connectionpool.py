@@ -1,13 +1,21 @@
 from __future__ import absolute_import
+
 import errno
 import logging
+import socket
 import sys
 import warnings
-
 from socket import error as SocketError, timeout as SocketTimeout
-import socket
 
-
+from .connection import (
+    port_by_scheme,
+    DummyConnection,
+    HTTPConnection,
+    HTTPSConnection,
+    VerifiedHTTPSConnection,
+    HTTPException,
+    BaseSSLError,
+)
 from .exceptions import (
     ClosedPoolError,
     ProtocolError,
@@ -23,22 +31,13 @@ from .exceptions import (
     InsecureRequestWarning,
     NewConnectionError,
 )
-from .packages.ssl_match_hostname import CertificateError
 from .packages import six
 from .packages.six.moves import queue
-from .connection import (
-    port_by_scheme,
-    DummyConnection,
-    HTTPConnection,
-    HTTPSConnection,
-    VerifiedHTTPSConnection,
-    HTTPException,
-    BaseSSLError,
-)
+from .packages.ssl_match_hostname import CertificateError
 from .request import RequestMethods
 from .response import HTTPResponse
-
 from .util.connection import is_connection_dropped
+from .util.queue import LifoQueue
 from .util.request import set_file_position
 from .util.response import assert_header_parsing
 from .util.retry import Retry
@@ -50,8 +49,6 @@ from .util.url import (
     _normalize_host as normalize_host,
     _encode_target,
 )
-from .util.queue import LifoQueue
-
 
 xrange = six.moves.xrange
 
@@ -170,18 +167,18 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
     ResponseCls = HTTPResponse
 
     def __init__(
-        self,
-        host,
-        port=None,
-        strict=False,
-        timeout=Timeout.DEFAULT_TIMEOUT,
-        maxsize=1,
-        block=False,
-        headers=None,
-        retries=None,
-        _proxy=None,
-        _proxy_headers=None,
-        **conn_kw
+            self,
+            host,
+            port=None,
+            strict=False,
+            timeout=Timeout.DEFAULT_TIMEOUT,
+            maxsize=1,
+            block=False,
+            headers=None,
+            retries=None,
+            _proxy=None,
+            _proxy_headers=None,
+            **conn_kw
     ):
         ConnectionPool.__init__(self, host, port)
         RequestMethods.__init__(self, headers)
@@ -347,14 +344,14 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
         # case, rethrow the original. We need to do this because of:
         # http://bugs.python.org/issue10272
         if "timed out" in str(err) or "did not complete (read)" in str(
-            err
+                err
         ):  # Python < 2.7.4
             raise ReadTimeoutError(
                 self, url, "Read timed out. (read timeout=%s)" % timeout_value
             )
 
     def _make_request(
-        self, conn, method, url, timeout=_Default, chunked=False, **httplib_request_kw
+            self, conn, method, url, timeout=_Default, chunked=False, **httplib_request_kw
     ):
         """
         Perform a request on a given urllib connection object taken from our
@@ -497,20 +494,20 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
         return (scheme, host, port) == (self.scheme, self.host, self.port)
 
     def urlopen(
-        self,
-        method,
-        url,
-        body=None,
-        headers=None,
-        retries=None,
-        redirect=True,
-        assert_same_host=True,
-        timeout=_Default,
-        pool_timeout=None,
-        release_conn=None,
-        chunked=False,
-        body_pos=None,
-        **response_kw
+            self,
+            method,
+            url,
+            body=None,
+            headers=None,
+            retries=None,
+            redirect=True,
+            assert_same_host=True,
+            timeout=_Default,
+            pool_timeout=None,
+            release_conn=None,
+            chunked=False,
+            body_pos=None,
+            **response_kw
     ):
         """
         Get a connection from the pool and perform an HTTP request. This is the
@@ -703,13 +700,13 @@ class HTTPConnectionPool(ConnectionPool, RequestMethods):
             raise EmptyPoolError(self, "No pool connections are available.")
 
         except (
-            TimeoutError,
-            HTTPException,
-            SocketError,
-            ProtocolError,
-            BaseSSLError,
-            SSLError,
-            CertificateError,
+                TimeoutError,
+                HTTPException,
+                SocketError,
+                ProtocolError,
+                BaseSSLError,
+                SSLError,
+                CertificateError,
         ) as e:
             # Discard the connection for these exceptions. It will be
             # replaced during the next _get_conn() call.
@@ -853,27 +850,27 @@ class HTTPSConnectionPool(HTTPConnectionPool):
     ConnectionCls = HTTPSConnection
 
     def __init__(
-        self,
-        host,
-        port=None,
-        strict=False,
-        timeout=Timeout.DEFAULT_TIMEOUT,
-        maxsize=1,
-        block=False,
-        headers=None,
-        retries=None,
-        _proxy=None,
-        _proxy_headers=None,
-        key_file=None,
-        cert_file=None,
-        cert_reqs=None,
-        key_password=None,
-        ca_certs=None,
-        ssl_version=None,
-        assert_hostname=None,
-        assert_fingerprint=None,
-        ca_cert_dir=None,
-        **conn_kw
+            self,
+            host,
+            port=None,
+            strict=False,
+            timeout=Timeout.DEFAULT_TIMEOUT,
+            maxsize=1,
+            block=False,
+            headers=None,
+            retries=None,
+            _proxy=None,
+            _proxy_headers=None,
+            key_file=None,
+            cert_file=None,
+            cert_reqs=None,
+            key_password=None,
+            ca_certs=None,
+            ssl_version=None,
+            assert_hostname=None,
+            assert_fingerprint=None,
+            ca_cert_dir=None,
+            **conn_kw
     ):
 
         HTTPConnectionPool.__init__(
@@ -978,10 +975,10 @@ class HTTPSConnectionPool(HTTPConnectionPool):
         if not conn.is_verified:
             warnings.warn(
                 (
-                    "Unverified HTTPS request is being made to host '%s'. "
-                    "Adding certificate verification is strongly advised. See: "
-                    "https://urllib3.readthedocs.io/en/latest/advanced-usage.html"
-                    "#ssl-warnings" % conn.host
+                        "Unverified HTTPS request is being made to host '%s'. "
+                        "Adding certificate verification is strongly advised. See: "
+                        "https://urllib3.readthedocs.io/en/latest/advanced-usage.html"
+                        "#ssl-warnings" % conn.host
                 ),
                 InsecureRequestWarning,
             )

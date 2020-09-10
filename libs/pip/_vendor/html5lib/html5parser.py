@@ -1,15 +1,13 @@
 from __future__ import absolute_import, division, unicode_literals
-from pip._vendor.six import with_metaclass, viewkeys
 
 import types
 
+from pip._vendor.six import with_metaclass, viewkeys
+
 from . import _inputstream
 from . import _tokenizer
-
-from . import treebuilders
-from .treebuilders.base import Marker
-
 from . import _utils
+from . import treebuilders
 from .constants import (
     spaceCharacters, asciiUpper2Lower,
     specialElements, headingElements, cdataElements, rcdataElements,
@@ -21,6 +19,7 @@ from .constants import (
     E,
     _ReparseException
 )
+from .treebuilders.base import Marker
 
 
 def parse(doc, treebuilder="etree", namespaceHTMLElements=True, **kwargs):
@@ -80,6 +79,7 @@ def method_decorator_metaclass(function):
 
                 classDict[attributeName] = attribute
             return type.__new__(meta, classname, bases, classDict)
+
     return Decorated
 
 
@@ -217,17 +217,17 @@ class HTMLParser(object):
                     new_token = None
                 else:
                     if (len(self.tree.openElements) == 0 or
-                        currentNodeNamespace == self.tree.defaultNamespace or
-                        (self.isMathMLTextIntegrationPoint(currentNode) and
-                         ((type == StartTagToken and
-                           token["name"] not in frozenset(["mglyph", "malignmark"])) or
-                          type in (CharactersToken, SpaceCharactersToken))) or
-                        (currentNodeNamespace == namespaces["mathml"] and
-                         currentNodeName == "annotation-xml" and
-                         type == StartTagToken and
-                         token["name"] == "svg") or
-                        (self.isHTMLIntegrationPoint(currentNode) and
-                         type in (StartTagToken, CharactersToken, SpaceCharactersToken))):
+                            currentNodeNamespace == self.tree.defaultNamespace or
+                            (self.isMathMLTextIntegrationPoint(currentNode) and
+                             ((type == StartTagToken and
+                               token["name"] not in frozenset(["mglyph", "malignmark"])) or
+                              type in (CharactersToken, SpaceCharactersToken))) or
+                            (currentNodeNamespace == namespaces["mathml"] and
+                             currentNodeName == "annotation-xml" and
+                             type == StartTagToken and
+                             token["name"] == "svg") or
+                            (self.isHTMLIntegrationPoint(currentNode) and
+                             type in (StartTagToken, CharactersToken, SpaceCharactersToken))):
                         phase = self.phase
                     else:
                         phase = self.phases["inForeignContent"]
@@ -414,6 +414,7 @@ def getPhases(debug):
                 return function(self, *args, **kwargs)
             else:
                 return function(self, *args, **kwargs)
+
         return wrapped
 
     def getMetaclass(use_metaclass, metaclass_func):
@@ -987,7 +988,7 @@ def getPhases(debug):
             data = token["data"]
             self.processSpaceCharacters = self.processSpaceCharactersNonPre
             if (data.startswith("\n") and
-                self.tree.openElements[-1].name in ("pre", "listing", "textarea") and
+                    self.tree.openElements[-1].name in ("pre", "listing", "textarea") and
                     not self.tree.openElements[-1].hasContent()):
                 data = data[1:]
             if data:
@@ -1002,8 +1003,8 @@ def getPhases(debug):
             self.tree.insertText(token["data"])
             # This must be bad for performance
             if (self.parser.framesetOK and
-                any([char not in spaceCharacters
-                     for char in token["data"]])):
+                    any([char not in spaceCharacters
+                         for char in token["data"]])):
                 self.parser.framesetOK = False
 
         def processSpaceCharactersNonPre(self, token):
@@ -1426,8 +1427,8 @@ def getPhases(debug):
                 formattingElement = self.tree.elementInActiveFormattingElements(
                     token["name"])
                 if (not formattingElement or
-                    (formattingElement in self.tree.openElements and
-                     not self.tree.elementInScope(formattingElement.name))):
+                        (formattingElement in self.tree.openElements and
+                         not self.tree.elementInScope(formattingElement.name))):
                     # If there is no such node, then abort these steps
                     # and instead act as described in the "any other
                     # end tag" entry below.
@@ -1875,7 +1876,8 @@ def getPhases(debug):
         def processSpaceCharacters(self, token):
             # pretty sure we should never reach here
             self.characterTokens.append(token)
-    #        assert False
+
+        #        assert False
 
         def processStartTag(self, token):
             self.flushCharacters()
@@ -2059,7 +2061,7 @@ def getPhases(debug):
         def startTagTableOther(self, token):
             # XXX AT Any ideas on how to share this with endTagTable?
             if (self.tree.elementInScope("tbody", variant="table") or
-                self.tree.elementInScope("thead", variant="table") or
+                    self.tree.elementInScope("thead", variant="table") or
                     self.tree.elementInScope("tfoot", variant="table")):
                 self.clearStackToTableBodyContext()
                 self.endTagTableRowGroup(
@@ -2084,7 +2086,7 @@ def getPhases(debug):
 
         def endTagTable(self, token):
             if (self.tree.elementInScope("tbody", variant="table") or
-                self.tree.elementInScope("thead", variant="table") or
+                    self.tree.elementInScope("thead", variant="table") or
                     self.tree.elementInScope("tfoot", variant="table")):
                 self.clearStackToTableBodyContext()
                 self.endTagTableRowGroup(
@@ -2485,8 +2487,8 @@ def getPhases(debug):
         def processStartTag(self, token):
             currentNode = self.tree.openElements[-1]
             if (token["name"] in self.breakoutElements or
-                (token["name"] == "font" and
-                 set(token["data"].keys()) & {"color", "face", "size"})):
+                    (token["name"] == "font" and
+                     set(token["data"].keys()) & {"color", "face", "size"})):
                 self.parser.parseError("unexpected-html-element-in-foreign-content",
                                        {"name": token["name"]})
                 while (self.tree.openElements[-1].namespace !=

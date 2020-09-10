@@ -46,8 +46,8 @@ def autocomplete():
             sys.exit(1)
         # special case: list locally installed dists for show and uninstall
         should_list_installed = (
-            subcommand_name in ['show', 'uninstall'] and
-            not current.startswith('-')
+                subcommand_name in ['show', 'uninstall'] and
+                not current.startswith('-')
         )
         if should_list_installed:
             installed = []

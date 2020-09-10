@@ -12,16 +12,16 @@ Results:
 - control_dir/output.json
   - {"return_val": ...}
 """
-from glob import glob
-from importlib import import_module
 import json
 import os
 import os.path
-from os.path import join as pjoin
 import re
 import shutil
 import sys
 import traceback
+from glob import glob
+from importlib import import_module
+from os.path import join as pjoin
 
 # This file is run as a script, and `import compat` is not zip-safe, so we
 # include write_json() and read_json() from compat.py.
@@ -34,6 +34,7 @@ if sys.version_info[0] >= 3:
         with open(path, 'w', encoding='utf-8') as f:
             json.dump(obj, f, **kwargs)
 
+
     def read_json(path):
         with open(path, 'r', encoding='utf-8') as f:
             return json.load(f)
@@ -44,6 +45,7 @@ else:
         with open(path, 'wb') as f:
             json.dump(obj, f, encoding='utf-8', **kwargs)
 
+
     def read_json(path):
         with open(path, 'rb') as f:
             return json.load(f)
@@ -51,12 +53,14 @@ else:
 
 class BackendUnavailable(Exception):
     """Raised if we cannot import the backend"""
+
     def __init__(self, traceback):
         self.traceback = traceback
 
 
 class BackendInvalid(Exception):
     """Raised if the backend is invalid"""
+
     def __init__(self, message):
         self.message = message
 
@@ -89,8 +93,8 @@ def _build_backend():
 
     if backend_path:
         if not any(
-            contained_in(obj.__file__, path)
-            for path in extra_pathitems
+                contained_in(obj.__file__, path)
+                for path in extra_pathitems
         ):
             raise BackendInvalid("Backend was not loaded from backend-path")
 
@@ -225,6 +229,7 @@ class _DummyException(Exception):
 
 class GotUnsupportedOperation(Exception):
     """For internal use when backend raises UnsupportedOperation"""
+
     def __init__(self, traceback):
         self.traceback = traceback
 

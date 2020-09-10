@@ -24,14 +24,13 @@ if MYPY_CHECK_RUNNING:
     from typing import Iterable, List, Optional, Text, Union
     from zipfile import ZipInfo
 
-
 logger = logging.getLogger(__name__)
-
 
 SUPPORTED_EXTENSIONS = ZIP_EXTENSIONS + TAR_EXTENSIONS
 
 try:
     import bz2  # noqa
+
     SUPPORTED_EXTENSIONS += BZ2_EXTENSIONS
 except ImportError:
     logger.debug('bz2 module is not available')
@@ -39,6 +38,7 @@ except ImportError:
 try:
     # Only for Python 3.3+
     import lzma  # noqa
+
     SUPPORTED_EXTENSIONS += XZ_EXTENSIONS
 except ImportError:
     logger.debug('lzma module is not available')
@@ -56,10 +56,10 @@ def split_leading_dir(path):
     # type: (Union[str, Text]) -> List[Union[str, Text]]
     path = path.lstrip('/').lstrip('\\')
     if (
-        '/' in path and (
+            '/' in path and (
             ('\\' in path and path.find('/') < path.find('\\')) or
             '\\' not in path
-        )
+    )
     ):
         return path.split('/', 1)
     elif '\\' in path:
@@ -251,9 +251,9 @@ def unpack_file(
     # type: (...) -> None
     filename = os.path.realpath(filename)
     if (
-        content_type == 'application/zip' or
-        filename.lower().endswith(ZIP_EXTENSIONS) or
-        zipfile.is_zipfile(filename)
+            content_type == 'application/zip' or
+            filename.lower().endswith(ZIP_EXTENSIONS) or
+            zipfile.is_zipfile(filename)
     ):
         unzip_file(
             filename,
@@ -261,11 +261,11 @@ def unpack_file(
             flatten=not filename.endswith('.whl')
         )
     elif (
-        content_type == 'application/x-gzip' or
-        tarfile.is_tarfile(filename) or
-        filename.lower().endswith(
-            TAR_EXTENSIONS + BZ2_EXTENSIONS + XZ_EXTENSIONS
-        )
+            content_type == 'application/x-gzip' or
+            tarfile.is_tarfile(filename) or
+            filename.lower().endswith(
+                TAR_EXTENSIONS + BZ2_EXTENSIONS + XZ_EXTENSIONS
+            )
     ):
         untar_file(filename, location)
     else:

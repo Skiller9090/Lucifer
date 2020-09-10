@@ -1,5 +1,7 @@
 from __future__ import absolute_import
+
 import socket
+
 from .wait import NoWayToWaitForSocketError, wait_for_read
 from ..contrib import _appengine_environ
 
@@ -31,10 +33,10 @@ def is_connection_dropped(conn):  # Platform-specific
 # One additional modification is that we avoid binding to IPv6 servers
 # discovered in DNS if the system doesn't have IPv6 functionality.
 def create_connection(
-    address,
-    timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
-    source_address=None,
-    socket_options=None,
+        address,
+        timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
+        source_address=None,
+        socket_options=None,
 ):
     """Connect to *address* and return the socket object.
 

@@ -57,7 +57,6 @@ codec_info = codecs.CodecInfo(
     streamwriter=StreamWriter,
 )
 
-
 ### Decoding Table
 
 # Python 3:

@@ -17,30 +17,30 @@ method.
 
 from __future__ import absolute_import
 
-import sys
-import os
-import io
-import time
-import re
-import types
-import zipfile
-import zipimport
-import warnings
-import stat
-import functools
-import pkgutil
-import operator
-import platform
 import collections
-import plistlib
 import email.parser
 import errno
+import functools
+import inspect
+import io
+import itertools
+import ntpath
+import operator
+import os
+import pkgutil
+import platform
+import plistlib
+import posixpath
+import re
+import stat
+import sys
 import tempfile
 import textwrap
-import itertools
-import inspect
-import ntpath
-import posixpath
+import time
+import types
+import warnings
+import zipfile
+import zipimport
 from pkgutil import get_importer
 
 try:
@@ -59,8 +59,10 @@ from pip._vendor.six.moves import urllib, map, filter
 
 # capture these to bypass sandboxing
 from os import utime
+
 try:
     from os import mkdir, rename, unlink
+
     WRITE_SUPPORT = True
 except ImportError:
     # no write support, probably under GAE
@@ -71,6 +73,7 @@ from os.path import isdir, split
 
 try:
     import importlib.machinery as importlib_machinery
+
     # access attribute to force import under delayed import mechanisms.
     importlib_machinery.__name__
 except ImportError:
@@ -79,14 +82,13 @@ except ImportError:
 from . import py31compat
 from pip._vendor import appdirs
 from pip._vendor import packaging
+
 __import__('pip._vendor.packaging.version')
 __import__('pip._vendor.packaging.specifiers')
 __import__('pip._vendor.packaging.requirements')
 __import__('pip._vendor.packaging.markers')
 
-
 __metaclass__ = type
-
 
 if (3, 0) < sys.version_info < (3, 5):
     raise RuntimeError("Python 3.5 or later is required")
@@ -991,9 +993,9 @@ class Environment:
         is returned.
         """
         py_compat = (
-            self.python is None
-            or dist.py_version is None
-            or dist.py_version == self.python
+                self.python is None
+                or dist.py_version is None
+                or dist.py_version == self.python
         )
         return py_compat and compatible_platforms(dist.platform, self.platform)
 
@@ -1234,11 +1236,11 @@ class ResourceManager:
         mode = os.stat(path).st_mode
         if mode & stat.S_IWOTH or mode & stat.S_IWGRP:
             msg = (
-                "%s is writable by group/others and vulnerable to attack "
-                "when "
-                "used with get_resource_filename. Consider a more secure "
-                "location (set with .set_extraction_path or the "
-                "PYTHON_EGG_CACHE environment variable)." % path
+                    "%s is writable by group/others and vulnerable to attack "
+                    "when "
+                    "used with get_resource_filename. Consider a more secure "
+                    "location (set with .set_extraction_path or the "
+                    "PYTHON_EGG_CACHE environment variable)." % path
             )
             warnings.warn(msg, UserWarning)
 
@@ -1309,8 +1311,8 @@ def get_default_cache():
     named "Python-Eggs".
     """
     return (
-        os.environ.get('PYTHON_EGG_CACHE')
-        or appdirs.user_cache_dir(appname='Python-Eggs')
+            os.environ.get('PYTHON_EGG_CACHE')
+            or appdirs.user_cache_dir(appname='Python-Eggs')
     )
 
 
@@ -1450,7 +1452,7 @@ class NullProvider:
         if not self.has_metadata(script):
             raise ResolutionError(
                 "Script {script!r} not found in metadata at {self.egg_info!r}"
-                .format(**locals()),
+                    .format(**locals()),
             )
         script_text = self.get_metadata(script).replace('\r\n', '\n')
         script_text = script_text.replace('\r', '\n')
@@ -1543,9 +1545,9 @@ is not allowed.
         AttributeError: ...
         """
         invalid = (
-            os.path.pardir in path.split(posixpath.sep) or
-            posixpath.isabs(path) or
-            ntpath.isabs(path)
+                os.path.pardir in path.split(posixpath.sep) or
+                posixpath.isabs(path) or
+                ntpath.isabs(path)
         )
         if not invalid:
             return
@@ -2023,6 +2025,7 @@ def _by_version_descending(names):
     >>> _by_version_descending(names)
     ['Setuptools-1.2.3.post1.egg', 'Setuptools-1.2.3b1.egg']
     """
+
     def _by_version(name):
         """
         Parse each component of the filename
@@ -2091,8 +2094,10 @@ class NoDists:
     >>> list(NoDists()('anything'))
     []
     """
+
     def __bool__(self):
         return False
+
     if six.PY2:
         __nonzero__ = __bool__
 
@@ -2112,9 +2117,9 @@ def safe_listdir(path):
         # Ignore the directory if does not exist, not a directory or
         # permission denied
         ignorable = (
-            e.errno in (errno.ENOTDIR, errno.EACCES, errno.ENOENT)
-            # Python 2 on Windows needs to be handled this way :(
-            or getattr(e, "winerror", None) == 267
+                e.errno in (errno.ENOTDIR, errno.EACCES, errno.ENOENT)
+                # Python 2 on Windows needs to be handled this way :(
+                or getattr(e, "winerror", None) == 267
         )
         if not ignorable:
             raise
@@ -2362,8 +2367,8 @@ def _is_unpacked_egg(path):
     Determine if given path appears to be an unpacked egg.
     """
     return (
-        _is_egg_path(path) and
-        os.path.isfile(os.path.join(path, 'EGG-INFO', 'PKG-INFO'))
+            _is_egg_path(path) and
+            os.path.isfile(os.path.join(path, 'EGG-INFO', 'PKG-INFO'))
     )
 
 
@@ -2550,8 +2555,10 @@ def _version_from_file(lines):
     Given an iterable of lines from a Metadata file, return
     the value of the Version field, if present, or None otherwise.
     """
+
     def is_version_line(line):
         return line.lower().startswith('version:')
+
     version_lines = filter(is_version_line, lines)
     line = next(iter(version_lines), '')
     _, _, value = line.partition(':')
@@ -2714,8 +2721,8 @@ class Distribution:
             reqs = dm.pop(extra)
             new_extra, _, marker = extra.partition(':')
             fails_marker = marker and (
-                invalid_marker(marker)
-                or not evaluate_marker(marker)
+                    invalid_marker(marker)
+                    or not evaluate_marker(marker)
             )
             if fails_marker:
                 reqs = []
@@ -3118,8 +3125,8 @@ class Requirement(packaging.requirements.Requirement):
 
     def __eq__(self, other):
         return (
-            isinstance(other, Requirement) and
-            self.hashCmp == other.hashCmp
+                isinstance(other, Requirement) and
+                self.hashCmp == other.hashCmp
         )
 
     def __ne__(self, other):
@@ -3286,6 +3293,7 @@ def _initialize_master_working_set():
     # match order
     list(map(working_set.add_entry, sys.path))
     globals().update(locals())
+
 
 class PkgResourcesDeprecationWarning(Warning):
     """

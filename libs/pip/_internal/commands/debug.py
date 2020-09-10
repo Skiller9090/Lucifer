@@ -6,9 +6,6 @@ import os
 import sys
 
 import pip._vendor
-from pip._vendor import pkg_resources
-from pip._vendor.certifi import where
-
 from pip import __file__ as pip_location
 from pip._internal.cli import cmdoptions
 from pip._internal.cli.base_command import Command
@@ -17,6 +14,8 @@ from pip._internal.cli.status_codes import SUCCESS
 from pip._internal.utils.logging import indent_log
 from pip._internal.utils.misc import get_pip_version
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor import pkg_resources
+from pip._vendor.certifi import where
 
 if MYPY_CHECK_RUNNING:
     from types import ModuleType
@@ -109,11 +108,11 @@ def show_actual_vendor_versions(vendor_txt_versions):
         extra_message = ''
         actual_version = get_vendor_version_from_module(module_name)
         if not actual_version:
-            extra_message = ' (Unable to locate actual module version, using'\
+            extra_message = ' (Unable to locate actual module version, using' \
                             ' vendor.txt specified version)'
             actual_version = expected_version
         elif actual_version != expected_version:
-            extra_message = ' (CONFLICT: vendor.txt suggests version should'\
+            extra_message = ' (CONFLICT: vendor.txt suggests version should' \
                             ' be {})'.format(expected_version)
         logger.info('%s==%s%s', module_name, actual_version, extra_message)
 

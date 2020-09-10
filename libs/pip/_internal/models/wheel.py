@@ -3,10 +3,9 @@ name that have meaning.
 """
 import re
 
-from pip._vendor.packaging.tags import Tag
-
 from pip._internal.exceptions import InvalidWheelFilename
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.packaging.tags import Tag
 
 if MYPY_CHECK_RUNNING:
     from typing import List

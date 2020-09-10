@@ -20,7 +20,6 @@ if MYPY_CHECK_RUNNING:
     from typing import Any
     from pip._internal.cli.base_command import Command
 
-
 CommandInfo = namedtuple('CommandInfo', 'module_path, class_name, summary')
 
 # The ordering matters for help display.

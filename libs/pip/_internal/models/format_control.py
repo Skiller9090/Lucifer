@@ -1,7 +1,6 @@
-from pip._vendor.packaging.utils import canonicalize_name
-
 from pip._internal.exceptions import CommandError
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.packaging.utils import canonicalize_name
 
 if MYPY_CHECK_RUNNING:
     from typing import Optional, Set, FrozenSet

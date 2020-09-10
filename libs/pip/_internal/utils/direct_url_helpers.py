@@ -117,9 +117,9 @@ def dist_get_direct_url(dist):
     try:
         return DirectUrl.from_json(dist.get_metadata(DIRECT_URL_METADATA_NAME))
     except (
-        DirectUrlValidationError,
-        JSONDecodeError,
-        UnicodeDecodeError
+            DirectUrlValidationError,
+            JSONDecodeError,
+            UnicodeDecodeError
     ) as e:
         logger.warning(
             "Error parsing %s for %s: %s",

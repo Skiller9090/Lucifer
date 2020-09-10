@@ -162,13 +162,13 @@ class SOCKSProxyManager(PoolManager):
     }
 
     def __init__(
-        self,
-        proxy_url,
-        username=None,
-        password=None,
-        num_pools=10,
-        headers=None,
-        **connection_pool_kw
+            self,
+            proxy_url,
+            username=None,
+            password=None,
+            num_pools=10,
+            headers=None,
+            **connection_pool_kw
     ):
         parsed = parse_url(proxy_url)
 

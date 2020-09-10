@@ -1,7 +1,8 @@
-from modules.Module import BaseModule
-from lucifer.Errors import IncompatibleSystemError
-from subprocess import check_output
 import os
+from subprocess import check_output
+
+from lucifer.Errors import IncompatibleSystemError
+from modules.Module import BaseModule
 
 
 def get_uname(arg):

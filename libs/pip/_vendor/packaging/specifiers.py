@@ -102,7 +102,6 @@ class BaseSpecifier(with_metaclass(abc.ABCMeta, object)):  # type: ignore
 
 
 class _IndividualSpecifier(BaseSpecifier):
-
     _operators = {}  # type: Dict[str, str]
 
     def __init__(self, spec="", prereleases=None):
@@ -243,7 +242,7 @@ class _IndividualSpecifier(BaseSpecifier):
                 # prereleases, then we'll store it for later incase nothing
                 # else matches this specifier.
                 if parsed_version.is_prerelease and not (
-                    prereleases or self.prereleases
+                        prereleases or self.prereleases
                 ):
                     found_prereleases.append(version)
                 # Either this is not a prerelease, or we should have been
@@ -261,7 +260,6 @@ class _IndividualSpecifier(BaseSpecifier):
 
 
 class LegacySpecifier(_IndividualSpecifier):
-
     _regex_str = r"""
         (?P<operator>(==|!=|<=|>=|<|>))
         \s*
@@ -317,7 +315,7 @@ class LegacySpecifier(_IndividualSpecifier):
 
 
 def _require_version_compare(
-    fn  # type: (Callable[[Specifier, ParsedVersion, str], bool])
+        fn  # type: (Callable[[Specifier, ParsedVersion, str], bool])
 ):
     # type: (...) -> Callable[[Specifier, ParsedVersion, str], bool]
     @functools.wraps(fn)
@@ -331,7 +329,6 @@ def _require_version_compare(
 
 
 class Specifier(_IndividualSpecifier):
-
     _regex_str = r"""
         (?P<operator>(~=|==|!=|<=|>=|<|>|===))
         (?P<version>
@@ -651,8 +648,8 @@ def _pad_version(left, right):
     right_split.append(list(itertools.takewhile(lambda x: x.isdigit(), right)))
 
     # Get the rest of our versions
-    left_split.append(left[len(left_split[0]) :])
-    right_split.append(right[len(right_split[0]) :])
+    left_split.append(left[len(left_split[0]):])
+    right_split.append(right[len(right_split[0]):])
 
     # Insert our padding
     left_split.insert(1, ["0"] * max(0, len(right_split[0]) - len(left_split[0])))
@@ -810,9 +807,9 @@ class SpecifierSet(BaseSpecifier):
         return all(s.contains(item, prereleases=prereleases) for s in self._specs)
 
     def filter(
-        self,
-        iterable,  # type: Iterable[Union[ParsedVersion, str]]
-        prereleases=None,  # type: Optional[bool]
+            self,
+            iterable,  # type: Iterable[Union[ParsedVersion, str]]
+            prereleases=None,  # type: Optional[bool]
     ):
         # type: (...) -> Iterable[Union[ParsedVersion, str]]
 

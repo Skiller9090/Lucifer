@@ -9,9 +9,6 @@ import shutil
 import subprocess
 import sys
 
-from pip._vendor import pkg_resources
-from pip._vendor.six.moves.urllib import parse as urllib_parse
-
 from pip._internal.exceptions import (
     BadCommand,
     InstallationError,
@@ -35,6 +32,8 @@ from pip._internal.utils.subprocess import (
 )
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.urls import get_url_scheme
+from pip._vendor import pkg_resources
+from pip._vendor.six.moves.urllib import parse as urllib_parse
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -46,9 +45,7 @@ if MYPY_CHECK_RUNNING:
 
     AuthInfo = Tuple[Optional[str], Optional[str]]
 
-
 __all__ = ['vcs']
-
 
 logger = logging.getLogger(__name__)
 
@@ -82,11 +79,11 @@ def make_vcs_requirement_url(repo_url, rev, project_name, subdir=None):
 
 
 def call_subprocess(
-    cmd,  # type: Union[List[str], CommandArgs]
-    cwd=None,  # type: Optional[str]
-    extra_environ=None,  # type: Optional[Mapping[str, Any]]
-    extra_ok_returncodes=None,  # type: Optional[Iterable[int]]
-    log_failed_cmd=True  # type: Optional[bool]
+        cmd,  # type: Union[List[str], CommandArgs]
+        cwd=None,  # type: Optional[str]
+        extra_environ=None,  # type: Optional[Mapping[str, Any]]
+        extra_ok_returncodes=None,  # type: Optional[Iterable[int]]
+        log_failed_cmd=True  # type: Optional[bool]
 ):
     # type: (...) -> Text
     """
@@ -146,7 +143,7 @@ def call_subprocess(
             proc.stdout.close()
 
     proc_had_error = (
-        proc.returncode and proc.returncode not in extra_ok_returncodes
+            proc.returncode and proc.returncode not in extra_ok_returncodes
     )
     if proc_had_error:
         if not showing_subprocess and log_failed_cmd:
@@ -200,7 +197,6 @@ class RemoteNotFoundError(Exception):
 
 
 class RevOptions(object):
-
     """
     Encapsulates a VCS-specific revision to install, along with any VCS
     install options.
@@ -209,10 +205,10 @@ class RevOptions(object):
     """
 
     def __init__(
-        self,
-        vc_class,  # type: Type[VersionControl]
-        rev=None,  # type: Optional[str]
-        extra_args=None,  # type: Optional[CommandArgs]
+            self,
+            vc_class,  # type: Type[VersionControl]
+            rev=None,  # type: Optional[str]
+            extra_args=None,  # type: Optional[CommandArgs]
     ):
         # type: (...) -> None
         """
@@ -753,12 +749,12 @@ class VersionControl(object):
 
     @classmethod
     def run_command(
-        cls,
-        cmd,  # type: Union[List[str], CommandArgs]
-        cwd=None,  # type: Optional[str]
-        extra_environ=None,  # type: Optional[Mapping[str, Any]]
-        extra_ok_returncodes=None,  # type: Optional[Iterable[int]]
-        log_failed_cmd=True  # type: bool
+            cls,
+            cmd,  # type: Union[List[str], CommandArgs]
+            cwd=None,  # type: Optional[str]
+            extra_environ=None,  # type: Optional[Mapping[str, Any]]
+            extra_ok_returncodes=None,  # type: Optional[Iterable[int]]
+            log_failed_cmd=True  # type: bool
     ):
         # type: (...) -> Text
         """

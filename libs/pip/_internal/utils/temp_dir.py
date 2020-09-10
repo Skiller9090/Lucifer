@@ -7,20 +7,17 @@ import os.path
 import tempfile
 from contextlib import contextmanager
 
-from pip._vendor.contextlib2 import ExitStack
-from pip._vendor.six import ensure_text
-
 from pip._internal.utils.misc import enum, rmtree
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor.contextlib2 import ExitStack
+from pip._vendor.six import ensure_text
 
 if MYPY_CHECK_RUNNING:
     from typing import Any, Dict, Iterator, Optional, TypeVar, Union
 
     _T = TypeVar('_T', bound='TempDirectory')
 
-
 logger = logging.getLogger(__name__)
-
 
 # Kinds of temporary directories. Only needed for ones that are
 # globally-managed.
@@ -29,7 +26,6 @@ tempdir_kinds = enum(
     EPHEM_WHEEL_CACHE="ephem-wheel-cache",
     REQ_BUILD="req-build",
 )
-
 
 _tempdir_manager = None  # type: Optional[ExitStack]
 
@@ -116,11 +112,11 @@ class TempDirectory(object):
     """
 
     def __init__(
-        self,
-        path=None,    # type: Optional[str]
-        delete=_default,  # type: Union[bool, None, _Default]
-        kind="temp",  # type: str
-        globally_managed=False,  # type: bool
+            self,
+            path=None,  # type: Optional[str]
+            delete=_default,  # type: Union[bool, None, _Default]
+            kind="temp",  # type: str
+            globally_managed=False,  # type: bool
     ):
         super(TempDirectory, self).__init__()
 

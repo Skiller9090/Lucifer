@@ -39,7 +39,6 @@ if TYPE_CHECKING:  # pragma: no cover
 
 __all__ = ["parse", "Version", "LegacyVersion", "InvalidVersion", "VERSION_PATTERN"]
 
-
 _Version = collections.namedtuple(
     "_Version", ["epoch", "release", "dev", "pre", "post", "local"]
 )
@@ -265,7 +264,6 @@ VERSION_PATTERN = r"""
 
 
 class Version(_BaseVersion):
-
     _regex = re.compile(r"^\s*" + VERSION_PATTERN + r"\s*$", re.VERBOSE | re.IGNORECASE)
 
     def __init__(self, version):
@@ -418,8 +416,8 @@ class Version(_BaseVersion):
 
 
 def _parse_letter_version(
-    letter,  # type: str
-    number,  # type: Union[str, bytes, SupportsInt]
+        letter,  # type: str
+        number,  # type: Union[str, bytes, SupportsInt]
 ):
     # type: (...) -> Optional[Tuple[str, int]]
 
@@ -472,12 +470,12 @@ def _parse_local_version(local):
 
 
 def _cmpkey(
-    epoch,  # type: int
-    release,  # type: Tuple[int, ...]
-    pre,  # type: Optional[Tuple[str, int]]
-    post,  # type: Optional[Tuple[str, int]]
-    dev,  # type: Optional[Tuple[str, int]]
-    local,  # type: Optional[Tuple[SubLocalType]]
+        epoch,  # type: int
+        release,  # type: Tuple[int, ...]
+        pre,  # type: Optional[Tuple[str, int]]
+        post,  # type: Optional[Tuple[str, int]]
+        dev,  # type: Optional[Tuple[str, int]]
+        local,  # type: Optional[Tuple[SubLocalType]]
 ):
     # type: (...) -> CmpKey
 

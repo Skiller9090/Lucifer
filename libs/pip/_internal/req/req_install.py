@@ -10,13 +10,6 @@ import sys
 import uuid
 import zipfile
 
-from pip._vendor import pkg_resources, six
-from pip._vendor.packaging.requirements import Requirement
-from pip._vendor.packaging.utils import canonicalize_name
-from pip._vendor.packaging.version import Version
-from pip._vendor.packaging.version import parse as parse_version
-from pip._vendor.pep517.wrappers import Pep517HookCaller
-
 from pip._internal.build_env import NoOpBuildEnvironment
 from pip._internal.exceptions import InstallationError
 from pip._internal.locations import get_scheme
@@ -51,6 +44,12 @@ from pip._internal.utils.temp_dir import TempDirectory, tempdir_kinds
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.virtualenv import running_under_virtualenv
 from pip._internal.vcs import vcs
+from pip._vendor import pkg_resources, six
+from pip._vendor.packaging.requirements import Requirement
+from pip._vendor.packaging.utils import canonicalize_name
+from pip._vendor.packaging.version import Version
+from pip._vendor.packaging.version import parse as parse_version
+from pip._vendor.pep517.wrappers import Pep517HookCaller
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -60,7 +59,6 @@ if MYPY_CHECK_RUNNING:
     from pip._vendor.pkg_resources import Distribution
     from pip._vendor.packaging.specifiers import SpecifierSet
     from pip._vendor.packaging.markers import Marker
-
 
 logger = logging.getLogger(__name__)
 
@@ -100,20 +98,20 @@ class InstallRequirement(object):
     """
 
     def __init__(
-        self,
-        req,  # type: Optional[Requirement]
-        comes_from,  # type: Optional[Union[str, InstallRequirement]]
-        editable=False,  # type: bool
-        link=None,  # type: Optional[Link]
-        markers=None,  # type: Optional[Marker]
-        use_pep517=None,  # type: Optional[bool]
-        isolated=False,  # type: bool
-        install_options=None,  # type: Optional[List[str]]
-        global_options=None,  # type: Optional[List[str]]
-        hash_options=None,  # type: Optional[Dict[str, List[str]]]
-        constraint=False,  # type: bool
-        extras=(),  # type: Iterable[str]
-        user_supplied=False,  # type: bool
+            self,
+            req,  # type: Optional[Requirement]
+            comes_from,  # type: Optional[Union[str, InstallRequirement]]
+            editable=False,  # type: bool
+            link=None,  # type: Optional[Link]
+            markers=None,  # type: Optional[Marker]
+            use_pep517=None,  # type: Optional[bool]
+            isolated=False,  # type: bool
+            install_options=None,  # type: Optional[List[str]]
+            global_options=None,  # type: Optional[List[str]]
+            hash_options=None,  # type: Optional[Dict[str, List[str]]]
+            constraint=False,  # type: bool
+            extras=(),  # type: Iterable[str]
+            user_supplied=False,  # type: bool
     ):
         # type: (...) -> None
         assert req is None or isinstance(req, Requirement), req
@@ -440,7 +438,7 @@ class InstallRequirement(object):
                 if dist_in_usersite(existing_dist):
                     self.should_reinstall = True
                 elif (running_under_virtualenv() and
-                        dist_in_site_packages(existing_dist)):
+                      dist_in_site_packages(existing_dist)):
                     raise InstallationError(
                         "Will not install to the user site because it will "
                         "lack sys.path precedence to {} in {}".format(
@@ -593,10 +591,10 @@ class InstallRequirement(object):
 
     # For both source distributions and editables
     def ensure_has_source_dir(
-        self,
-        parent_dir,
-        autodelete=False,
-        parallel_builds=False,
+            self,
+            parent_dir,
+            autodelete=False,
+            parallel_builds=False,
     ):
         # type: (str, bool, bool) -> None
         """Ensure that a source_dir is set.
@@ -692,7 +690,7 @@ class InstallRequirement(object):
             # type: (str, str) -> str
             assert name.startswith(prefix + os.path.sep), (
                 "name {name!r} doesn't start with prefix {prefix!r}"
-                .format(**locals())
+                    .format(**locals())
             )
             name = name[len(prefix) + 1:]
             name = name.replace(os.path.sep, '/')
@@ -764,15 +762,15 @@ class InstallRequirement(object):
         logger.info('Saved %s', display_path(archive_path))
 
     def install(
-        self,
-        install_options,  # type: List[str]
-        global_options=None,  # type: Optional[Sequence[str]]
-        root=None,  # type: Optional[str]
-        home=None,  # type: Optional[str]
-        prefix=None,  # type: Optional[str]
-        warn_script_location=True,  # type: bool
-        use_user_site=False,  # type: bool
-        pycompile=True  # type: bool
+            self,
+            install_options,  # type: List[str]
+            global_options=None,  # type: Optional[Sequence[str]]
+            root=None,  # type: Optional[str]
+            home=None,  # type: Optional[str]
+            prefix=None,  # type: Optional[str]
+            warn_script_location=True,  # type: bool
+            use_user_site=False,  # type: bool
+            pycompile=True  # type: bool
     ):
         # type: (...) -> None
         scheme = get_scheme(

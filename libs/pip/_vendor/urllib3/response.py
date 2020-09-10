@@ -1,10 +1,11 @@
 from __future__ import absolute_import
-from contextlib import contextmanager
-import zlib
+
 import io
 import logging
-from socket import timeout as SocketTimeout
+import zlib
+from contextlib import contextmanager
 from socket import error as SocketError
+from socket import timeout as SocketTimeout
 
 try:
     import brotli
@@ -63,7 +64,6 @@ class DeflateDecoder(object):
 
 
 class GzipDecoderState(object):
-
     FIRST_MEMBER = 0
     OTHER_MEMBERS = 1
     SWALLOW_DATA = 2
@@ -192,24 +192,24 @@ class HTTPResponse(io.IOBase):
     REDIRECT_STATUSES = [301, 302, 303, 307, 308]
 
     def __init__(
-        self,
-        body="",
-        headers=None,
-        status=0,
-        version=0,
-        reason=None,
-        strict=0,
-        preload_content=True,
-        decode_content=True,
-        original_response=None,
-        pool=None,
-        connection=None,
-        msg=None,
-        retries=None,
-        enforce_content_length=False,
-        request_method=None,
-        request_url=None,
-        auto_close=True,
+            self,
+            body="",
+            headers=None,
+            status=0,
+            version=0,
+            reason=None,
+            strict=0,
+            preload_content=True,
+            decode_content=True,
+            original_response=None,
+            pool=None,
+            connection=None,
+            msg=None,
+            retries=None,
+            enforce_content_length=False,
+            request_method=None,
+            request_url=None,
+            auto_close=True,
     ):
 
         if isinstance(headers, HTTPHeaderDict):
@@ -518,7 +518,7 @@ class HTTPResponse(io.IOBase):
                 cache_content = False
                 data = self._fp.read(amt) if not fp_closed else b""
                 if (
-                    amt != 0 and not data
+                        amt != 0 and not data
                 ):  # Platform-specific: Buggy versions of Python.
                     # Close the connection when no data is returned
                     #
@@ -530,8 +530,8 @@ class HTTPResponse(io.IOBase):
                     self._fp.close()
                     flush_decoder = True
                     if self.enforce_content_length and self.length_remaining not in (
-                        0,
-                        None,
+                            0,
+                            None,
                     ):
                         # This is an edge case that httplib failed to cover due
                         # to concerns of backward compatibility. We're
@@ -658,9 +658,9 @@ class HTTPResponse(io.IOBase):
 
     def flush(self):
         if (
-            self._fp is not None
-            and hasattr(self._fp, "flush")
-            and not getattr(self._fp, "closed", False)
+                self._fp is not None
+                and hasattr(self._fp, "flush")
+                and not getattr(self._fp, "closed", False)
         ):
             return self._fp.flush()
 

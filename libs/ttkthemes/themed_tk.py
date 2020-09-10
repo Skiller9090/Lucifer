@@ -5,6 +5,7 @@ Copyright (c) 2017-2018 RedFantom
 """
 import tkinter as tk
 from tkinter import ttk
+
 from ._widget import ThemedWidget
 
 
@@ -85,6 +86,7 @@ class ThemedTk(tk.Tk, ThemedWidget):
 
     def _setup_toplevel_hook(self, color):
         """Setup Toplevel.__init__ hook for background color"""
+
         def __toplevel__(*args, **kwargs):
             kwargs.setdefault("background", color)
             ThemedTk.__tk_toplevel_init(*args, **kwargs)

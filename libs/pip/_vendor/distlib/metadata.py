@@ -10,11 +10,10 @@ Supports all metadata formats (1.0, 1.1, 1.2, 1.3/2.1 and withdrawn 2.0).
 from __future__ import unicode_literals
 
 import codecs
-from email import message_from_file
 import json
 import logging
 import re
-
+from email import message_from_file
 
 from . import DistlibException, __version__
 from .compat import StringIO, string_types, text_type
@@ -39,6 +38,7 @@ class MetadataUnrecognizedVersionError(DistlibException):
 
 class MetadataInvalidError(DistlibException):
     """A metadata value is invalid"""
+
 
 # public API of this module
 __all__ = ['Metadata', 'PKG_INFO_ENCODING', 'PKG_INFO_PREFERRED_VERSION']
@@ -125,6 +125,7 @@ def _version2fieldlist(version):
 
 def _best_version(fields):
     """Detect the best version depending on the fields used."""
+
     def _has_marker(keys, markers):
         for marker in markers:
             if marker in keys:
@@ -163,7 +164,7 @@ def _best_version(fields):
 
     # possible_version contains qualified versions
     if len(possible_versions) == 1:
-        return possible_versions[0]   # found !
+        return possible_versions[0]  # found !
     elif len(possible_versions) == 0:
         logger.debug('Out of options - unknown metadata set: %s', fields)
         raise MetadataConflictError('Unknown metadata set')
@@ -193,6 +194,7 @@ def _best_version(fields):
         return '2.1'
 
     return '2.0'
+
 
 # This follows the rules about transforming keys as described in
 # https://www.python.org/dev/peps/pep-0566/#id17
@@ -243,6 +245,7 @@ class LegacyMetadata(object):
     - *mapping* is a dict-like object
     - *scheme* is a version scheme name
     """
+
     # TODO document the mapping API and UNKNOWN default key
 
     def __init__(self, path=None, fileobj=None, mapping=None,
@@ -310,7 +313,7 @@ class LegacyMetadata(object):
     # Public API
     #
 
-#    dependencies = property(_get_dependencies, _set_dependencies)
+    #    dependencies = property(_get_dependencies, _set_dependencies)
 
     def get_fullname(self, filesafe=False):
         """Return the distribution name with version.
@@ -406,6 +409,7 @@ class LegacyMetadata(object):
         Keys that don't match a metadata field or that have an empty value are
         dropped.
         """
+
         def _set(key, value):
             if key in _ATTR2FIELD and value:
                 self.set(self._convert_name(key), value)
@@ -429,7 +433,7 @@ class LegacyMetadata(object):
         name = self._convert_name(name)
 
         if ((name in _ELEMENTSFIELD or name == 'Platform') and
-            not isinstance(value, (list, tuple))):
+                not isinstance(value, (list, tuple))):
             if isinstance(value, string_types):
                 value = [v.strip() for v in value.split(',')]
             else:
@@ -647,7 +651,7 @@ class Metadata(object):
         self._legacy = None
         self._data = None
         self.scheme = scheme
-        #import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         if mapping is not None:
             try:
                 self._validate_mapping(mapping, scheme)
@@ -759,7 +763,7 @@ class Metadata(object):
                 if not m:
                     raise MetadataInvalidError("'%s' is an invalid value for "
                                                "the '%s' property" % (value,
-                                                                    key))
+                                                                      key))
 
     def __setattr__(self, key, value):
         self._validate_value(key, value)
@@ -920,7 +924,7 @@ class Metadata(object):
             'metadata_version': self.METADATA_VERSION,
             'generator': self.GENERATOR,
         }
-        lmd = self._legacy.todict(True)     # skip missing ones
+        lmd = self._legacy.todict(True)  # skip missing ones
         for k in ('name', 'version', 'license', 'summary', 'description',
                   'classifier'):
             if k in lmd:
@@ -1043,7 +1047,7 @@ class Metadata(object):
                     always = entry
                     break
             if always is None:
-                always = { 'requires': requirements }
+                always = {'requires': requirements}
                 run_requires.insert(0, always)
             else:
                 rset = set(always['requires']) | set(requirements)

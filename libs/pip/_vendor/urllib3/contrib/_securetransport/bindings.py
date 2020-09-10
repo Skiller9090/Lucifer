@@ -32,7 +32,7 @@ license and by oscrypto's:
 from __future__ import absolute_import
 
 import platform
-from ctypes.util import find_library
+from ctypes import CDLL, POINTER, CFUNCTYPE
 from ctypes import (
     c_void_p,
     c_int32,
@@ -44,18 +44,15 @@ from ctypes import (
     c_long,
     c_bool,
 )
-from ctypes import CDLL, POINTER, CFUNCTYPE
-
+from ctypes.util import find_library
 
 security_path = find_library("Security")
 if not security_path:
     raise ImportError("The library Security could not be found")
 
-
 core_foundation_path = find_library("CoreFoundation")
 if not core_foundation_path:
     raise ImportError("The library CoreFoundation could not be found")
-
 
 version = platform.mac_ver()[0]
 version_info = tuple(map(int, version.split(".")))
@@ -111,7 +108,6 @@ SecTrustOptionFlags = c_uint32
 SSLProtocolSide = c_uint32
 SSLConnectionType = c_uint32
 SSLSessionOption = c_uint32
-
 
 try:
     Security.SecItemImport.argtypes = [

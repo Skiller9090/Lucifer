@@ -14,7 +14,6 @@ if MYPY_CHECK_RUNNING:
 
 
 class TargetPython(object):
-
     """
     Encapsulates the properties of a Python interpreter one is targeting
     for a package install, download, etc.
@@ -31,11 +30,11 @@ class TargetPython(object):
     ]
 
     def __init__(
-        self,
-        platform=None,  # type: Optional[str]
-        py_version_info=None,  # type: Optional[Tuple[int, ...]]
-        abi=None,  # type: Optional[str]
-        implementation=None,  # type: Optional[str]
+            self,
+            platform=None,  # type: Optional[str]
+            py_version_info=None,  # type: Optional[Tuple[int, ...]]
+            abi=None,  # type: Optional[str]
+            implementation=None,  # type: Optional[str]
     ):
         # type: (...) -> None
         """

@@ -10,6 +10,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+
 try:
     from threading import Thread
 except ImportError:
@@ -18,12 +19,13 @@ except ImportError:
 from . import DistlibException
 from .compat import (HTTPBasicAuthHandler, Request, HTTPPasswordMgr,
                      urlparse, build_opener, string_types)
-from .util import cached_property, zip_dir, ServerProxy
+from .util import zip_dir, ServerProxy
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_INDEX = 'https://pypi.org/pypi'
 DEFAULT_REALM = 'pypi'
+
 
 class PackageIndex(object):
     """
@@ -288,7 +290,7 @@ class PackageIndex(object):
             with open(sig_file, 'rb') as f:
                 sig_data = f.read()
             files.append(('gpg_signature', os.path.basename(sig_file),
-                         sig_data))
+                          sig_data))
             shutil.rmtree(os.path.dirname(sig_file))
         request = self.encode_request(d.items(), files)
         return self.send_request(request)
@@ -367,7 +369,7 @@ class PackageIndex(object):
         rc, stdout, stderr = self.run_command(cmd)
         if rc not in (0, 1):
             raise DistlibException('verify command failed with error '
-                             'code %s' % rc)
+                                   'code %s' % rc)
         return rc == 0
 
     def download_file(self, url, destfile, digest=None, reporthook=None):

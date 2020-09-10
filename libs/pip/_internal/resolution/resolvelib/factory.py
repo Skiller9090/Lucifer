@@ -1,9 +1,6 @@
 import collections
 import logging
 
-from pip._vendor import six
-from pip._vendor.packaging.utils import canonicalize_name
-
 from pip._internal.exceptions import (
     DistributionNotFound,
     InstallationError,
@@ -21,6 +18,8 @@ from pip._internal.utils.misc import (
 )
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
 from pip._internal.utils.virtualenv import running_under_virtualenv
+from pip._vendor import six
+from pip._vendor.packaging.utils import canonicalize_name
 
 from .candidates import (
     AlreadyInstalledCandidate,
@@ -66,23 +65,22 @@ if MYPY_CHECK_RUNNING:
     Cache = Dict[Link, C]
     VersionCandidates = Dict[_BaseVersion, Candidate]
 
-
 logger = logging.getLogger(__name__)
 
 
 class Factory(object):
     def __init__(
-        self,
-        finder,  # type: PackageFinder
-        preparer,  # type: RequirementPreparer
-        make_install_req,  # type: InstallRequirementProvider
-        wheel_cache,  # type: Optional[WheelCache]
-        use_user_site,  # type: bool
-        force_reinstall,  # type: bool
-        ignore_installed,  # type: bool
-        ignore_requires_python,  # type: bool
-        py_version_info=None,  # type: Optional[Tuple[int, ...]]
-        lazy_wheel=False,  # type: bool
+            self,
+            finder,  # type: PackageFinder
+            preparer,  # type: RequirementPreparer
+            make_install_req,  # type: InstallRequirementProvider
+            wheel_cache,  # type: Optional[WheelCache]
+            use_user_site,  # type: bool
+            force_reinstall,  # type: bool
+            ignore_installed,  # type: bool
+            ignore_requires_python,  # type: bool
+            py_version_info=None,  # type: Optional[Tuple[int, ...]]
+            lazy_wheel=False,  # type: bool
     ):
         # type: (...) -> None
         self._finder = finder
@@ -112,10 +110,10 @@ class Factory(object):
         return self._force_reinstall
 
     def _make_candidate_from_dist(
-        self,
-        dist,  # type: Distribution
-        extras,  # type: FrozenSet[str]
-        template,  # type: InstallRequirement
+            self,
+            dist,  # type: Distribution
+            extras,  # type: FrozenSet[str]
+            template,  # type: InstallRequirement
     ):
         # type: (...) -> Candidate
         base = AlreadyInstalledCandidate(dist, template, factory=self)
@@ -124,12 +122,12 @@ class Factory(object):
         return base
 
     def _make_candidate_from_link(
-        self,
-        link,  # type: Link
-        extras,  # type: FrozenSet[str]
-        template,  # type: InstallRequirement
-        name,  # type: Optional[str]
-        version,  # type: Optional[_BaseVersion]
+            self,
+            link,  # type: Link
+            extras,  # type: FrozenSet[str]
+            template,  # type: InstallRequirement
+            name,  # type: Optional[str]
+            version,  # type: Optional[_BaseVersion]
     ):
         # type: (...) -> Candidate
         # TODO: Check already installed candidate, and use it if the link and
@@ -151,9 +149,9 @@ class Factory(object):
         return base
 
     def _iter_found_candidates(
-        self,
-        ireqs,  # type: Sequence[InstallRequirement]
-        specifier,  # type: SpecifierSet
+            self,
+            ireqs,  # type: Sequence[InstallRequirement]
+            specifier,  # type: SpecifierSet
     ):
         # type: (...) -> Iterable[Candidate]
         if not ireqs:
@@ -278,10 +276,10 @@ class Factory(object):
         return ExplicitRequirement(candidate)
 
     def make_requirement_from_spec(
-        self,
-        specifier,  # type: str
-        comes_from,  # type: InstallRequirement
-        requested_extras=(),  # type: Iterable[str]
+            self,
+            specifier,  # type: str
+            comes_from,  # type: InstallRequirement
+            requested_extras=(),  # type: Iterable[str]
     ):
         # type: (...) -> Optional[Requirement]
         ireq = self._make_install_req_from_spec(specifier, comes_from)
@@ -342,9 +340,9 @@ class Factory(object):
         return None
 
     def _report_requires_python_error(
-        self,
-        requirement,  # type: RequiresPythonRequirement
-        template,  # type: Candidate
+            self,
+            requirement,  # type: RequiresPythonRequirement
+            template,  # type: Candidate
     ):
         # type: (...) -> UnsupportedPythonVersion
         message_format = (
@@ -430,7 +428,7 @@ class Factory(object):
             info = "the requested packages"
 
         msg = "Cannot install {} because these package versions " \
-            "have conflicting dependencies.".format(info)
+              "have conflicting dependencies.".format(info)
         logger.critical(msg)
         msg = "\nThe conflict is caused by:"
         for req, parent in e.causes:
@@ -445,10 +443,10 @@ class Factory(object):
             msg = msg + req.format_for_error()
 
         msg = msg + "\n\n" + \
-            "To fix this you could try to:\n" + \
-            "1. loosen the range of package versions you've specified\n" + \
-            "2. remove package versions to allow pip attempt to solve " + \
-            "the dependency conflict\n"
+              "To fix this you could try to:\n" + \
+              "1. loosen the range of package versions you've specified\n" + \
+              "2. remove package versions to allow pip attempt to solve " + \
+              "the dependency conflict\n"
 
         logger.info(msg)
 

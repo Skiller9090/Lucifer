@@ -1,6 +1,7 @@
-from libs import termcolor
-from libs import colorama
 import sys
+
+from libs import colorama
+from libs import termcolor
 
 
 class LuciferManager:

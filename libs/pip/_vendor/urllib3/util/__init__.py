@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from .connection import is_connection_dropped
 from .request import make_headers
 from .response import is_fp_closed
+from .retry import Retry
 from .ssl_ import (
     SSLContext,
     HAS_SNI,
@@ -16,8 +17,6 @@ from .ssl_ import (
     PROTOCOL_TLS,
 )
 from .timeout import current_time, Timeout
-
-from .retry import Retry
 from .url import get_host, parse_url, split_first, Url
 from .wait import wait_for_read, wait_for_write
 

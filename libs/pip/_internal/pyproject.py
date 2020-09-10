@@ -5,11 +5,10 @@ import os
 import sys
 from collections import namedtuple
 
-from pip._vendor import six, toml
-from pip._vendor.packaging.requirements import InvalidRequirement, Requirement
-
 from pip._internal.exceptions import InstallationError
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor import six, toml
+from pip._vendor.packaging.requirements import InvalidRequirement, Requirement
 
 if MYPY_CHECK_RUNNING:
     from typing import Any, Optional, List
@@ -18,8 +17,8 @@ if MYPY_CHECK_RUNNING:
 def _is_list_of_str(obj):
     # type: (Any) -> bool
     return (
-        isinstance(obj, list) and
-        all(isinstance(item, six.string_types) for item in obj)
+            isinstance(obj, list) and
+            all(isinstance(item, six.string_types) for item in obj)
     )
 
 
@@ -40,10 +39,10 @@ BuildSystemDetails = namedtuple('BuildSystemDetails', [
 
 
 def load_pyproject_toml(
-    use_pep517,  # type: Optional[bool]
-    pyproject_toml,  # type: str
-    setup_py,  # type: str
-    req_name  # type: str
+        use_pep517,  # type: Optional[bool]
+        pyproject_toml,  # type: str
+        setup_py,  # type: str
+        req_name  # type: str
 ):
     # type: (...) -> Optional[BuildSystemDetails]
     """Load the pyproject.toml file.

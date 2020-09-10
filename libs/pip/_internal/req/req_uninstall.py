@@ -7,8 +7,6 @@ import os
 import sys
 import sysconfig
 
-from pip._vendor import pkg_resources
-
 from pip._internal.exceptions import UninstallationError
 from pip._internal.locations import bin_py, bin_user
 from pip._internal.utils.compat import WINDOWS, cache_from_source, uses_pycache
@@ -26,6 +24,7 @@ from pip._internal.utils.misc import (
 )
 from pip._internal.utils.temp_dir import AdjacentTempDirectory, TempDirectory
 from pip._internal.utils.typing import MYPY_CHECK_RUNNING
+from pip._vendor import pkg_resources
 
 if MYPY_CHECK_RUNNING:
     from typing import (
@@ -68,6 +67,7 @@ def _unique(fn):
             if item not in seen:
                 seen.add(item)
                 yield item
+
     return unique
 
 
@@ -209,6 +209,7 @@ def compress_for_output_listing(paths):
 class StashedUninstallPathSet(object):
     """A set of file rename operations to stash files while
     tentatively uninstalling them."""
+
     def __init__(self):
         # type: () -> None
         # Mapping from source file root to [Adjacent]TempDirectory
@@ -320,6 +321,7 @@ class StashedUninstallPathSet(object):
 class UninstallPathSet(object):
     """A set of file paths to be removed in the uninstallation of a
     requirement."""
+
     def __init__(self, dist):
         # type: (Distribution) -> None
         self.paths = set()  # type: Set[str]
@@ -380,7 +382,7 @@ class UninstallPathSet(object):
             return
 
         dist_name_version = (
-            self.dist.project_name + "-" + self.dist.version
+                self.dist.project_name + "-" + self.dist.version
         )
         logger.info('Uninstalling %s:', dist_name_version)
 
@@ -503,9 +505,9 @@ class UninstallPathSet(object):
                 else:
                     namespaces = []
                 for top_level_pkg in [
-                        p for p
-                        in dist.get_metadata('top_level.txt').splitlines()
-                        if p and p not in namespaces]:
+                    p for p
+                    in dist.get_metadata('top_level.txt').splitlines()
+                    if p and p not in namespaces]:
                     path = os.path.join(dist.location, top_level_pkg)
                     paths_to_remove.add(path)
                     paths_to_remove.add(path + '.py')

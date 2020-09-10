@@ -6,11 +6,11 @@ Issue #10, see: http://code.google.com/p/urllib3/issues/detail?id=10
 from __future__ import absolute_import
 
 from logging import getLogger
+
 from ntlm import ntlm
 
 from .. import HTTPSConnectionPool
 from ..packages.six.moves.http_client import HTTPSConnection
-
 
 log = getLogger(__name__)
 
@@ -104,14 +104,14 @@ class NTLMConnectionPool(HTTPSConnectionPool):
         return conn
 
     def urlopen(
-        self,
-        method,
-        url,
-        body=None,
-        headers=None,
-        retries=3,
-        redirect=True,
-        assert_same_host=True,
+            self,
+            method,
+            url,
+            body=None,
+            headers=None,
+            retries=3,
+            redirect=True,
+            assert_same_host=True,
     ):
         if headers is None:
             headers = {}
