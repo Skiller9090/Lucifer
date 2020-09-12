@@ -7,6 +7,7 @@ from lucifer.GUI.Utils import Closer
 
 class LuciferStatus(tk.Frame):
     def __init__(self, luciferManager, parent, GUI, *args, **kwargs):
+        """The Status Bar Setup"""
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
         self.luciferManager = luciferManager
@@ -27,6 +28,7 @@ class LuciferStatus(tk.Frame):
 
 class LuciferToolbar(tk.Frame, Closer):
     def __init__(self, luciferManager, parent, GUI, *args, **kwargs):
+        """The Tool Bar Setup"""
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
         self.luciferManager = luciferManager

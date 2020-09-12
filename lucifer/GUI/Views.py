@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from lucifer.GUI.Utils import RetrieveShell
+from lucifer.Utils import RetrieveShell
 from lucifer.Indexing import index_modules
 
 

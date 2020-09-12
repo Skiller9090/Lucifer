@@ -1,6 +1,5 @@
 import os
 import platform
-from subprocess import Popen, PIPE
 
 from lucifer.Errors import IncompatibleSystemError
 from modules.Module import BaseModule
@@ -8,7 +7,6 @@ from modules.Module import BaseModule
 from LMI import Command
 
 
-# use auxiliary/privesc/peass
 class Module(BaseModule):
     def run(self):
         args = []

@@ -1,4 +1,3 @@
-import os
 import platform
 
 from lucifer.Errors import ArgumentUndefinedError
