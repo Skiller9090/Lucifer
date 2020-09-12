@@ -1,4 +1,5 @@
 import os
+import platform
 
 from lucifer.Errors import ArgumentUndefinedError
 from modules.Module import BaseModule
@@ -7,7 +8,13 @@ from modules.Module import BaseModule
 def ping_response(host):
     if "://" in host:
         host = host.split("://")[1]
-    response = os.system("ping " + host)
+
+    if platform.system() == "Windows":
+        command = "ping"
+    else:
+        command = "ping -c 4"
+
+    response = os.system(f'{command} {host}')
     if response == 0:
         return True
     else:
