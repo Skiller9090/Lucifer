@@ -1,15 +1,16 @@
 import tkinter as tk
 from tkinter import ttk, font as tk_fonts
+from .Utils import SetWindowIcon
 
 
-class Settings(tk.Tk):
+class Settings(tk.Tk, SetWindowIcon):
     def __init__(self, luciferManager, GUI, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.luciferManager = luciferManager
         self.LuciferGUI = GUI
 
         self.title("Settings")
-        self.iconbitmap("assets/lucifer.ico")
+        self.set_icon()
 
         self.font_settings = LuciferSettingsFont(self.luciferManager, self, self.LuciferGUI)
         self.view_settings = LuciferSettingsViews(self.luciferManager, self, self.LuciferGUI)
