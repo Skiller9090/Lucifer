@@ -27,14 +27,13 @@ class Module(BaseModule):
     def ping_response(self, host):
         if "://" in host:
             host = host.split("://")[1]
-
-        if platform.system() == "Windows":
-            command = "ping"
-        else:
-            command = "ping -c 4"
-
+        command = ["ping"]
+        if platform.system() != "Windows":
+            command.append("-c")
+            command.append("4")
+        command.append(host)
         if self.isShellRun:
-            response = Command.tee_output([command, host])
+            response = Command.tee_output(command)
         else:
-            response = Command.return_output([command, host])
+            response = Command.return_output(command)
         return response
