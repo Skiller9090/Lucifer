@@ -16,6 +16,7 @@ class TextRedirect(object):
         self.widget.configure(state="normal")
         self.widget.insert("end", ansi_escape.sub("", string), (self.tag,))
         self.widget.configure(state="disabled")
+        self.widget.see(tk.END)
 
     def flush(self):
         pass
@@ -119,7 +120,6 @@ class LuciferConsole(tk.Frame, RetrieveShell):
             if self.luciferManager.log_file is not None:
                 if self.luciferManager.log_amount == 1:
                     self.luciferManager.log_command(self.shell.shell_in)
-            self.ConsoleBox.see(tk.END)
         except Exception as e:
             checkErrors(e)
         self.luciferManager.gui.statusFrame.status.set("Idle")

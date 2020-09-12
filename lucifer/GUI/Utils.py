@@ -4,7 +4,6 @@ from tkinter import messagebox
 from lucifer.Errors import NoShellError
 
 ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
-photo = None
 
 
 class Closer:
