@@ -32,25 +32,35 @@ def get_lines(parts, indent, text_width, prefix=None):
 
 def ext_prog(opt_parts, pos_parts, prefix, prog, text_width):
     if len(prefix) + len(prog) <= 0.75 * text_width:
-        indent = ' ' * (len(prefix) + len(prog) + 1)
-        if opt_parts:
-            lines = get_lines([prog] + opt_parts, indent, text_width, prefix)
-            lines.extend(get_lines(pos_parts, indent, text_width))
-        elif pos_parts:
-            lines = get_lines([prog] + pos_parts, indent, text_width, prefix)
-        else:
-            lines = [prog]
+        lines = ext_short(opt_parts, pos_parts, prefix, prog, text_width)
 
     # if prog is long, put it on its own line
     else:
-        indent = ' ' * len(prefix)
-        parts = opt_parts + pos_parts
-        lines = get_lines(parts, indent, text_width)
-        if len(lines) > 1:
-            lines = []
-            lines.extend(get_lines(opt_parts, indent, text_width))
-            lines.extend(get_lines(pos_parts, indent, text_width))
-        lines = [prog] + lines
+        lines = ext_long(opt_parts, pos_parts, prefix, prog, text_width)
+    return lines
+
+
+def ext_long(opt_parts, pos_parts, prefix, prog, text_width):
+    indent = ' ' * len(prefix)
+    parts = opt_parts + pos_parts
+    lines = get_lines(parts, indent, text_width)
+    if len(lines) > 1:
+        lines = []
+        lines.extend(get_lines(opt_parts, indent, text_width))
+        lines.extend(get_lines(pos_parts, indent, text_width))
+    lines = [prog] + lines
+    return lines
+
+
+def ext_short(opt_parts, pos_parts, prefix, prog, text_width):
+    indent = ' ' * (len(prefix) + len(prog) + 1)
+    if opt_parts:
+        lines = get_lines([prog] + opt_parts, indent, text_width, prefix)
+        lines.extend(get_lines(pos_parts, indent, text_width))
+    elif pos_parts:
+        lines = get_lines([prog] + pos_parts, indent, text_width, prefix)
+    else:
+        lines = [prog]
     return lines
 
 
