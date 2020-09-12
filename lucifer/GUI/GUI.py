@@ -4,11 +4,11 @@ from tkinter import ttk
 from lucifer.Font import FontFind
 from lucifer.GUI.Bars import LuciferStatus, LuciferToolbar
 from lucifer.GUI.Console import LuciferConsole
-from lucifer.GUI.Utils import Closer
+from lucifer.GUI.Utils import Closer, SetWindowIcon
 from lucifer.GUI.Views import LuciferModulesView, LuciferVarView
 
 
-class LuciferGui(tk.Frame, Closer, FontFind):
+class LuciferGui(tk.Frame, Closer, FontFind, SetWindowIcon):
     def __init__(self, luciferManager, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
@@ -29,7 +29,9 @@ class LuciferGui(tk.Frame, Closer, FontFind):
 
         self.parent.title("Lucifer")
         self.parent.geometry("1200x600")
-        self.parent.iconbitmap("assets/lucifer.ico")
+
+        self.set_icon()
+
         self.parent["bg"] = '#%02x%02x%02x' % (28, 28, 36)
         self.parent.protocol("WM_DELETE_WINDOW", self.on_close)
 
