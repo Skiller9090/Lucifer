@@ -1,10 +1,10 @@
 import re
-from tkinter import Image
 from tkinter import messagebox
 
 from lucifer.Errors import NoShellError
 
 ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+photo = None
 
 
 class Closer:
@@ -23,9 +23,3 @@ class RetrieveShell:
                     break
             else:
                 raise NoShellError("Couldn't Find Shell With ID: " + str(self.luciferManager.current_shell_id))
-
-
-class SetWindowIcon:
-    def set_icon(self):
-        photo = Image("photo", file="assets/lucifer.gif")
-        self.parent.tk.call("wm", "iconphoto", self.parent._w, photo)

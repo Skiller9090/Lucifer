@@ -1,14 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
-
+from PIL import Image, ImageTk
 from lucifer.Font import FontFind
 from lucifer.GUI.Bars import LuciferStatus, LuciferToolbar
 from lucifer.GUI.Console import LuciferConsole
-from lucifer.GUI.Utils import Closer, SetWindowIcon
+from lucifer.GUI.Utils import Closer
 from lucifer.GUI.Views import LuciferModulesView, LuciferVarView
 
 
-class LuciferGui(tk.Frame, Closer, FontFind, SetWindowIcon):
+class LuciferGui(tk.Frame, Closer, FontFind):
     def __init__(self, luciferManager, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
@@ -30,7 +30,8 @@ class LuciferGui(tk.Frame, Closer, FontFind, SetWindowIcon):
         self.parent.title("Lucifer")
         self.parent.geometry("1200x600")
 
-        self.set_icon()
+        image = Image.open("assets/lucifer.png")
+        self.parent.iconphoto(True, ImageTk.PhotoImage(image))
 
         self.parent["bg"] = '#%02x%02x%02x' % (28, 28, 36)
         self.parent.protocol("WM_DELETE_WINDOW", self.on_close)
