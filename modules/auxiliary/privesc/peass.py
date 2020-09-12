@@ -5,6 +5,8 @@ from subprocess import Popen, PIPE
 from lucifer.Errors import IncompatibleSystemError
 from modules.Module import BaseModule
 
+from LMI import Command
+
 
 # use auxiliary/privesc/peass
 class Module(BaseModule):
@@ -21,12 +23,18 @@ class Module(BaseModule):
             if "args" in self.shell.vars.keys():
                 args = self.shell.vars["args"].split(" ")
             print("Running PEASS, this might take sometime!")
-            out = self.get_peass(path, args)
+            args.insert(0, path)
+            if self.isShellRun:
+                out = Command.tee_output(args)
+            else:
+                out = Command.return_output(args)
+            out = out.strip()
             if output_file != "":
                 with open(self.shell.vars["output_file"], write_mode) as f:
                     f.write(out)
             if self.isShellRun:
-                print(out)
+                # print(out)
+                pass
             else:
                 return out
         else:
@@ -41,11 +49,3 @@ class Module(BaseModule):
     def get_description(self):
         desc = """Privilege Escalation tester script for Windows and Linux"""
         return desc
-
-    def get_peass(self, command, arg):
-        arg.insert(0, command)
-        p = Popen(arg, stdout=PIPE, stderr=None)
-        out, err = p.communicate()
-        out = out.strip()
-        out = out.decode('utf-8', 'ignore')
-        return out
