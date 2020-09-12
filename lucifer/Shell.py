@@ -163,22 +163,23 @@ class Shell:
             else:
                 print(f"Module: {'/'.join(ori_path)} Does Not Exist!")
                 return
+
+        if os.path.isfile(path + "/" + file):
+            self.module = path + "/" + file
+            print(f"Using module: {self.module}")
+        elif os.path.isfile(path + "/" + file + ".py"):
+            self.module = path + "/" + file + ".py"
+            print(f"Using module: {self.module}")
         else:
-            if os.path.isfile(path + "/" + file):
-                self.module = path + "/" + file
-                print(f"Using module: {self.module}")
-            elif os.path.isfile(path + "/" + file + ".py"):
-                self.module = path + "/" + file + ".py"
-                print(f"Using module: {self.module}")
-            else:
-                print(f"Module: {'/'.join(ori_path)} Does Not Exist!")
-                return
+            print(f"Module: {'/'.join(ori_path)} Does Not Exist!")
+            return
         isInCache = self.module in self.loaded_modules.keys()
         if isInCache and use_cache:
             print(f"Loading {self.module} from cache, use -R to override this.")
             self.module_obj = self.loaded_modules.get(self.module)
         else:
-            print(f"{self.module} in cache, ignoring it...") if isInCache else None
+            if isInCache:
+                print(f"{self.module} in cache, ignoring it...")
             print(f"Loading {self.module} from file.")
             to_import = (self.module.replace("/", ".")
                          if ".py" not in self.module else
@@ -273,7 +274,7 @@ class Shell:
         if len(com_args) > 1:
             ID = com_args[1].rstrip()
             if check_int(ID):
-                for i in range(2):
+                for _ in range(2):
                     com_args.pop(0)
                 name = " ".join(com_args)
                 ID = int(ID)

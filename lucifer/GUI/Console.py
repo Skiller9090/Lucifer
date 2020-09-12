@@ -4,11 +4,13 @@ import tkinter as tk
 from tkinter import ttk
 
 from lucifer.Errors import checkErrors
-from lucifer.GUI.Utils import ansi_escape, RetrieveShell
+from lucifer.GUI.Utils import ansi_escape
+from lucifer.Utils import RetrieveShell
 
 
 class TextRedirect(object):
     def __init__(self, widget, tag="stdout"):
+        """The Object to Redirect output into the tkinter console box"""
         self.widget = widget
         self.tag = tag
 
@@ -30,6 +32,7 @@ class TextRedirect(object):
 
 class LuciferConsole(tk.Frame, RetrieveShell):
     def __init__(self, luciferManager, parent, GUI, *args, **kwargs):
+        """The Console Box Setup"""
         super().__init__(parent, *args, **kwargs)
 
         self.parent = parent

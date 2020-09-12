@@ -4,6 +4,7 @@ from tkinter import ttk, font as tk_fonts
 
 class Settings(tk.Tk):
     def __init__(self, luciferManager, GUI, *args, **kwargs):
+        """The Settings Window Setup"""
         super().__init__(*args, **kwargs)
         self.luciferManager = luciferManager
         self.LuciferGUI = GUI
@@ -29,6 +30,7 @@ class Settings(tk.Tk):
 
 class LuciferSettingsFont(tk.LabelFrame):
     def __init__(self, luciferManager, parent, GUI, *args, **kwargs):
+        """The Settings Font Menu Setup"""
         super().__init__(parent, text="Fonts", *args, **kwargs)
         self.parent = parent
         self.luciferManager = luciferManager
@@ -68,6 +70,7 @@ class LuciferSettingsFont(tk.LabelFrame):
 
 class LuciferSettingsExit(ttk.Frame):
     def __init__(self, luciferManager, parent, GUI, **kwargs):
+        """The Settings Exit And Apply Button Setup"""
         super().__init__(parent, **kwargs)
 
         self.parent = parent
@@ -94,6 +97,7 @@ class LuciferSettingsExit(ttk.Frame):
 
 class LuciferSettingsViews(tk.LabelFrame):
     def __init__(self, luciferManager, parent, GUI, *args, **kwargs):
+        """The Settings View Menu Setup"""
         super().__init__(parent, text="Views", *args, **kwargs)
         self.parent = parent
         self.luciferManager = luciferManager

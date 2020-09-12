@@ -10,6 +10,7 @@ from lucifer.GUI.Views import LuciferModulesView, LuciferVarView
 
 class LuciferGui(tk.Frame, Closer, FontFind):
     def __init__(self, luciferManager, parent, *args, **kwargs):
+        """The Full GUI Application Setup"""
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
         self.luciferManager = luciferManager

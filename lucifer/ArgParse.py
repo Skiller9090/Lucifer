@@ -9,6 +9,51 @@ from .Manager import LuciferManager
 from .Shell import Shell
 
 
+def get_lines(parts, indent, text_width, prefix=None):
+    lines = []
+    line = []
+    if prefix is not None:
+        line_len = len(prefix) - 1
+    else:
+        line_len = len(indent) - 1
+    for part in parts:
+        if line_len + 1 + len(part) > text_width:
+            lines.append(indent + ' '.join(line))
+            line = []
+            line_len = len(indent) - 1
+        line.append(part)
+        line_len += len(part) + 1
+    if line:
+        lines.append(indent + ' '.join(line))
+    if prefix is not None:
+        lines[0] = lines[0][len(indent):]
+    return lines
+
+
+def ext_prog(opt_parts, pos_parts, prefix, prog, text_width):
+    if len(prefix) + len(prog) <= 0.75 * text_width:
+        indent = ' ' * (len(prefix) + len(prog) + 1)
+        if opt_parts:
+            lines = get_lines([prog] + opt_parts, indent, text_width, prefix)
+            lines.extend(get_lines(pos_parts, indent, text_width))
+        elif pos_parts:
+            lines = get_lines([prog] + pos_parts, indent, text_width, prefix)
+        else:
+            lines = [prog]
+
+    # if prog is long, put it on its own line
+    else:
+        indent = ' ' * len(prefix)
+        parts = opt_parts + pos_parts
+        lines = get_lines(parts, indent, text_width)
+        if len(lines) > 1:
+            lines = []
+            lines.extend(get_lines(opt_parts, indent, text_width))
+            lines.extend(get_lines(pos_parts, indent, text_width))
+        lines = [prog] + lines
+    return lines
+
+
 class CapitalisedHelpFormatter(argparse.HelpFormatter):
     def add_usage(self, usage, actions, groups, prefix=None):
         if prefix is None:
@@ -18,23 +63,9 @@ class CapitalisedHelpFormatter(argparse.HelpFormatter):
             usage, actions, groups, prefix)
 
     def generate_usage(self, groups, prefix, actions):
-        prog = '%(prog)s' % dict(prog=self._prog)
-        # split optionals from positionals
-        optionals = []
-        positionals = []
-        for action in actions:
-            if action.option_strings:
-                optionals.append(action)
-            else:
-                positionals.append(action)
-
-        # build full usage string
-        formats = self._format_actions_usage
-        action_usage = formats(optionals + positionals, groups)
-        usage = ' '.join([s for s in [prog, action_usage] if s])
-
-        # wrap the usage parts if it's too long
+        formats, optionals, positionals, prog, usage = self.build_usage_string(actions, groups)
         text_width = self._width - self._current_indent
+
         if len(prefix) + len(usage) > text_width:
 
             # break usage into wrappable parts
@@ -46,52 +77,28 @@ class CapitalisedHelpFormatter(argparse.HelpFormatter):
             assert ' '.join(opt_parts) == opt_usage
             assert ' '.join(pos_parts) == pos_usage
 
-            # helper for wrapping lines
-            def get_lines(parts, indent, prefix=None):
-                lines = []
-                line = []
-                if prefix is not None:
-                    line_len = len(prefix) - 1
-                else:
-                    line_len = len(indent) - 1
-                for part in parts:
-                    if line_len + 1 + len(part) > text_width:
-                        lines.append(indent + ' '.join(line))
-                        line = []
-                        line_len = len(indent) - 1
-                    line.append(part)
-                    line_len += len(part) + 1
-                if line:
-                    lines.append(indent + ' '.join(line))
-                if prefix is not None:
-                    lines[0] = lines[0][len(indent):]
-                return lines
-
             # if prog is short, follow it with optionals or positionals
-            if len(prefix) + len(prog) <= 0.75 * text_width:
-                indent = ' ' * (len(prefix) + len(prog) + 1)
-                if opt_parts:
-                    lines = get_lines([prog] + opt_parts, indent, prefix)
-                    lines.extend(get_lines(pos_parts, indent))
-                elif pos_parts:
-                    lines = get_lines([prog] + pos_parts, indent, prefix)
-                else:
-                    lines = [prog]
-
-            # if prog is long, put it on its own line
-            else:
-                indent = ' ' * len(prefix)
-                parts = opt_parts + pos_parts
-                lines = get_lines(parts, indent)
-                if len(lines) > 1:
-                    lines = []
-                    lines.extend(get_lines(opt_parts, indent))
-                    lines.extend(get_lines(pos_parts, indent))
-                lines = [prog] + lines
+            lines = ext_prog(opt_parts, pos_parts, prefix, prog, text_width)
 
             # join lines into usage
             usage = '\n'.join(lines)
-        return usage.replace("()", "python Main.py")
+        return usage.replace("()", "python main.py")
+
+    def build_usage_string(self, actions, groups):
+        prog = '%(prog)s' % dict(prog=self._prog)
+        # split optionals from positionals
+        optionals = []
+        positionals = []
+        for action in actions:
+            if action.option_strings:
+                optionals.append(action)
+            else:
+                positionals.append(action)
+        # build full usage string
+        formats = self._format_actions_usage
+        action_usage = formats(optionals + positionals, groups)
+        usage = ' '.join([s for s in [prog, action_usage] if s])
+        return formats, optionals, positionals, prog, usage
 
 
 class LuciferParser(argparse.ArgumentParser):

@@ -15,7 +15,6 @@ def scan_modules(dirname):
 
 def index_modules():
     base_path = "modules/"
-    path = ""
     sub_folders = recursive_scan_dir(base_path)  # {"file_name": {"folders": {}, "modules": {}}}
     tree = {}
     modules = {}

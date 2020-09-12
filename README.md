@@ -11,7 +11,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/Skiller9090/Lucifer)](https://GitHub.com/Skiller9090/Lucifer/issues/)
 [![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/Skiller9090/badges/)
 
-
 09/09/2020
 
 ## Commands
