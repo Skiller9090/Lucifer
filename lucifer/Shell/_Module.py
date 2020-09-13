@@ -71,9 +71,7 @@ def describe_module(self, *args, **kwargs):
         if self.module_obj is not None:
             print(self.module_obj.get_description())
             return
-        else:
-            print("Please Select A Module First!")
-            return
+        print("Please Select A Module First!")
     except Exception as e:
         checkErrors(e)
 
@@ -83,9 +81,7 @@ def set_vars(self, *args, **kwargs):
         if self.module_obj is not None:
             self.vars.update(self.module_obj.set_vars())
             return
-        else:
-            print("Please Select A Module First!")
-            return
+        print("Please Select A Module First!")
     except Exception as e:
         checkErrors(e)
 
@@ -103,4 +99,3 @@ def use(self, com_args: list):
             self.use_module(module_path)
     else:
         print("Please add valid module path")
-    return
