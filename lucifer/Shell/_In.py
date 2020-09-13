@@ -1,7 +1,10 @@
 def getIn(self):
-    self.shell_in = input(f"{self.program_name}|" +
-                          f"{self.module if '.py' not in self.module else self.module.replace('.py', '')}" +
-                          f"|{self.id}> ")
+    p_name = f"{self.program_name}|"
+    m_name = self.module \
+        if '.py' not in self.module else \
+        self.module.replace('.py', '')
+    p_id = f"|{self.id}> "
+    self.shell_in = input(p_name + m_name + p_id)
     if self.luciferManager.log_file is not None:
         if self.luciferManager.log_amount == 1:
             self.luciferManager.log_command(self.shell_in)
@@ -17,4 +20,3 @@ def parseShellIn(self):
     if com in self.alias.keys():
         return_value = self.alias[com](com_args)
         return return_value
-    return

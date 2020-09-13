@@ -2,7 +2,7 @@ version: "2"         # required to adjust maintainability checks
 checks:
   argument-count:
     config:
-      threshold: 4
+      threshold: 8
   complex-logic:
     config:
       threshold: 7
@@ -32,8 +32,6 @@ checks:
       threshold: # language-specific defaults. an override will affect all languages.
 plugins:
   pep8:
-    enabled: true
-  radon:
     enabled: true
   sonarpython:
     enabled: true

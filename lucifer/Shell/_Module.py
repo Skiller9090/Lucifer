@@ -5,15 +5,7 @@ import re
 
 
 def use_module(self, mod_path: list):
-    use_cache = True
-    if "-R" in mod_path:
-        mod_path.remove("-R")
-        use_cache = False
-    if self.module_obj is not None:
-        self.loaded_modules[self.module] = self.module_obj
-    ori_path = mod_path.copy()
-    file = mod_path.pop(-1)
-    path = "modules"
+    file, ori_path, path, use_cache = use_arg_setup(mod_path, self)
     for directory in mod_path:
         path += "/" + directory
         if os.path.exists(path):
@@ -25,7 +17,6 @@ def use_module(self, mod_path: list):
         else:
             print(f"Module: {'/'.join(ori_path)} Does Not Exist!")
             return
-
     if os.path.isfile(path + "/" + file):
         self.module = path + "/" + file
         print(f"Using module: {self.module}")
@@ -35,6 +26,13 @@ def use_module(self, mod_path: list):
     else:
         print(f"Module: {'/'.join(ori_path)} Does Not Exist!")
         return
+    open_module(self, use_cache)
+    if self.auto_vars:
+        self.set_vars()
+    return
+
+
+def open_module(self, use_cache):
     isInCache = self.module in self.loaded_modules.keys()
     if isInCache and use_cache:
         print(f"Loading {self.module} from cache, use -R to override this.")
@@ -45,15 +43,27 @@ def use_module(self, mod_path: list):
         print(f"Loading {self.module} from file.")
         to_import = (self.module.replace("/", ".")
                      if ".py" not in self.module else
-                     self.module.replace(".py", "").replace("/", ".")).split(".")
+                     self.module.replace(".py", "").replace("/", "."))
+        to_import = to_import.split(".")
         pkg = to_import.pop(-1)
         to_import = ".".join(to_import)
         imported_module = importlib.import_module(to_import + "." + pkg)
-        self.module_obj = imported_module.Module(self.luciferManager, ShellRun=True)
+        self.module_obj = imported_module.Module(self.luciferManager,
+                                                 ShellRun=True)
         self.loaded_modules[self.module] = self.module_obj
-    if self.auto_vars:
-        self.set_vars()
-    return
+
+
+def use_arg_setup(mod_path, self):
+    use_cache = True
+    if "-R" in mod_path:
+        mod_path.remove("-R")
+        use_cache = False
+    if self.module_obj is not None:
+        self.loaded_modules[self.module] = self.module_obj
+    ori_path = mod_path.copy()
+    file = mod_path.pop(-1)
+    path = "modules"
+    return file, ori_path, path, use_cache
 
 
 def run_module(self, *args, **kwargs):
