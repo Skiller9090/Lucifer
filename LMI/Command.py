@@ -3,18 +3,16 @@ import sys
 
 
 def return_output(command):
-    process = subprocess.Popen(command, stdout=subprocess.PIPE)
-    all_output = ""
-    while True:
-        output = process.stdout.readline().decode(sys.getfilesystemencoding(), "ignore")
-        if output == '' and process.poll() is not None:
-            break
-        if output:
-            all_output += output
+    all_output = process_command(command, stdout=subprocess.PIPE)
     return all_output
 
 
 def tee_output(command, stdout=sys.stdout):
+    tee_out = process_command(command, stdout, tee=True)
+    return tee_out
+
+
+def process_command(command, stdout, tee=False):
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
     all_output = ""
     while True:
@@ -23,7 +21,8 @@ def tee_output(command, stdout=sys.stdout):
             break
         if output:
             all_output += output
-            stdout.write(output)
+            if tee:
+                stdout.write(output)
     return all_output
 
 
