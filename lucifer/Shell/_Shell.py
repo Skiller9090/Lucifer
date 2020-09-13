@@ -75,9 +75,8 @@ def open_shell(self, com_args: list):
                         except Exception as e:
                             checkErrors(e)
                         return
-                else:
-                    print("Please specify a valid ID")
-                    return
+                print("Please specify a valid ID")
+                return
         else:
             print("Please specify a valid ID")
             return
