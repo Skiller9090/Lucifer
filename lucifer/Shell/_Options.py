@@ -13,7 +13,8 @@ def command_set(self, com_args: list):
 
 def show(self, com_args: list):
     if len(com_args) > 1:
-        if com_args[1].lower().strip() == "options" or com_args[1].lower().strip() == "vars":
+        if (com_args[1].lower().strip() == "options"
+                or com_args[1].lower().strip() == "vars"):
             self.show_options()
             return
         print("Please enter a valid argument: options/vars or modules")
@@ -31,8 +32,12 @@ def show_options(self, *args, **kwargs):
     if (2 * max_l - 3) % 2 != 0:
         max_l += 1
     title_padding = int((2 * max_l - 3) / 2)
+    coloured_title = self.luciferManager.termcolor.colored('Vars',
+                                                           'green',
+                                                           attrs=['bold',
+                                                                  'underline'])
     print(f"{' ' * title_padding}" +
-          f"{self.luciferManager.termcolor.colored('Vars', 'green', attrs=['bold', 'underline'])}")
+          f"{coloured_title}")
     print("=" * (2 * title_padding + 5))
     for k, v in zip(self.vars.keys(), self.vars.values()):
         print(f"{k}{' ' * (max_l - len(k))}| {v}")
@@ -41,7 +46,8 @@ def show_options(self, *args, **kwargs):
 def change_auto_set_vars(self, com_args: list):
     com_args.pop(0)
     if len(com_args) > 0:
-        inclusive, set_for_new, set_global, to_set = change_auto_parse_args(com_args)
+        inclusive, set_for_new, \
+            set_global, to_set = change_auto_parse_args(com_args)
         if to_set is None:
             print("Please Add An Argument!")
             return
@@ -71,9 +77,11 @@ def change_auto_parse_args(com_args):
     inclusive = False
     for argument in com_args:
         argument = argument.rstrip()
-        if argument.lower() == "true" or argument.lower() == "t" or argument.lower() == "-t":
+        if (argument.lower() == "true"
+                or argument.lower() == "t" or argument.lower() == "-t"):
             to_set = True
-        elif argument.lower() == "false" or argument.lower() == "f" or argument.lower() == "-f":
+        elif (argument.lower() == "false"
+              or argument.lower() == "f" or argument.lower() == "-f"):
             to_set = False
         elif argument.lower() == "-g":
             set_global = True
