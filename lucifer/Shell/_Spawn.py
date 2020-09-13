@@ -13,4 +13,3 @@ def spawn_shell(self, *args, **kwargs):
     self.luciferManager.next_shell_id += 1
     self.luciferManager.alternative_shells[-1].name += str(self.luciferManager.next_shell_id - 1)
     print(f"Opened New Shell With ID: {self.luciferManager.next_shell_id - 1}")
-
