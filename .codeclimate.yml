@@ -1,0 +1,39 @@
+version: "2"         # required to adjust maintainability checks
+checks:
+  argument-count:
+    config:
+      threshold: 8
+  complex-logic:
+    config:
+      threshold: 7
+  file-lines:
+    config:
+      threshold: 250
+  method-complexity:
+    config:
+      threshold: 20
+  method-count:
+    config:
+      threshold: 20
+  method-lines:
+    config:
+      threshold: 25
+  nested-control-flow:
+    config:
+      threshold: 4
+  return-statements:
+    config:
+      threshold: 4
+  similar-code:
+    config:
+      threshold: # language-specific defaults. an override will affect all languages.
+  identical-code:
+    config:
+      threshold: # language-specific defaults. an override will affect all languages.
+plugins:
+  pep8:
+    enabled: true
+  sonarpython:
+    enabled: true
+exclude_patterns:
+  - "libs/"
