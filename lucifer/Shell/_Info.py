@@ -6,7 +6,7 @@ def print_name(self, *args, **kwargs):
     print(f"Shell Name: {self.name}")
 
 
-def help(self, *args, **kwargs):
+def display_help(self, *args, **kwargs):
     print(self.help_menu)
 
 
