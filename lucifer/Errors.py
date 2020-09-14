@@ -1,4 +1,9 @@
 from subprocess import CalledProcessError
+import pybrake
+
+notifier = pybrake.Notifier(project_id=297340,
+                            project_key='bc600da5fe7ba7a73119a2d84519793d',
+                            environment='production')
 
 
 class BaseLuciferError(Exception):
@@ -36,3 +41,8 @@ def checkErrors(e):
         pass
     except ArgumentUndefinedError:
         print(e)
+    except Exception as err:
+        notifier.notify(err)
+        print("The following error has occurred" +
+              " and has been reported to the devs: ")
+        raise err
