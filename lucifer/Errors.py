@@ -41,8 +41,8 @@ def checkErrors(e):
         pass
     except ArgumentUndefinedError:
         print(e)
-    except Exception as e:
-        notifier.notify(e)
+    except Exception as err:
+        notifier.notify(err)
         print("The following error has occurred" +
               " and has been reported to the devs: ")
-        raise e
+        raise err
