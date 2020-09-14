@@ -1,14 +1,18 @@
 from lucifer.ArgParse import LuciferParser
 from lucifer.Manager import LuciferManager
+from lucifer import Errors
 
 
 def start():
-    luciferManager = LuciferManager()
-    parser = LuciferParser(luciferManager, description="Lucifer")
+    try:
+        luciferManager = LuciferManager()
+        parser = LuciferParser(luciferManager, description="Lucifer")
 
-    parser.add_lucifer_args()
+        parser.add_lucifer_args()
 
-    parser.args = parser.parse_args()
-    # parser.check_args()
+        parser.args = parser.parse_args()
+        # parser.check_args()
 
-    parser.run()
+        parser.run()
+    except Exception as e:
+        Errors.checkErrors(e)
