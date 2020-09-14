@@ -20,6 +20,7 @@ class LuciferManager:
         self.gui_thread_free = True
         self.stdout = sys.stdout
         self.stderr = sys.stderr
+        self.version = "Prototype 2"
 
     def end(self, *args, **kwargs):
         sys.stderr = sys.__stderr__
