@@ -48,31 +48,9 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         self.opened_order = [0]
 
         self.y_scrollbar = ttk.Scrollbar(self)
-
-        self.ConsoleBox.config(yscrollcommand=self.y_scrollbar.set)
-        self.y_scrollbar.config(command=self.ConsoleBox.yview)
         self.ConsoleInput = ttk.Entry(self, textvariable=self.console_in, font=self.LuciferGui.font)
-        self.get_shell()
 
-        self.ConsoleBox["bg"] = '#%02x%02x%02x' % (28, 28, 36)
-        self.ConsoleBox["foreground"] = '#%02x%02x%02x' % (255, 255, 255)
-
-        self.ConsoleInput.insert(0, 'Enter Command...')
-
-        self.ConsoleInput.pack(side=tk.BOTTOM, anchor=tk.W, expand=False, fill="x")
-        self.y_scrollbar.pack(side=tk.RIGHT, fill="y", anchor=tk.E, expand=False)
-        self.ConsoleBox.pack(fill="both", side=tk.LEFT, anchor=tk.E, expand=True)
-
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=1)
-
-        self.ConsoleInput.bind('<FocusIn>', self.on_entry_click)
-        self.ConsoleInput.bind('<FocusOut>', self.on_focusout)
-        self.ConsoleInput.bind("<Return>", self.send_command)
-        self.ConsoleInput.bind("<Up>", self.history_up)
-        self.ConsoleInput.bind("<Down>", self.history_down)
+        self.setup_console_widget()
 
         self.luciferManager.stdout = TextRedirect(self.ConsoleBox, "stdout")
         # self.luciferManager.stderr = TextRedirect(self.ConsoleBox, "stderr")
@@ -82,6 +60,38 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         print(f"{self.shell.program_name}|" +
               f"{self.shell.module if '.py' not in self.shell.module else self.shell.module.replace('.py', '')}" +
               f"|{self.shell.id}> ", end="")
+
+    def setup_console_widget(self):
+        self.link_scrollbar()
+        self.get_shell()
+        self.ConsoleBox["bg"] = '#%02x%02x%02x' % (28, 28, 36)
+        self.ConsoleBox["foreground"] = '#%02x%02x%02x' % (255, 255, 255)
+        self.ConsoleInput.insert(0, 'Enter Command...')
+        self.pack_all()
+        self.setup_grid()
+        self.bind_shortcuts()
+
+    def link_scrollbar(self):
+        self.ConsoleBox.config(yscrollcommand=self.y_scrollbar.set)
+        self.y_scrollbar.config(command=self.ConsoleBox.yview)
+
+    def pack_all(self):
+        self.ConsoleInput.pack(side=tk.BOTTOM, anchor=tk.W, expand=False, fill="x")
+        self.y_scrollbar.pack(side=tk.RIGHT, fill="y", anchor=tk.E, expand=False)
+        self.ConsoleBox.pack(fill="both", side=tk.LEFT, anchor=tk.E, expand=True)
+
+    def bind_shortcuts(self):
+        self.ConsoleInput.bind('<FocusIn>', self.on_entry_click)
+        self.ConsoleInput.bind('<FocusOut>', self.on_focusout)
+        self.ConsoleInput.bind("<Return>", self.send_command)
+        self.ConsoleInput.bind("<Up>", self.history_up)
+        self.ConsoleInput.bind("<Down>", self.history_down)
+
+    def setup_grid(self):
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
 
     def on_entry_click(self, *args, **kwargs):
         if self.ConsoleInput.get() == 'Enter Command...':

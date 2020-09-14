@@ -35,5 +35,11 @@ plugins:
     enabled: true
   sonarpython:
     enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+        python:
+          mass_threshold: 70
 exclude_patterns:
   - "libs/"
