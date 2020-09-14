@@ -20,44 +20,53 @@ class LuciferGui(tk.Frame, Closer, FontFind):
         self.font = (self.base_font_name, self.base_font_size)
 
         self.isRightPaneEnabled = tk.IntVar(self)
-        self.isRightPaneEnabled.set(1)
         self.isConsoleEnabled = tk.IntVar(self)
-        self.isConsoleEnabled.set(1)
         self.isVarViewEnabled = tk.IntVar(self)
-        self.isVarViewEnabled.set(1)
         self.isModuleViewEnabled = tk.IntVar(self)
-        self.isModuleViewEnabled.set(1)
 
+        self.enable_Panes()
+        self.setup_App()
+        self.configure_grid()
+
+        self.mainPane = ttk.PanedWindow(orient=tk.HORIZONTAL)
+        self.statusFrame = LuciferStatus(self.luciferManager,
+                                         self.parent, self)
+        self.toolbar = LuciferToolbar(self.luciferManager, self.parent, self)
+        self.console = LuciferConsole(self.luciferManager, self.parent, self)
+        self.rightPane = ttk.PanedWindow(orient=tk.VERTICAL)
+        self.moduleView = LuciferModulesView(self.luciferManager,
+                                             self.parent, self)
+        self.varView = LuciferVarView(self.luciferManager, self.parent, self)
+
+        self.pack_all()
+
+    def pack_all(self):
+        self.statusFrame.pack(fill=tk.X, expand=False, side=tk.BOTTOM)
+        self.mainPane.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
+        self.mainPane.add(self.console)
+        self.mainPane.add(self.rightPane)
+        self.rightPane.add(self.moduleView)
+        self.rightPane.add(self.varView)
+
+    def setup_App(self):
         self.parent.title("Lucifer")
         self.parent.geometry("1200x600")
-
         image = Image.open("assets/lucifer.png")
         self.parent.iconphoto(True, ImageTk.PhotoImage(image))
-
         self.parent["bg"] = '#%02x%02x%02x' % (28, 28, 36)
         self.parent.protocol("WM_DELETE_WINDOW", self.on_close)
 
+    def configure_grid(self):
         self.parent.grid_columnconfigure(0, weight=1)
         self.parent.grid_columnconfigure(1, weight=1)
         self.parent.grid_rowconfigure(0, weight=1)
         self.parent.grid_rowconfigure(1, weight=1)
 
-        self.mainPane = ttk.PanedWindow(orient=tk.HORIZONTAL)
-        self.statusFrame = LuciferStatus(self.luciferManager, self.parent, self)
-        self.statusFrame.pack(fill=tk.X, expand=False, side=tk.BOTTOM)
-        self.mainPane.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
-
-        self.toolbar = LuciferToolbar(self.luciferManager, self.parent, self)
-        self.console = LuciferConsole(self.luciferManager, self.parent, self)
-        self.mainPane.add(self.console)
-
-        self.rightPane = ttk.PanedWindow(orient=tk.VERTICAL)
-        self.mainPane.add(self.rightPane)
-
-        self.moduleView = LuciferModulesView(self.luciferManager, self.parent, self)
-        self.varView = LuciferVarView(self.luciferManager, self.parent, self)
-        self.rightPane.add(self.moduleView)
-        self.rightPane.add(self.varView)
+    def enable_Panes(self):
+        self.isVarViewEnabled.set(1)
+        self.isConsoleEnabled.set(1)
+        self.isRightPaneEnabled.set(1)
+        self.isModuleViewEnabled.set(1)
 
     def toggle_right_pane(self):
         if self.isRightPaneEnabled.get():

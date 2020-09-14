@@ -26,8 +26,7 @@ class TextRedirect(object):
     def fileno(self):
         if self.tag == "stdout":
             return 1
-        else:
-            return 2
+        return 2
 
 
 class LuciferConsole(tk.Frame, RetrieveShell):
