@@ -1,2 +1,3 @@
 Pillow>=7.2.0
 pybrake>=0.4.6
+pyyaml>=5.3.1

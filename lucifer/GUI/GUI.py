@@ -6,6 +6,7 @@ from lucifer.GUI.Bars import LuciferStatus, LuciferToolbar
 from lucifer.GUI.Console import LuciferConsole
 from lucifer.GUI.Utils import Closer
 from lucifer.GUI.Views import LuciferModulesView, LuciferVarView
+from lucifer import Settings
 
 
 class LuciferGui(tk.Frame, Closer, FontFind):
@@ -39,6 +40,8 @@ class LuciferGui(tk.Frame, Closer, FontFind):
         self.varView = LuciferVarView(self.luciferManager, self.parent, self)
 
         self.pack_all()
+
+        self.load_settings()
 
     def pack_all(self):
         self.statusFrame.pack(fill=tk.X, expand=False, side=tk.BOTTOM)
@@ -112,3 +115,16 @@ class LuciferGui(tk.Frame, Closer, FontFind):
                                      font=self.font)
         if self.toolbar.isSettingsOpen:
             self.toolbar.settings_window.update_font()
+
+    def load_settings(self):
+        if Settings.is_settings():
+            font_settings = Settings.get_setting("gui.font")
+            try:
+                self.font = (font_settings["name"], font_settings["size"])
+                self.update_font()
+            except TypeError as e:
+                print("\nProblem Loading 'settings.yml' file, Ignoring user settings.\n"
+                      "To Fix this problem please delete or edit the 'settings.yml' file!")
+        else:
+            Settings.create_settings(self.font)
+
