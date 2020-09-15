@@ -1,9 +1,8 @@
-from lucifer.ArgParse import LuciferParser
-from lucifer.Manager import LuciferManager
-from lucifer import Errors
-
 
 def start():
+    from lucifer.ArgParse import LuciferParser
+    from lucifer.Manager import LuciferManager
+    from lucifer import Errors
     try:
         luciferManager = LuciferManager()
         parser = LuciferParser(luciferManager, description="Lucifer")
