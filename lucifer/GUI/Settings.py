@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, font as tk_fonts
+
 import lucifer.Settings
 
 

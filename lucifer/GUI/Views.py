@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
-from lucifer.Utils import RetrieveShell
 from lucifer.Indexing import index_modules
+from lucifer.Utils import RetrieveShell
 
 
 class LuciferModulesView(tk.Frame):

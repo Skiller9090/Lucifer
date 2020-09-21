@@ -1,12 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
+
 from PIL import Image, ImageTk
+
+from lucifer import Settings
 from lucifer.Font import FontFind
 from lucifer.GUI.Bars import LuciferStatus, LuciferToolbar
 from lucifer.GUI.Console import LuciferConsole
 from lucifer.GUI.Utils import Closer
 from lucifer.GUI.Views import LuciferModulesView, LuciferVarView
-from lucifer import Settings
 
 
 class LuciferGui(tk.Frame, Closer, FontFind):
@@ -122,9 +124,8 @@ class LuciferGui(tk.Frame, Closer, FontFind):
             try:
                 self.font = (font_settings["name"], font_settings["size"])
                 self.update_font()
-            except TypeError as e:
+            except TypeError:
                 print("\nProblem Loading 'settings.yml' file, Ignoring user settings.\n"
                       "To Fix this problem please delete or edit the 'settings.yml' file!")
         else:
             Settings.create_settings(self.font)
-

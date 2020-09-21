@@ -1,4 +1,5 @@
 from subprocess import CalledProcessError
+
 import pybrake
 
 notifier = pybrake.Notifier(project_id=297340,
@@ -60,13 +61,9 @@ def checkErrors(e, ModuleError=False):
     #     print(e)
     #     print("If Error Continues Try Removing 'settings.yml'")
     except Exception as err:
+        notifier.notify(err)
         if not ModuleError:
-            notifier.notify(err)
             print("The following error has occurred" +
                   " and has been reported to the devs: ")
             raise err
-        else:
-            notifier.notify(err)
-            print("The Following Error Occurred In Current Module, Reported To Devs...\n"+str(err))
-
-
+        print("The Following Error Occurred In Current Module, Reported To Devs...\n"+str(err))
