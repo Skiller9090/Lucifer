@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, font as tk_fonts
 
+import lucifer.Settings
+
 
 class Settings(tk.Tk):
     def __init__(self, luciferManager, GUI, *args, **kwargs):
@@ -87,6 +89,8 @@ class LuciferSettingsExit(ttk.Frame):
         self.parent.view_settings.apply_view_settings()
         self.LuciferGui.font = self.parent.font_settings.current_font
         self.LuciferGui.update_font()
+        lucifer.Settings.update_setting("gui.font.name", self.LuciferGui.font[0])
+        lucifer.Settings.update_setting("gui.font.size", self.LuciferGui.font[1])
 
     def exit(self):
         self.parent.destroy()

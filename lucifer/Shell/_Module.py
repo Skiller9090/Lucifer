@@ -1,7 +1,8 @@
-import os
 import importlib
-from lucifer.Errors import checkErrors
+import os
 import re
+
+from lucifer.Errors import checkErrors
 
 
 def use_module(self, mod_path: list):
@@ -73,7 +74,7 @@ def run_module(self, *args, **kwargs):
         else:
             print("Please Select A Module First!")
     except Exception as e:
-        checkErrors(e)
+        checkErrors(e, ModuleError=True)
 
 
 def describe_module(self, *args, **kwargs):

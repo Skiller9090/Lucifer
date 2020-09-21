@@ -1,8 +1,8 @@
 import platform
 
+from LMI import Command
 from lucifer.Errors import ArgumentUndefinedError
 from modules.Module import BaseModule
-from LMI import Command
 
 
 class Module(BaseModule):

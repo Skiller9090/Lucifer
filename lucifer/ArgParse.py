@@ -136,7 +136,8 @@ class LuciferParser(argparse.ArgumentParser):
 
         else:
             self.luciferManager.colorama.init(autoreset=True)
-            print(self.luciferManager.termcolor.colored("Lucifer Prototype 2", "red", attrs=["bold", "underline"]))
+            print(self.luciferManager.termcolor.colored(self.luciferManager.version,
+                                                        "red", attrs=["bold", "underline"]))
             self.luciferManager.main_shell = Shell(self.luciferManager.next_shell_id, self.luciferManager)
             self.luciferManager.next_shell_id += 1
             self.luciferManager.main_shell.spawn()
