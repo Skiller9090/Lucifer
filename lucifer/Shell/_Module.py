@@ -1,7 +1,8 @@
-import os
 import importlib
-from lucifer.Errors import checkErrors
+import os
 import re
+
+from lucifer.Errors import checkErrors
 
 
 def use_module(self, mod_path: list):

@@ -1,8 +1,10 @@
-from yaml import load, dump, Loader, Dumper
-from lucifer.Errors import LuciferFileNotFound, LuciferSettingNotFound
-from functools import reduce
 import operator
 import os
+from functools import reduce
+
+from yaml import load, dump, Loader
+
+from lucifer.Errors import LuciferFileNotFound, LuciferSettingNotFound
 
 
 def is_settings():
@@ -39,9 +41,9 @@ def get_setting(setting):
     if settings:
         try:
             return reduce(operator.getitem, setting_split, settings)
-        except KeyError as e:
+        except KeyError:
             raise LuciferSettingNotFound(setting)
-        except TypeError as e:
+        except TypeError:
             raise LuciferSettingNotFound(setting)
     else:
         print("'settings.yml' file empty, ignoring user settings!")

@@ -1,7 +1,7 @@
-from libs.termcolor import colored
+from termcolor import colored
 
-help_menu = f"""{colored('Help Menu', 'green', attrs=['bold', 'underline'])}
-==========================================================================================
+help_menu = f"""{colored('Help Menu', 'red', attrs=['bold', 'underline'])}
+{colored("=========================================", "magenta")}
 {colored('help', 'blue')}                - Displays This Menu
 {colored('name', 'blue')}                - Shows name of current shell
 {colored('id', 'blue')}                  - Displays current shell's id

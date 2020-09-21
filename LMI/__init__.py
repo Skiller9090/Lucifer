@@ -3,3 +3,7 @@ LMI (Lucifer Module Interface) allows you to easily interface with different par
 Modules:
     - Command: Allows you to run system commands with varying levels of output
 """
+from .Interface import LuciferManagerInterface
+
+
+LMI = LuciferManagerInterface()

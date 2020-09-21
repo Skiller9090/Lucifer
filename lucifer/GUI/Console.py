@@ -4,21 +4,52 @@ import tkinter as tk
 from tkinter import ttk
 
 from lucifer.Errors import checkErrors
-from lucifer.GUI.Utils import ansi_escape
 from lucifer.Utils import RetrieveShell
 
 
 class TextRedirect(object):
     def __init__(self, widget, tag="stdout"):
-        """The Object to Redirect output into the tkinter console box"""
+        """The Object to Redirect output into the tkinter console box."""
+        self.all_tags = {
+            "30": "black",
+            "31": "red",
+            "32": "green",
+            "33": "yellow",
+            "34": "blue",
+            "35": "cyan",
+            "36": "magenta",
+            "37": "white",
+            "0": "stdout"
+        }
         self.widget = widget
+        self.esc_seq = u"\u001b["
         self.tag = tag
 
     def write(self, string):
         self.widget.configure(state="normal")
-        self.widget.insert("end", ansi_escape.sub("", string), (self.tag,))
+        if self.esc_seq in string:
+            tag_string = self.process_text(string)
+            for insert_tuple in tag_string:
+                tags = self.tag_map(insert_tuple[0])
+                self.widget.insert("end", (str(insert_tuple[1])), tags)
+        else:
+            self.widget.insert("end", string, (self.tag,))
         self.widget.configure(state="disabled")
         self.widget.see(tk.END)
+
+    def process_text(self, string):
+        to_process = string.split(self.esc_seq)
+        tag_string = []
+        while "" in to_process:
+            to_process.remove("")
+        for text in to_process:
+            if "m" in text:
+                m_ind = text.index("m")
+                if len(text) - 1 != m_ind:
+                    tag_string.append(([text[0:m_ind]], text[(m_ind + 1):]))
+            else:
+                tag_string.append(("stdout", text))
+        return tag_string
 
     def flush(self):
         pass
@@ -27,6 +58,16 @@ class TextRedirect(object):
         if self.tag == "stdout":
             return 1
         return 2
+
+    def tag_map(self, tag_ids):
+        tags = []
+        for tid in tag_ids:
+            mapped_tag = self.all_tags.get(tid)
+            if mapped_tag is None:
+                tags.append("stdout")
+            else:
+                tags.append(mapped_tag)
+        return tuple(tags)
 
 
 class LuciferConsole(tk.Frame, RetrieveShell):
@@ -42,7 +83,7 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         self.console_in = tk.StringVar()
         self.ConsoleBox = tk.Text(self, font=self.LuciferGui.font)
         self.ConsoleBox.configure(state="disabled")
-        self.ConsoleBox.tag_configure("stderr", foreground="#b22222")
+        self.add_colour_tags()
         self.command_history = []
         self.command_index = None
         self.opened_order = [0]
@@ -56,10 +97,22 @@ class LuciferConsole(tk.Frame, RetrieveShell):
         # self.luciferManager.stderr = TextRedirect(self.ConsoleBox, "stderr")
         sys.stdout = self.luciferManager.stdout
         sys.stderr = self.luciferManager.stderr
-        print(self.luciferManager.version)
+        print(self.luciferManager.termcolor.colored(self.luciferManager.version, "red", attrs=["bold", "underline"]))
         print(f"{self.shell.program_name}|" +
               f"{self.shell.module if '.py' not in self.shell.module else self.shell.module.replace('.py', '')}" +
               f"|{self.shell.id}> ", end="")
+
+    def add_colour_tags(self):
+        self.ConsoleBox.tag_configure("stderr", foreground="#b22222")
+        self.ConsoleBox.tag_configure("stdout", foreground="#FFFFFF")
+        self.ConsoleBox.tag_configure("black", foreground="#555555")
+        self.ConsoleBox.tag_configure("red", foreground="#FF5555")
+        self.ConsoleBox.tag_configure("green", foreground="#55FF55")
+        self.ConsoleBox.tag_configure("yellow", foreground="#FFFF55")
+        self.ConsoleBox.tag_configure("blue", foreground="#0D98BA")
+        self.ConsoleBox.tag_configure("cyan", foreground="#FF55FF")
+        self.ConsoleBox.tag_configure("magenta", foreground="#55FFFF")
+        self.ConsoleBox.tag_configure("white", foreground="#FFFFFF")
 
     def setup_console_widget(self):
         self.link_scrollbar()
