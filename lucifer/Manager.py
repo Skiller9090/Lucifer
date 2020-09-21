@@ -1,7 +1,7 @@
 import sys
 
-from libs import colorama
-from libs import termcolor
+import colorama
+import termcolor
 
 
 class LuciferManager:
@@ -20,6 +20,8 @@ class LuciferManager:
         self.gui_thread_free = True
         self.stdout = sys.stdout
         self.stderr = sys.stderr
+        self.isLMI = False
+        self.version = "Prototype 2"
 
     def end(self, *args, **kwargs):
         sys.stderr = sys.__stderr__
