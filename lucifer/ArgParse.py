@@ -3,7 +3,7 @@ import os
 import re as _re
 import sys
 
-from libs.ttkthemes import themed_tk
+from ttkthemes import themed_tk
 from .GUI.GUI import LuciferGui
 from .Manager import LuciferManager
 from .Shell import Shell

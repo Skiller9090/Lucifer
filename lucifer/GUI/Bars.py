@@ -17,7 +17,7 @@ class LuciferStatus(tk.Frame):
         self.status.set("Idle")
 
         style = ttk.Style()
-        style.configure("Label", foreground="white")
+        style.configure("Label", foreground="white", background='#%02x%02x%02x' % (56, 56, 72))
 
         self.statusWidget = ttk.Label(self, textvariable=self.status,
                                       relief=tk.SUNKEN, anchor=tk.E,
