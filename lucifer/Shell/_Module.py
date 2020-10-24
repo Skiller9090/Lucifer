@@ -48,7 +48,10 @@ def open_module(self, use_cache):
         to_import = to_import.split(".")
         pkg = to_import.pop(-1)
         to_import = ".".join(to_import)
+        importlib.invalidate_caches()
         imported_module = importlib.import_module(to_import + "." + pkg)
+        if self.module in self.loaded_modules.keys():
+            importlib.reload(imported_module)
         self.module_obj = imported_module.Module(self.luciferManager,
                                                  ShellRun=True)
         self.loaded_modules[self.module] = self.module_obj
