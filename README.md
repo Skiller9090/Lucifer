@@ -18,6 +18,16 @@
 
 `Initial Release`: 09/09/2020
 
+## Setup
+```shell
+git clone https://github.com/Skiller9090/Lucifer.git
+cd Lucifer
+pip install -r requirements.txt
+python main.py --help
+```
+If you want the cutting edge changes add `-d dev` to the end of `git clone https://github.com/Skiller9090/Lucifer.git`
+
+
 ## Commands
 | Command     | Description                                                            |
 | ----------- | ---------------------------------------------------------------------- |
