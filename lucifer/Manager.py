@@ -21,7 +21,7 @@ class LuciferManager:
         self.stdout = sys.stdout
         self.stderr = sys.stderr
         self.isLMI = False
-        self.version = "Prototype 2"
+        self.version = "Prototype 3"
 
     def end(self, *args, **kwargs):
         sys.stderr = sys.__stderr__
