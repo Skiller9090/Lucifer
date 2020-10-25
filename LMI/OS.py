@@ -38,7 +38,5 @@ def getOS(query=None):
     if query is not None:
         if query in OSInfo.keys():
             return 1, OSInfo[query]
-        else:
-            return 0, "Query Not Found"
-    else:
-        return 1, OSInfo
+        return 0, "Query Not Found"
+    return 1, OSInfo
