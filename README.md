@@ -77,9 +77,17 @@
   - `set_name <name>` - set the name of the current shell
   - `set_name_id <id> <name>` - set the name of the shell specified by <id>
 
+## Examples
 
-  
-  
+### Settings Variables
+![example two](./assets/examples/two.png)
+
+### Running Module
+![example one](./assets/examples/one.png)
+
+### Settings
+![example three](./assets/examples/three.png)  
+
 
 
 
