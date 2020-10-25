@@ -25,7 +25,7 @@ cd Lucifer
 pip install -r requirements.txt
 python main.py --help
 ```
-If you want the cutting edge changes add `-d dev` to the end of `git clone https://github.com/Skiller9090/Lucifer.git`
+If you want the cutting edge changes add `-b dev` to the end of `git clone https://github.com/Skiller9090/Lucifer.git`
 
 ## Commands
 | Command            | Description                                                             |
