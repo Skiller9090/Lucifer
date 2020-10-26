@@ -39,9 +39,10 @@ class LuciferModulesView(tk.Frame):
 
     def run_Module(self, event, *args, **kwargs):
         selected = self.moduleView.selection()
-        if "M" == selected[0][0]:
-            path = self.moduleView.item(selected[0])["values"][0]
-            self.luciferManager.gui.console.console_in.set(f'use {path}')
+        if selected:
+            if "M" == selected[0][0]:
+                path = self.moduleView.item(selected[0])["values"][0]
+                self.luciferManager.gui.console.console_in.set(f'use {path}')
 
     def add_Modules(self):
         _, modules, directories = index_modules()

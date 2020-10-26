@@ -17,7 +17,7 @@ def getOS(query=None):
             "python_branch": platform.python_branch(),
             "python_implementation": platform.python_implementation(),
             "python_revision": platform.python_revision(),
-            "python_version": platform.python_revision(),
+            "python_version": platform.python_version(),
             "python_version_tuple": platform.python_version_tuple(),
             "release": platform.release(),
             "system": platform.system(),
