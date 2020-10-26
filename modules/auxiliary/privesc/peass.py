@@ -38,10 +38,10 @@ class Module(BaseModule):
             raise IncompatibleSystemError("Unsupported OS or Architecture")
 
     def set_vars(self):
-        new_vars = {"output_file": "",
-                    "write_mode": "w",
-                    "args": ""}
-        return new_vars
+        default_vars = {"output_file": "",
+                        "write_mode": "w",
+                        "args": ""}
+        return default_vars
 
     def get_description(self):
         desc = """Privilege Escalation tester script for Windows and Linux"""

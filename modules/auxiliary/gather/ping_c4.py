@@ -15,10 +15,10 @@ class Module(BaseModule):
         return response
 
     def set_vars(self):
-        new_vars = {
+        default_vars = {
             "hostname": "www.google.com"
         }
-        return new_vars
+        return default_vars
 
     def get_description(self):
         desc = """Ping a host to check if it is up"""

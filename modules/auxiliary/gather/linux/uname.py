@@ -23,10 +23,10 @@ class Module(BaseModule):
             return get_uname(args)
 
     def set_vars(self):
-        new_vars = {
+        default_vars = {
             "args": "-a"
         }
-        return new_vars
+        return default_vars
 
     def get_description(self):
         desc = """Gets the output of uname on a unix system with any arguments supplied in the args variable"""
