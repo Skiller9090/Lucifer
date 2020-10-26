@@ -1,6 +1,6 @@
 # Lucifer
 
-[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
+[![ForTheBadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://GitHub.com/Skiller9090/)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Skiller9090/Lucifer?color=CC0000&style=for-the-badge)]()
 
@@ -40,6 +40,7 @@ If you want the cutting edge changes add `-d dev` to the end of `git clone https
 |description         | Displays description of the module loaded                               |
 |auto_vars           | Displays is auto_vars is True or False for current shell                |  
 |change_auto_vars    | Changes the auto_var options for one shell, all shells or future shells | 
+|reindex             | Re-indexes all modules, allows for dynamic additions of modules         |
 |use                 | Move into a module, EX: use <module>                                    |
 |run                 | Runs the current module, can also use exploit to do the same            | 
 |spawn_shell         | Spawns a alternative shell                                              |

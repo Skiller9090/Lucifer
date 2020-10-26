@@ -8,6 +8,8 @@ class BaseModule(RetrieveShell):   # All Modules should inherit from BaseModule 
         self.isShellRun = ShellRun
         self.get_shell()
         self.setup()
+        self.desc = ""
+        self.default_vars = {}
 
     def setup(self):  # This is a setup hook which will be run on module load
         pass
@@ -17,10 +19,10 @@ class BaseModule(RetrieveShell):   # All Modules should inherit from BaseModule 
             action()
 
     def set_vars(self):  # This is set_vars hook and will return the vars to set when the command 'set_vars' is run
-        new_vars = {
+        self.default_vars = {
         }
-        return new_vars
+        return self.default_vars
 
     def get_description(self):   # This is the description hook, returns a description on command 'description'
-        desc = """This Module Has No Description!"""
-        return desc
+        self.desc = """This Module Has No Description!"""
+        return self.desc

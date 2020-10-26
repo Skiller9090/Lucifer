@@ -45,7 +45,8 @@ class LuciferModulesView(tk.Frame):
                 self.luciferManager.gui.console.console_in.set(f'use {path}')
 
     def add_Modules(self):
-        _, modules, directories = index_modules()
+        self.moduleView.delete(*self.moduleView.get_children())
+        _, modules, directories = self.luciferManager.module_cache
         directories.sort()
 
         class Folder:

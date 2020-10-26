@@ -125,3 +125,9 @@ def use(self, com_args: list):
             self.use_module(module_path)
     else:
         print("Please add valid module path")
+
+
+def reindex_modules(self, _: list):
+    self.luciferManager.index_modules(re=True)
+    if self.luciferManager.gui is not None:
+        self.luciferManager.gui.moduleView.add_Modules()
