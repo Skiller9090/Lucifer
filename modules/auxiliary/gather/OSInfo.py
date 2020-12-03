@@ -21,5 +21,5 @@ class Module(BaseModule):
         return default_vars
 
     def get_description(self):
-        desc = """Returns all OS infomation"""
+        desc = """Returns all OS information"""
         return desc

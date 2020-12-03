@@ -113,7 +113,8 @@ class CapitalisedHelpFormatter(argparse.HelpFormatter):
 
 class LuciferParser(argparse.ArgumentParser):
     def __init__(self, lucifer_manager: LuciferManager, *args, **kwargs):
-        super().__init__(args, kwargs)
+        super().__init__(*args, **kwargs)
+        self.args = None
         self.luciferManager = lucifer_manager
         self.formatter_class = CapitalisedHelpFormatter
 
