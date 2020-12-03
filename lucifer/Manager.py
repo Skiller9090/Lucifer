@@ -10,6 +10,7 @@ class LuciferManager:
     def __init__(self, auto_vars=False):
         self.main_shell = None
         self.alternative_shells = []
+        self.plugin_aliases = {}
         self.next_shell_id = 0
         self.shell_recur = 0
         self.colorama = colorama
@@ -54,3 +55,8 @@ class LuciferManager:
         if re:
             result = "re"+result
         print(result.title())
+
+    def add_command_all(self, name, function):
+        self.main_shell.alias[name] = function
+        for shell in self.alternative_shells:
+            shell.alias[name] = function

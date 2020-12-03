@@ -13,7 +13,7 @@ def get_uname(arg):
 class Module(BaseModule):
     def run(self):
         args = ["-a"]
-        if os.name == "nt":
+        if "nt" in os.name.lower():
             raise IncompatibleSystemError("Not Unix")
         if "args" in self.shell.vars.keys():
             args = self.shell.vars["args"].split(" ")

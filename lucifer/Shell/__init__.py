@@ -57,5 +57,3 @@ class Shell:
         self.luciferManager.shell_recur += 1
 
         self.Shell_Class = Shell
-
-

@@ -1,5 +1,6 @@
 from . import LMI
 import platform
+import os
 
 
 def getLMAddress():
@@ -40,3 +41,7 @@ def getOS(query=None):
             return 1, OSInfo[query]
         return 0, "Query Not Found"
     return 1, OSInfo
+
+
+def scan_dir(directory):
+    return os.scandir(directory)

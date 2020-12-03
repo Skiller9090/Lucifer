@@ -1,4 +1,3 @@
-
 def start():
     from lucifer.ArgParse import LuciferParser
     from lucifer.Manager import LuciferManager
@@ -15,5 +14,10 @@ def start():
         parser.args = parser.parse_args()
 
         parser.run()
+
     except Exception as e:
         Errors.checkErrors(e)
+
+
+
+
