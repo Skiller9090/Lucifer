@@ -1,6 +1,4 @@
-import platform
-
-from LMI import Command
+from LMI import Command, OS
 from lucifer.Errors import ArgumentUndefinedError
 from modules.Module import BaseModule
 
@@ -15,10 +13,10 @@ class Module(BaseModule):
         return response
 
     def set_vars(self):
-        new_vars = {
+        default_vars = {
             "hostname": "www.google.com"
         }
-        return new_vars
+        return default_vars
 
     def get_description(self):
         desc = """Ping a host to check if it is up"""
@@ -28,7 +26,7 @@ class Module(BaseModule):
         if "://" in host:
             host = host.split("://")[1]
         command = ["ping"]
-        if platform.system() != "Windows":
+        if OS.get_os_type() != "windows":
             command.append("-c")
             command.append("4")
         command.append(host)

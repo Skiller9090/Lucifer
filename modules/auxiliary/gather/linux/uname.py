@@ -13,7 +13,7 @@ def get_uname(arg):
 class Module(BaseModule):
     def run(self):
         args = ["-a"]
-        if os.name == "nt":
+        if "nt" in os.name.lower():
             raise IncompatibleSystemError("Not Unix")
         if "args" in self.shell.vars.keys():
             args = self.shell.vars["args"].split(" ")
@@ -23,10 +23,10 @@ class Module(BaseModule):
             return get_uname(args)
 
     def set_vars(self):
-        new_vars = {
+        default_vars = {
             "args": "-a"
         }
-        return new_vars
+        return default_vars
 
     def get_description(self):
         desc = """Gets the output of uname on a unix system with any arguments supplied in the args variable"""

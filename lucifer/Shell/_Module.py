@@ -49,12 +49,24 @@ def open_module(self, use_cache):
         pkg = to_import.pop(-1)
         to_import = ".".join(to_import)
         importlib.invalidate_caches()
-        imported_module = importlib.import_module(to_import + "." + pkg)
-        if self.module in self.loaded_modules.keys():
-            importlib.reload(imported_module)
-        self.module_obj = imported_module.Module(self.luciferManager,
-                                                 ShellRun=True)
-        self.loaded_modules[self.module] = self.module_obj
+        try:
+            imported_module = importlib.import_module(to_import + "." + pkg)
+            if self.module in self.loaded_modules.keys():
+                importlib.reload(imported_module)
+            self.module_obj = imported_module.Module(self.luciferManager,
+                                                     ShellRun=True)
+            self.loaded_modules[self.module] = self.module_obj
+        except ModuleNotFoundError as e:
+            handle_module_error(e, pkg, self)
+        except AttributeError as e:
+            handle_module_error(e, pkg, self)
+
+
+def handle_module_error(e, pkg, self):
+    error = f'Error: Cant find attribute Module in {pkg}'
+    self.module_obj = None
+    self.module = ""
+    print(f"{self.luciferManager.termcolor.colored(error, 'red')}")
 
 
 def use_arg_setup(mod_path, self):
@@ -113,3 +125,9 @@ def use(self, com_args: list):
             self.use_module(module_path)
     else:
         print("Please add valid module path")
+
+
+def reindex_modules(self, _: list):
+    self.luciferManager.index_modules(re=True)
+    if self.luciferManager.gui is not None:
+        self.luciferManager.gui.moduleView.add_Modules()
