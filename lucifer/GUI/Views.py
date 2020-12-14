@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 
-from lucifer.Indexing import index_modules
 from lucifer.Utils import RetrieveShell
 
 
@@ -39,12 +38,14 @@ class LuciferModulesView(tk.Frame):
 
     def run_Module(self, event, *args, **kwargs):
         selected = self.moduleView.selection()
-        if "M" == selected[0][0]:
-            path = self.moduleView.item(selected[0])["values"][0]
-            self.luciferManager.gui.console.console_in.set(f'use {path}')
+        if selected:
+            if "M" == selected[0][0]:
+                path = self.moduleView.item(selected[0])["values"][0]
+                self.luciferManager.gui.console.console_in.set(f'use {path}')
 
     def add_Modules(self):
-        _, modules, directories = index_modules()
+        self.moduleView.delete(*self.moduleView.get_children())
+        _, modules, directories = self.luciferManager.module_cache
         directories.sort()
 
         class Folder:

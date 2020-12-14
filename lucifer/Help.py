@@ -15,6 +15,7 @@ help_menu = f"""{colored('Help Menu', 'red', attrs=['bold', 'underline'])}
 current shell 
 {colored('change_auto_vars', 'blue')}    - Changes the auto_var options for one shell, \
 all shells or future shells 
+{colored('reindex', 'blue')}                - Reindex all modules, allowing dynamic module changing
 {colored('use', 'blue')}                 - Move into a module, EX: use <module>
 {colored('run', 'blue')}                 - Runs the current module, can also use \
 exploit to do the same 

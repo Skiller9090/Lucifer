@@ -34,3 +34,12 @@ def run_command(command):
 def async_run_command(command):
     interface = subprocess.Popen(command, stdout=subprocess.PIPE)
     return interface
+
+
+def tee_or_return_output(condition, args):
+    if condition:
+        out = tee_output(args)
+    else:
+        out = return_output(args)
+    out = out.strip()
+    return out

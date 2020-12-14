@@ -1,5 +1,4 @@
 """The Shell package contains the code to operate the console."""
-import lucifer.Indexing as Indexing
 from lucifer.Help import help_menu
 
 
@@ -8,8 +7,8 @@ class Shell:
     from ._Info import display_help, print_name, print_id, print_auto_vars
     from ._Spawn import spawn_shell, spawn
     from ._Options import show, show_options, command_set, change_auto_set_vars
-    from ._Module import describe_module, run_module, use_module, set_vars, use
-    from ._Shell import open_shell, show_shells, set_name, command_name_id,\
+    from ._Module import describe_module, run_module, use_module, set_vars, use, reindex_modules
+    from ._Shell import open_shell, show_shells, set_name, command_name_id, \
         clear_shell, background_shell
 
     def __init__(self, ID, lucifer_manager):
@@ -52,16 +51,9 @@ class Shell:
             "auto_vars": self.print_auto_vars,
             "change_auto_vars": self.change_auto_set_vars,
             "auto_var": self.print_auto_vars,
-            "change_auto_var": self.change_auto_set_vars
+            "change_auto_var": self.change_auto_set_vars,
+            "reindex": self.reindex_modules
         }
-        self.module_cache = None
         self.luciferManager.shell_recur += 1
-        self.module_amount = 0
-        self.index_modules()
-        self.Shell_Class = Shell
 
-    def index_modules(self):
-        print("Indexing Modules...")
-        self.module_cache = Indexing.index_modules()
-        self.module_amount = len(self.module_cache[1].keys())
-        print(f"Indexing Complete, Found {self.module_amount} Modules")
+        self.Shell_Class = Shell
