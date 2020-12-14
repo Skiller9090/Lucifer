@@ -25,8 +25,8 @@ class Module(BaseModule):
         return self.default_vars
 
     def get_description(self):
-        self.desc = """This module will retrieve the product key from the windows registry on 8 and up and 
-attempts this in three different way: XP, IE and WPA!"""
+        self.desc = """This module will retrieve the product key from the windows registry on 8 and up and
+ attempts this in three different way: XP, IE and WPA!"""
         return self.desc
 
     def getAllKeys(self):
@@ -65,7 +65,7 @@ attempts this in three different way: XP, IE and WPA!"""
             key = _winreg.OpenKey(
                 _winreg.HKEY_LOCAL_MACHINE, key)
 
-            value, val_type = _winreg.QueryValueEx(key, value)
+            value, _ = _winreg.QueryValueEx(key, value)
         except Exception as e:
             _ = e  # VOID for IDE niceness
             return "Error"

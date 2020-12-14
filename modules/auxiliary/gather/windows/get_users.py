@@ -51,13 +51,14 @@ class Module(BaseModule):
             raise IncompatibleSystemError("System Is Not Running Windows")
 
     @staticmethod
-    def get_command_out( args, command):
+    def get_command_out(args, command):
         out = []
         for item in reversed(command):
             args.insert(0, item)
         for i in range(2):
             out.append(return_output(args))
-            args.append("/domain") if i == 0 else None
+            if i == 0:
+                args.append("/domain")
         return out
 
     def get_vars(self):

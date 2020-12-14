@@ -23,8 +23,7 @@ class Module(BaseModule):
             out = Command.tee_or_return_output(self.isShellRun, args)
             write_file_exists(output_file, out, write_mode)
             return out
-        else:
-            raise IncompatibleSystemError("Unsupported OS or Architecture")
+        raise IncompatibleSystemError("Unsupported OS or Architecture")
 
     def set_vars(self):
         default_vars = {"output_file": "",

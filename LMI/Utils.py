@@ -2,12 +2,10 @@ def check_int(s):
     if s.count(".") == 1:
         if not (s.split(".")[1].count("0") == len(s.split(".")[1])):
             return False
-        else:
-            return check_int_quick(s.split(".")[0])
-    elif s.count(".") > 1:
+        return check_int_quick(s.split(".")[0])
+    if s.count(".") > 1:
         return False
-    else:
-        return check_int_quick(s)
+    return check_int_quick(s)
 
 
 def check_int_quick(s):
