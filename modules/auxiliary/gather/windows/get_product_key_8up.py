@@ -1,7 +1,7 @@
 import winreg as _winreg
 import os
+from LMI.Table import generate_table
 from lucifer.Errors import IncompatibleSystemError
-
 from modules.Module import BaseModule
 
 
@@ -11,7 +11,13 @@ class Module(BaseModule):
             raise IncompatibleSystemError("Not Windows...")
         keys = self.getAllKeys()
         if self.isShellRun:
-            print(f"XP: {keys['XP']}\nIE: {keys['IE']}\nWPA: {keys['WPA']}\n")
+            print(generate_table([
+                ['XP', keys['XP']],
+                ['IE', keys['IE']],
+                ['WPA', keys['WPA']]
+            ],
+                title="Product Keys",
+                headings=['Type', 'Key']))
             return
         return keys
 
@@ -66,10 +72,10 @@ attempts this in three different way: XP, IE and WPA!"""
         return self.DecodeKey(list(value))
 
     def GetIEKey(self):
-        return self.GetKeyFromRegLoc("SOFTWARE\Microsoft\Internet Explorer\Registration")
+        return self.GetKeyFromRegLoc(r"SOFTWARE\Microsoft\Internet Explorer\Registration")
 
     def GetXPKey(self):
-        return self.GetKeyFromRegLoc("SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+        return self.GetKeyFromRegLoc(r"SOFTWARE\Microsoft\Windows NT\CurrentVersion")
 
     def GetWPAKey(self):
-        return self.GetKeyFromRegLoc("SYSTEM\WPA\Key-4F3B2RFXKC9C637882MBM")
+        return self.GetKeyFromRegLoc(r"SYSTEM\WPA\Key-4F3B2RFXKC9C637882MBM")
