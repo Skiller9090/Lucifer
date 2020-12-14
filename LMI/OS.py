@@ -1,13 +1,13 @@
 from . import LMI
-import platform
 import os
+import platform
 
 
 def getLMAddress():
     return hex(id(LMI.luciferManager))
 
 
-def getOS(query=None):
+def get_OS(query=None):
     if "OSInfo" not in LMI.cache:
         OSInfo = {
             "machine": platform.machine(),
@@ -25,9 +25,9 @@ def getOS(query=None):
             "version": platform.version(),
             "uname": platform.uname()
         }
-        LMI.cache["OSInfo"] = OSInfo
+        LMI.cache["OSInfo"] = OSInfo.copy()
     else:
-        OSInfo = LMI.cache["OSInfo"]
+        OSInfo = LMI.cache["OSInfo"].copy()
     if "java" in OSInfo["system"].lower():
         OSInfo["java_version"] = platform.java_ver()
     elif "windows" in OSInfo["system"].lower():
@@ -45,3 +45,19 @@ def getOS(query=None):
 
 def scan_dir(directory):
     return os.scandir(directory)
+
+
+def get_os_type():
+    return platform.system().lower()
+
+
+def get_os_version():
+    return platform.release(), platform.version()
+
+
+def path_exists(path):
+    return os.path.exists(path)
+
+
+def absolute_path(path):
+    return os.path.abspath(path)

@@ -1,6 +1,4 @@
-import platform
-
-from LMI import Command
+from LMI import Command, OS
 from lucifer.Errors import ArgumentUndefinedError
 from modules.Module import BaseModule
 
@@ -28,7 +26,7 @@ class Module(BaseModule):
         if "://" in host:
             host = host.split("://")[1]
         command = ["ping"]
-        if platform.system() != "Windows":
+        if OS.get_os_type() != "windows":
             command.append("-c")
             command.append("4")
         command.append(host)
