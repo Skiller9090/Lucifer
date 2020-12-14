@@ -17,7 +17,3 @@ def start():
 
     except Exception as e:
         Errors.checkErrors(e)
-
-
-
-
