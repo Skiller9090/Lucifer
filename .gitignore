@@ -6,3 +6,4 @@ venv/
 Venv/
 .venv
 settings.yml
+.vscode/

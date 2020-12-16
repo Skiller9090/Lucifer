@@ -56,10 +56,9 @@ def checkErrors(e, ModuleError=False):
         print(e)
     except LuciferFileNotFound:
         print(e)
-        raise e
-    # except LuciferSettingNotFound:
-    #     print(e)
-    #     print("If Error Continues Try Removing 'settings.yml'")
+    except LuciferSettingNotFound:
+        print(e)
+        print("If Error Continues Try Removing 'settings.yml'")
     except Exception as err:
         notifier.notify(err)
         if not ModuleError:
