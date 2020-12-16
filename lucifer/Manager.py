@@ -24,7 +24,8 @@ class LuciferManager:
         self.stdout = sys.stdout
         self.stderr = sys.stderr
         self.isLMI = False
-        self.version = "Prototype 3"
+        self.version = "Prototype 4"
+        self.numeric_version = (0, 4)
         self.module_cache = None
         self.module_amount = 0
         self.index_modules()
