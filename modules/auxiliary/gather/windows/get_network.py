@@ -41,6 +41,8 @@ class Module(BaseModule):
             if value[-1] == ":" and lines[i + 1] == "" and value[-2] != " ":
                 interfaces.append(lines[last:i])
                 last = i
+        else:
+            interfaces.append(lines[last:])
         interfaces = interfaces[1:]
         return interfaces
 

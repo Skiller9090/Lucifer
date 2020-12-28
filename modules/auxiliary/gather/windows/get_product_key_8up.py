@@ -17,7 +17,7 @@ class Module(BaseModule):
             ],
                 title="Product Keys",
                 headings=['Type', 'Key']))
-            return
+            return keys
         return keys
 
     def set_vars(self):

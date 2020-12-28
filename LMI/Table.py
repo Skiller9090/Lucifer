@@ -12,7 +12,7 @@ def generate_table(array2d, title="", headings=None):
     for line in array2d:
         max_cols = max(len(line), max_cols)
         for cell in line:
-            cellLines = cell.split("\n")
+            cellLines = str(cell).split("\n")
             for string in cellLines:
                 max_char = max(len(str(string)), max_char)
     title_total = (max_char * max_cols) + (max_cols - 1) - len(str(title))
@@ -33,6 +33,7 @@ def generate_table(array2d, title="", headings=None):
         depth = 1
         dataCells = []
         for data in line:
+            data = str(data)
             nl_count = data.count("\n") + 1
             depth = nl_count if nl_count > depth else depth
             dataCells.append(data.split("\n"))
@@ -51,3 +52,27 @@ def generate_table(array2d, title="", headings=None):
             if i != len(array2d) - 1 else "\n"
     out += f'└{"┴".join(([dash_column] * max_cols))}┘\n'
     return out
+
+
+def dictionary_max_transformation(dictionary, max_chars=30):
+    to_transform = dictionary.copy()
+    for k, v in zip(to_transform.keys(), to_transform.values()):
+        eachPiece = v.split("\n")
+        new_set = []
+        for q in eachPiece:
+            current = 0
+            words = q.split(" ")
+            split_cell = []
+            temp = []
+            for word in words:
+                current += len(word)
+                if current >= max_chars:
+                    split_cell.append(" ".join(temp))
+                    temp = [word]
+                    current = len(word)
+                else:
+                    temp.append(word)
+            split_cell.append(" ".join(temp))
+            new_set.append("\n".join(split_cell))
+        to_transform[k] = "\n".join(new_set).strip("\n")
+    return to_transform
