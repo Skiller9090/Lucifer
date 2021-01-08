@@ -10,6 +10,7 @@ class Shell:
     from ._Module import describe_module, run_module, use_module, set_vars, use, reindex_modules
     from ._Shell import open_shell, show_shells, set_name, command_name_id, \
         clear_shell, background_shell
+    from ._Networking import listServers, killServer
 
     def __init__(self, ID, lucifer_manager):
         """Per Shell Setup."""
@@ -52,7 +53,9 @@ class Shell:
             "change_auto_vars": self.change_auto_set_vars,
             "auto_var": self.print_auto_vars,
             "change_auto_var": self.change_auto_set_vars,
-            "reindex": self.reindex_modules
+            "reindex": self.reindex_modules,
+            "show_servers": self.listServers,
+            "kill_sever": self.killServer
         }
         self.luciferManager.shell_recur += 1
 
