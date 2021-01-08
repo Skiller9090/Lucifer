@@ -4,6 +4,7 @@ import re as _re
 import sys
 
 from ttkthemes import themed_tk
+
 from .GUI.GUI import LuciferGui
 from .Manager import LuciferManager
 from .Shell import Shell
@@ -77,7 +78,6 @@ class CapitalisedHelpFormatter(argparse.HelpFormatter):
         text_width = self._width - self._current_indent
 
         if len(prefix) + len(usage) > text_width:
-
             # break usage into wrappable parts
             part_regexp = r'\(.*?\)+|\[.*?\]+|\S+'
             opt_usage = formats(optionals, groups)

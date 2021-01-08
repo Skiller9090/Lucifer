@@ -1,9 +1,12 @@
-import lucifer.Indexing as Indexing
-
 import sys
+import time
+
 import colorama
 import termcolor
-import time
+
+import lucifer.Indexing as Indexing
+from lucifer.Networking.Connections import Connections
+from lucifer.Networking.Servers import Servers
 
 
 class LuciferManager:
@@ -29,6 +32,8 @@ class LuciferManager:
         self.module_cache = None
         self.module_amount = 0
         self.index_modules()
+        self.connections = Connections()
+        self.servers = Servers()
 
     def end(self, *args, **kwargs):
         sys.stderr = sys.__stderr__
@@ -50,11 +55,11 @@ class LuciferManager:
         start_clock = time.perf_counter_ns()
         self.module_cache = Indexing.index_modules()
         end_clock = time.perf_counter_ns()
-        print(f"Indexing Of Modules Took: {(end_clock-start_clock)/1000000} ms")
+        print(f"Indexing Of Modules Took: {(end_clock - start_clock) / 1000000} ms")
         self.module_amount = len(self.module_cache[1].keys())
         result = f"indexing Complete, Found {self.module_amount} Modules"
         if re:
-            result = "re"+result
+            result = "re" + result
         print(result.title())
 
     def add_command_all(self, name, function):

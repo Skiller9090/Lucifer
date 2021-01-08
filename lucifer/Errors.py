@@ -65,4 +65,4 @@ def checkErrors(e, ModuleError=False):
             print("The following error has occurred" +
                   " and has been reported to the devs: ")
             raise err
-        print("The Following Error Occurred In Current Module, Reported To Devs...\n"+str(err))
+        print("The Following Error Occurred In Current Module, Reported To Devs...\n" + str(err))
