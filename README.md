@@ -121,3 +121,41 @@ If you want the cutting edge changes add `-d dev` to the end of `git clone https
 
 ### Settings
 ![example three](./assets/examples/three.png)  
+
+## Versioning
+The standard of versioning on this project is:  
+
+####MAJOR.MINOR.PATCH.STAGE.BUILD  
+
+- Major:
+  - incremented when either there has been a significant amount of new features since the start of the major or if there
+  is a change which is so big that is can cause compatibility issues (Major of 0 if very unstable
+  - Could cause incompatibility issues
+- Minor:
+  - incremented when a new feature or feature-set is added to the project
+  - should not cause incompatibility errors due to only additions made
+- Patch:  
+  - incremented on bugfixes or if feature is so small that it is worth incrementing minor
+  - very low risk of incompatibility error
+- Stage:
+  - The stage of current MAJOR.MINOR.PATCH BUILD, either alpha, beta, release candidate or release
+  - Indicates how far through development the new MAJOR.MINOR.PATCH is
+  - Stage number to name translation:
+      - 0 => beta (b)
+      - 1 => alpha (a)
+      - 2 => release candidate (rc)
+      - 3 => release (r)
+- Build:
+  - this should be incremented on every change made to the code, even on a one character change
+
+This version structure can be stored and displayed in a few ways:
+  -  The best way to store the data within code is via a tuple such as:
+     - (Major, Minor, Patch, Stage, Build)
+        - Example is: (1, 4, 1, 2, 331)
+  -  The long display would be:
+     - `{stage} {major}.{minor}.{patch} Build {build}`
+        - Example is: Alpha 1.4.1 Build 331
+  -  The short display would be:
+     - `{major}.{minor}.{patch}{stage}{build}`
+        - Example is: 1.4.1a331
+  

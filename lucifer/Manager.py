@@ -27,8 +27,19 @@ class LuciferManager:
         self.stdout = sys.stdout
         self.stderr = sys.stderr
         self.isLMI = False
-        self.version = "Prototype 4"
-        self.numeric_version = (0, 4)
+        # MAJOR.MINOR.PATCH.STAGE.BUILD VERSIONING
+        self.numeric_version = (0, 4, 0, 1, 3)
+        self.numeric_stage = self.numeric_version[3]
+        self.stage = ["Alpha", "Beta", "RC", "Release"][self.numeric_version[3]]
+        self.shortStage = ["a", "b", "rc", "r"][self.numeric_version[3]]
+        self.major = self.numeric_version[0]
+        self.minor = self.numeric_version[1]
+        self.patch = self.numeric_version[2]
+        self.build = self.numeric_version[4]
+        self.version = f"{self.stage} {self.major}.{self.minor}.{self.patch} " \
+                       f"Build {self.build} " \
+                       f"({self.major}.{self.minor}.{self.patch}{self.shortStage}" \
+                       f"{self.build})"
         self.module_cache = None
         self.module_amount = 0
         self.index_modules()
