@@ -24,9 +24,7 @@ class Module(BaseModule):
                                      title=name,
                                      headings=["Key", "Value"]))
                 interface["name"] = name
-            return interface_dictionaries
-        else:
-            return interface_dictionaries
+        return interface_dictionaries
 
     @staticmethod
     def output_to_interfaces(out):
@@ -41,8 +39,7 @@ class Module(BaseModule):
             if value[-1] == ":" and lines[i + 1] == "" and value[-2] != " ":
                 interfaces.append(lines[last:i])
                 last = i
-        else:
-            interfaces.append(lines[last:])
+        interfaces.append(lines[last:])
         interfaces = interfaces[1:]
         return interfaces
 
@@ -52,29 +49,38 @@ class Module(BaseModule):
         for i in interfaces:
             while "" in i:
                 i.remove("")
-            interface = {"name": i[0][:-1]}
-            if len(i) > 1:
-                prevS = None
-                for setting in i[1:]:
-                    split = setting.split(":")
-                    if len(split) > 1:
-                        k, v = split[0].replace(" .", "").strip(), ":".join(split[1:]).strip()
-                        placed = False
-                        i = 1
-                        check = k
-                        while not placed:
-                            if check not in interface.keys():
-                                interface[check] = v
-                                prevS = check
-                                placed = True
-                            else:
-                                i += 1
-                                check = f"{k} {i}"
-                    else:
-                        if prevS is not None:
-                            interface[prevS] += "\n" + split[0]
+            interface = Module.create_interface_for_dict(i)
             interface_dictionaries.append(interface)
         return interface_dictionaries
+
+    @staticmethod
+    def create_interface_for_dict(i):
+        interface = {"name": i[0][:-1]}
+        if len(i) > 1:
+            prevS = None
+            for setting in i[1:]:
+                Module.process_setting(interface, prevS, setting)
+        return interface
+
+    @staticmethod
+    def process_setting(interface, prevS, setting):
+        split = setting.split(":")
+        if len(split) > 1:
+            k, v = split[0].replace(" .", "").strip(), ":".join(split[1:]).strip()
+            placed = False
+            i = 1
+            check = k
+            while not placed:
+                if check not in interface.keys():
+                    interface[check] = v
+                    prevS = check
+                    placed = True
+                else:
+                    i += 1
+                    check = f"{k} {i}"
+        else:
+            if prevS is not None:
+                interface[prevS] += "\n" + split[0]
 
     @staticmethod
     def get_command_out(args, command):

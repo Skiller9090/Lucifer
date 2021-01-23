@@ -1,5 +1,14 @@
 class Servers:
+    """
+    This class keep track of all server Objects and their IDS.
+    """
     def __init__(self):
+        """
+        Initializes all variables needed for data storage of servers
+
+        nextID stores the next available id to give out to next server instance.
+        serverObjects is a dictionary of keys which are ids and values which are serverObjects.
+        """
         self.nextID = 0
         self.serverObjects = {}
 
