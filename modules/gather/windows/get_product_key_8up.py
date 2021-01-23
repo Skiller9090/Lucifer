@@ -1,14 +1,12 @@
 import winreg as _winreg
-import os
+from LMI import OS
 from LMI.Table import generate_table
-from lucifer.Errors import IncompatibleSystemError
 from modules.Module import BaseModule
 
 
 class Module(BaseModule):
     def run(self):
-        if "nt" not in os.name.lower():
-            raise IncompatibleSystemError("Not Windows...")
+        OS.check_os("windows")
         keys = self.getAllKeys()
         if self.isShellRun:
             print(generate_table([
@@ -18,7 +16,7 @@ class Module(BaseModule):
             ],
                 title="Product Keys",
                 headings=['Type', 'Key']))
-            return
+            return keys
         return keys
 
     def set_vars(self):

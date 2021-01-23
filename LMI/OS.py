@@ -1,6 +1,7 @@
 from . import LMI
 import os
 import platform
+from lucifer.Errors import IncompatibleSystemError
 
 
 def getLMAddress():
@@ -61,3 +62,12 @@ def path_exists(path):
 
 def absolute_path(path):
     return os.path.abspath(path)
+
+
+def check_os(os):
+    if isinstance(os, str):
+        os = [os]
+    os = [o.lower() for o in os]
+    platform_name = get_os_type()
+    if platform_name not in os:
+        raise IncompatibleSystemError(f"System Is Not Running Any Of These: {' | '.join(os)}")
