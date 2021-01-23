@@ -3,7 +3,6 @@ from LMI.File import write_file_exists
 from LMI.Table import generate_table
 from LMI.Utils import check_int
 from modules.Module import BaseModule
-from lucifer.Errors import IncompatibleSystemError
 from LMI import OS
 from termcolor import colored
 
@@ -11,7 +10,7 @@ from termcolor import colored
 class Module(BaseModule):
     def run(self):
         command = ["net", "user"]
-        self.check_os()
+        OS.check_os("windows")
         output_file, split_size, write_mode, args = self.get_vars()
 
         out = self.get_command_out(args, command)
@@ -43,12 +42,6 @@ class Module(BaseModule):
                     isUsers = True if "--------" in e else isUsers
             user_stripped_list.append([ut[x:x + split_size] for x in range(0, len(ut), split_size)])
         return user_stripped_list
-
-    @staticmethod
-    def check_os():
-        platform_name = OS.get_os_type()
-        if platform_name != "windows":
-            raise IncompatibleSystemError("System Is Not Running Windows")
 
     @staticmethod
     def get_command_out(args, command):

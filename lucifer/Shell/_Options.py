@@ -46,8 +46,7 @@ def show_options(self, *args, **kwargs):
 def change_auto_set_vars(self, com_args: list):
     com_args.pop(0)
     if len(com_args) > 0:
-        inclusive, set_for_new, \
-            set_global, to_set = change_auto_parse_args(com_args)
+        inclusive, set_for_new, set_global, to_set = change_auto_parse_args(com_args)
         if to_set is None:
             print("Please Add An Argument!")
             return

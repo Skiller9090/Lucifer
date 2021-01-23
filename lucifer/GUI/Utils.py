@@ -8,5 +8,3 @@ class Closer:
     def on_close(self):
         if messagebox.askokcancel("Quit Lucifer", "Are you sure you want to quit Lucifer?"):
             self.luciferManager.end()
-
-
