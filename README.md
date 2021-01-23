@@ -125,22 +125,22 @@ If you want the cutting edge changes add `-b dev` to the end of `git clone https
 ## Versioning
 The standard of versioning on this project is:  
 
-###MAJOR.MINOR.PATCH.STAGE.BUILD  
+### MAJOR.MINOR.PATCH.STAGE.BUILD  
 
-####Major:
+#### Major:
 - incremented when either there has been a significant amount of new features since the start of the major or if there
 is a change which is so big that is can cause compatibility issues (Major of 0 if very unstable
 - Could cause incompatibility issues
 
-####Minor:
+#### Minor:
 - incremented when a new feature or feature-set is added to the project
 - should not cause incompatibility errors due to only additions made
 
-####Patch:  
+#### Patch:  
 - incremented on bugfixes or if feature is so small that it is worth incrementing minor
 - very low risk of incompatibility error
 
-####Stage:
+#### Stage:
 - The stage of current MAJOR.MINOR.PATCH BUILD, either alpha, beta, release candidate or release
 - Indicates how far through development the new MAJOR.MINOR.PATCH is
 - Stage number to name translation:
@@ -149,7 +149,7 @@ is a change which is so big that is can cause compatibility issues (Major of 0 i
     - 2 => release candidate (rc)
     - 3 => release (r)
 
-####Build:
+#### Build:
 - this should be incremented on every change made to the code, even on a one character change
 
 This version structure can be stored and displayed in a few ways:
