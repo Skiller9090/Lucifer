@@ -4,7 +4,13 @@ import socket
 
 
 class SimpleServer:
+    """
+    Receives connections and puts clients on the handler function set by the handler variable.
+
+     By default the handler is LMI.Networking.Simple.Handlers.ClientRecvContinuously.handle_client
+     """
     def __init__(self, handler=ClientRecvContinuously.handle_client, trackClients=True):
+        """Initializes the handler function, client dictionary and thread list."""
         self.handler = handler
         self.clientThreadList = []
         self.clients = {}

@@ -1,7 +1,6 @@
 import winreg as _winreg
 from LMI import OS
 from LMI.Table import generate_table
-from lucifer.Errors import IncompatibleSystemError
 from modules.Module import BaseModule
 
 
