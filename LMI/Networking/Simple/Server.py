@@ -1,5 +1,6 @@
 from threading import Thread
 from LMI.Networking.Simple.Handlers import ClientRecvContinuously
+from lucifer.Errors import LuciferAddressInUseError
 import socket
 
 
@@ -30,7 +31,10 @@ class SimpleServer:
     def createTCPSocket(self, ip, port):
         self.socketObject = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socketObject.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.socketObject.bind((ip, port))
+        try:
+            self.socketObject.bind((ip, port))
+        except OSError as e:
+            raise LuciferAddressInUseError(e)
         self.socketObject.listen(100)
         self.socketObject.setblocking(True)
         return True
