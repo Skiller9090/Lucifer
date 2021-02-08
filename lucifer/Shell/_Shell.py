@@ -77,7 +77,8 @@ def open_shell(self, com_args: list):
 
 def open_alt_shell(index, openid, self):
     self.luciferManager.current_shell_id = openid
-    self.luciferManager.gui.console.opened_order.append(openid)
+    if self.luciferManager.gui is not None:
+        self.luciferManager.gui.console.opened_order.append(openid)
     try:
         self.luciferManager.alternative_shells[index].spawn()
     except Exception as e:
@@ -85,7 +86,8 @@ def open_alt_shell(index, openid, self):
 
 
 def open_main_shell(openid, self):
-    self.luciferManager.gui.console.opened_order.append(openid)
+    if self.luciferManager.gui is not None:
+        self.luciferManager.gui.console.opened_order.append(openid)
     self.luciferManager.current_shell_id = openid
     try:
         self.luciferManager.main_shell.spawn()

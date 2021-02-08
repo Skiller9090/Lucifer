@@ -43,6 +43,12 @@ class LuciferSettingNotFound(BaseLuciferError):
         return "Lucifer Setting Not Found: " + str(self.message)
 
 
+class LuciferAddressInUseError(BaseLuciferError):
+    def __str__(self):
+        """Error Output"""
+        return "Address already in use, so cannot bind to ip and port"
+
+
 def checkErrors(e, ModuleError=False):
     try:
         raise e
@@ -59,6 +65,8 @@ def checkErrors(e, ModuleError=False):
     except LuciferSettingNotFound:
         print(e)
         print("If Error Continues Try Removing 'settings.yml'")
+    except LuciferAddressInUseError:
+        print(e)
     except Exception as err:
         notifier.notify(err)
         if not ModuleError:
