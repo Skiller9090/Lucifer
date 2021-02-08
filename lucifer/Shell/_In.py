@@ -4,7 +4,11 @@ def getIn(self):
         if '.py' not in self.module else \
         self.module.replace('.py', '')
     p_id = f"|{self.id}> "
-    self.shell_in = input(p_name + m_name + p_id)
+    try:
+        self.shell_in = input(p_name + m_name + p_id)
+    except EOFError as _:
+        self.shell_in = ""
+        return
     if self.luciferManager.log_file is not None:
         if self.luciferManager.log_amount == 1:
             self.luciferManager.log_command(self.shell_in)
