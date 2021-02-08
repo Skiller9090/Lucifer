@@ -6,7 +6,7 @@ def getIn(self):
     p_id = f"|{self.id}> "
     try:
         self.shell_in = input(p_name + m_name + p_id)
-    except EOFError as _:
+    except EOFError:
         self.shell_in = ""
         return
     if self.luciferManager.log_file is not None:

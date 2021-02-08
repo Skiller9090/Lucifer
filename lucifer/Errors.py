@@ -45,6 +45,7 @@ class LuciferSettingNotFound(BaseLuciferError):
 
 class LuciferAddressInUseError(BaseLuciferError):
     def __str__(self):
+        """Error Output"""
         return "Address already in use, so cannot bind to ip and port"
 
 
