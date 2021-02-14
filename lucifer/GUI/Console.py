@@ -26,13 +26,22 @@ class TextRedirect(object):
         self.tag = tag
 
     def write(self, string):
+        if string == "":
+            return
         self.widget.configure(state="normal")
         if self.esc_seq in string:
             tag_string = self.process_text(string)
             for insert_tuple in tag_string:
                 tags = self.tag_map(insert_tuple[0])
-                self.widget.insert("end", (str(insert_tuple[1])), tags)
+                string = str(insert_tuple[1])
+                if string and "\r" == string[0]:
+                    self.widget.delete("end-1l", "end")
+                    string = "\n" + string
+                self.widget.insert("end", string, tags)
         else:
+            if str(string) and "\r" == str(string)[0]:
+                self.widget.delete("end-1l", "end")
+                string = "\n" + string
             self.widget.insert("end", string, (self.tag,))
         self.widget.configure(state="disabled")
         self.widget.see(tk.END)
@@ -158,6 +167,7 @@ class LuciferConsole(tk.Frame, RetrieveShell):
     def send_command(self, *args, **kwargs):
         if self.luciferManager.gui_thread_free:
             self.luciferManager.gui_thread_free = False
+            self.luciferManager.gui.statusFrame.progressBar["value"] = 0
             thread = threading.Thread(target=self.send_command_daemon)
             thread.setDaemon(True)
             thread.start()
@@ -187,6 +197,7 @@ class LuciferConsole(tk.Frame, RetrieveShell):
                     self.luciferManager.log_command(self.shell.shell_in)
         except Exception as e:
             checkErrors(e)
+        self.luciferManager.gui.statusFrame.progressBar["value"] = 100
         self.luciferManager.gui.statusFrame.status.set("Idle")
         self.luciferManager.gui.varView.display_vars()
         self.luciferManager.gui_thread_free = True

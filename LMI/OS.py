@@ -1,4 +1,4 @@
-from . import LMI
+from .import LMI
 import os
 import platform
 from lucifer.Errors import IncompatibleSystemError
