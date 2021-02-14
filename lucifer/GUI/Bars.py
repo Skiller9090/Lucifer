@@ -15,15 +15,24 @@ class LuciferStatus(tk.Frame):
 
         self.status = tk.StringVar()
         self.status.set("Idle")
+        self.config(background='#%02x%02x%02x' % (56, 56, 72))
 
         style = ttk.Style()
         style.configure("Label", foreground="white", background='#%02x%02x%02x' % (56, 56, 72))
+        style.configure("red.Horizontal.TProgressbar", background='#%02x%02x%02x' % (56, 56, 72))
+
+        self.progressBar = ttk.Progressbar(self, orient="horizontal", mode="determinate")
 
         self.statusWidget = ttk.Label(self, textvariable=self.status,
                                       relief=tk.SUNKEN, anchor=tk.E,
                                       font=self.LuciferGui.font)
         self.statusWidget.config(style="Label")
-        self.statusWidget.pack(fill=tk.X, expand=False)
+        self.progressBar.config(style="red.Horizontal.TProgressbar")
+        self.progressBar.pack(expand=False, side=tk.LEFT)
+        self.statusWidget.pack(fill=tk.X, expand=False, side=tk.RIGHT)
+
+        self.progressBar["maximum"] = 100
+        self.progressBar["value"] = 100
 
 
 class LuciferToolbar(tk.Frame, Closer):
