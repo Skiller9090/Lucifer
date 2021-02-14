@@ -11,6 +11,7 @@ class Shell:
     from ._Shell import open_shell, show_shells, set_name, command_name_id, \
         clear_shell, background_shell
     from ._Networking import listServers, killServer
+    from ._Java import installJava, reinstallJava, uninstallJava, getJavaInstalls
 
     def __init__(self, ID, lucifer_manager):
         """Per Shell Setup."""
@@ -55,7 +56,11 @@ class Shell:
             "change_auto_var": self.change_auto_set_vars,
             "reindex": self.reindex_modules,
             "show_servers": self.listServers,
-            "kill_sever": self.killServer
+            "kill_sever": self.killServer,
+            "install_java": self.installJava,
+            "reinstall_java": self.reinstallJava,
+            "uninstall_java": self.uninstallJava,
+            "get_installs_java": self.getJavaInstalls
         }
         self.luciferManager.shell_recur += 1
 
