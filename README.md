@@ -16,6 +16,8 @@
 [![CodeScene Code Health](https://codescene.io/projects/9260/status-badges/code-health)](https://codescene.io/projects/9260)
 [![CodeScene System Mastery](https://codescene.io/projects/9260/status-badges/system-mastery)](https://codescene.io/projects/9260)
 
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Skiller9090/Lucifer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Skiller9090/Lucifer/context:python)
+
 `Initial Release`: 09/09/2020
 
 ## Setup
