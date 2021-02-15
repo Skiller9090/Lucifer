@@ -73,7 +73,6 @@ class Module(BaseModule):
             while not placed:
                 if check not in interface.keys():
                     interface[check] = v
-                    prevS = check
                     placed = True
                 else:
                     i += 1
