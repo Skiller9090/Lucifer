@@ -1,4 +1,4 @@
-def handle_client(client, addr, trackClients=None):
+def handle_client(client, addr, trackClients=None, numberBlanks=1000):
     print(f"Connection established with {addr}")
     request = None
     if trackClients:
@@ -12,7 +12,7 @@ def handle_client(client, addr, trackClients=None):
                 blanks = 0
             else:
                 blanks += 1
-            if blanks == 1000:
+            if blanks == numberBlanks:
                 print(f"{addr} has disconnected")
                 break
     except Exception as e:
