@@ -9,3 +9,6 @@ Venv/
 
 settings.yml
 .lucifer-jdk/
+out/
+.compiledJava/
+javaModules/builds/
