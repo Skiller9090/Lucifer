@@ -72,13 +72,15 @@ def reinstall(version, operating_system=_JavaInstallsData.OS, arch=_JavaInstalls
 
 def getVersions():
     table = Table.generate_table(
-        [[x[0],
+        [[str(i),
+          x[0],
           x[1]["releaseData"]["JAVA_VERSION"] if "JAVA_VERSION" in x[1]["releaseData"].keys() else x[1]["version"],
           x[1]["releaseData"]["JVM_VARIANT"] if "JVM_VARIANT" in x[1]["releaseData"] else x[1]["variant"],
           x[1]["location"]
-          ] for x in zip(get_lucifer_java_versions().keys(), get_lucifer_java_versions().values())],
+          ] for i, x in enumerate(zip(get_lucifer_java_versions().keys(), get_lucifer_java_versions().values()))],
         title="Java Versions",
         headings=[
+            "ID",
             "Name",
             "Version",
             "Variant",
