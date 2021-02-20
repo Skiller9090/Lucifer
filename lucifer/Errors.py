@@ -49,6 +49,24 @@ class LuciferAddressInUseError(BaseLuciferError):
         return "Address already in use, so cannot bind to ip and port"
 
 
+class LuciferJVMPathNotFound(BaseLuciferError):
+    def __str__(self):
+        """Error Output"""
+        return f"Could not find find JVM in: {str(self.message)}"
+
+
+class LuciferJavaBinPathNotFound(BaseLuciferError):
+    def __str__(self):
+        """Error Output"""
+        return f"Could not find find Bin Directory in: {str(self.message)}"
+
+
+class LuciferJavaBinaryNotFound(BaseLuciferError):
+    def __str__(self):
+        """Error Output"""
+        return f"Could not find find Binary: {str(self.message)}"
+
+
 def checkErrors(e, ModuleError=False):
     try:
         raise e
@@ -66,6 +84,12 @@ def checkErrors(e, ModuleError=False):
         print(e)
         print("If Error Continues Try Removing 'settings.yml'")
     except LuciferAddressInUseError:
+        print(e)
+    except LuciferJVMPathNotFound:
+        print(e)
+    except LuciferJavaBinPathNotFound:
+        print(e)
+    except LuciferJavaBinaryNotFound:
         print(e)
     except Exception as err:
         notifier.notify(err)
