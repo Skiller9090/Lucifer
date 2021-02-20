@@ -113,6 +113,15 @@ If you want the cutting edge changes add `-b dev` to the end of `git clone https
   
   - `set_name_id <id> <name>` - set the name of the shell specified by <id>
 
+# Using Java
+Lucifer allows for Python and Java code to work side by side through the use of LMI.Java 
+extension. For this to work you will need to install jpype1, to do this run the following
+command in your python environment:  
+`pip install jpype1`  
+From here you are free to interact with LMI.Java.compiler and LMI.Java.luciferJVM which
+allows you to call java functions and instantiate java classes through python, more documentation
+of this will be created later on, on the lucifer wiki.
+
 ## Examples
 
 ### Settings Variables

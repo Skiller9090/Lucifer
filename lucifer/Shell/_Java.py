@@ -1,4 +1,6 @@
-import LMI.Java.Installs
+from LMI.Java.Installs.List import get_lucifer_java_versions
+from LMI import Utils
+import LMI
 
 
 def _getVerbose(com_args):
@@ -40,3 +42,47 @@ def uninstallJava(self, com_args):
 
 def getJavaInstalls(self, com_args):
     print(LMI.Java.Installs.getVersions())
+
+
+def setJavaJDK(self, com_args):
+    if len(com_args) < 2:
+        print("Please add a Java JDK ID to use, to get IDs run 'get_installs_java' command!")
+        return
+    if LMI.Java.Run.luciferJVM.isJVMRunning:
+        print("Can not set Java JDK for lucifer when JVM is already running!\nPlease restart lucifer to start a "
+              "different version of Java JDK")
+        return
+    if not Utils.check_int(com_args[1]):
+        print("The Java JDK ID needs to be an integer!")
+        return
+    javaVersions = get_lucifer_java_versions()
+    javaIndex = abs(int(com_args[1]))
+    if len(javaVersions)-1 < javaIndex:
+        print("Invalid Java ID!")
+        return
+    javaVersion = javaVersions[list(javaVersions.keys())[javaIndex]]
+    LMI.Java.Run.luciferJVM.setJavaPath(
+        javaVersion["folderPath"]
+    )
+    print(f"JDK set to: {javaVersion['folderName']}")
+
+
+def startJavaJVM(self, com_args):
+    if LMI.Java.Run.luciferJVM.isJVMRunning:
+        print("Java JVM already running, to change java version restart lucifer!")
+        return
+    LMI.Java.Run.luciferJVM.startJVM()
+
+
+def buildJar(self, com_args):
+    LMI.Java.Run.compiler.createLuciferModuleJar()
+    print("Lucifer Module Jar Build Complete!")
+
+
+def loadLuciferJar(self, com_args):
+    if not LMI.Java.Run.luciferJVM.isJVMRunning:
+        print("Please start jvm first then run command!")
+        return
+    LMI.Java.Run.luciferJVM.addLuciferJar()
+    LMI.Java.Run.luciferJVM.setSTDOUT()
+    print("Loaded Lucifer Module Jar!")

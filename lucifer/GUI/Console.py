@@ -26,6 +26,7 @@ class TextRedirect(object):
         self.tag = tag
 
     def write(self, string):
+        string = str(string)
         if string == "":
             return
         self.widget.configure(state="normal")

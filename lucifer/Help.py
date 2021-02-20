@@ -1,7 +1,8 @@
 from termcolor import colored
+from LMI.Java import Run
 
 help_menu = f"""{colored('Help Menu', 'red', attrs=['bold', 'underline'])}
-{colored("=========================================", "magenta")}
+{colored("======================MAIN======================", "magenta")}
 {colored('help', 'blue')}                - Displays This Menu
 {colored('name', 'blue')}                - Shows name of current shell
 {colored('id', 'blue')}                  - Displays current shell's id
@@ -15,7 +16,7 @@ help_menu = f"""{colored('Help Menu', 'red', attrs=['bold', 'underline'])}
 current shell 
 {colored('change_auto_vars', 'blue')}    - Changes the auto_var options for one shell, \
 all shells or future shells 
-{colored('reindex', 'blue')}                - Reindex all modules, allowing dynamic module changing
+{colored('reindex', 'blue')}             - Reindex all modules, allowing dynamic module changing
 {colored('use', 'blue')}                 - Move into a module, EX: use <module>
 {colored('run', 'blue')}                 - Runs the current module, can also use \
 exploit to do the same 
@@ -29,5 +30,16 @@ exploit to do the same
 {colored('close', 'blue')}               - Kills current input into opened shell
 {colored('reset', 'blue')}               - Resets Everything
 {colored('exit', 'blue')}                - Exits the program, can also use quit to do \
-the same 
+the same
 """
+if Run.isJPypeInstalled:
+    help_menu += f"""
+{colored("--------LMI.Java Extension--------", "magenta")}
+{colored('install_java', 'blue')}        - Install a java version of choice
+{colored('uninstall_java', 'blue')}      - Uninstall a java version of choice
+{colored('get_java_installs', 'blue')}   - List all installed java versions
+{colored('set_jdk', 'blue')}             - Sets the current jdk by id
+{colored('start_jvm', 'blue')}           - Starts the java jvm for lucifer
+{colored('build_java_modules', 'blue')}  - Builds all of lucifer java files into jar file
+{colored('load_lucifer_jar', 'blue')}    - Loads the created jar from the build_java_modules command
+    """

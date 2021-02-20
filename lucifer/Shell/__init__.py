@@ -1,5 +1,6 @@
 """The Shell package contains the code to operate the console."""
 from lucifer.Help import help_menu
+from LMI import Java
 
 
 class Shell:
@@ -11,7 +12,8 @@ class Shell:
     from ._Shell import open_shell, show_shells, set_name, command_name_id, \
         clear_shell, background_shell
     from ._Networking import listServers, killServer
-    from ._Java import installJava, reinstallJava, uninstallJava, getJavaInstalls
+    from ._Java import installJava, reinstallJava, uninstallJava, getJavaInstalls, setJavaJDK, startJavaJVM, \
+        buildJar, loadLuciferJar
 
     def __init__(self, ID, lucifer_manager):
         """Per Shell Setup."""
@@ -57,11 +59,27 @@ class Shell:
             "reindex": self.reindex_modules,
             "show_servers": self.listServers,
             "kill_sever": self.killServer,
-            "install_java": self.installJava,
-            "reinstall_java": self.reinstallJava,
-            "uninstall_java": self.uninstallJava,
-            "get_installs_java": self.getJavaInstalls
         }
         self.luciferManager.shell_recur += 1
 
         self.Shell_Class = Shell
+        if Java.Run.isJPypeInstalled:
+            self.addJavaModules()
+
+    def addJavaModules(self):
+        javaCommands = {
+            "install_java": self.installJava,
+            "reinstall_java": self.reinstallJava,
+            "uninstall_java": self.uninstallJava,
+            "get_installs_java": self.getJavaInstalls,
+            "get_java_installs": self.getJavaInstalls,
+            "set_jdk_java": self.setJavaJDK,
+            "set_jdk": self.setJavaJDK,
+            "start_jvm_java": self.startJavaJVM,
+            "start_jvm": self.startJavaJVM,
+            "build_java_modules": self.buildJar,
+            "build_java": self.buildJar,
+            "build_modules": self.buildJar,
+            "load_lucifer_jar": self.loadLuciferJar
+        }
+        self.alias.update(javaCommands)
