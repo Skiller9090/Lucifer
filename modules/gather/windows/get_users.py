@@ -1,10 +1,11 @@
+from termcolor import colored
+
+from LMI import OS
 from LMI.Command import return_output
 from LMI.File import write_file_exists
 from LMI.Table import generate_table
 from LMI.Utils import check_int
 from modules.Module import BaseModule
-from LMI import OS
-from termcolor import colored
 
 
 class Module(BaseModule):

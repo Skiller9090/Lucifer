@@ -1,7 +1,8 @@
-from modules.Module import BaseModule
 from modules.auxiliary.gather.windows import get_users
+
 from LMI.Command import return_output
 from LMI.Table import generate_table, dictionary_max_transformation
+from modules.Module import BaseModule
 
 
 class Module(BaseModule):

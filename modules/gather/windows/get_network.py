@@ -1,8 +1,8 @@
-from LMI.Command import return_output
-from modules.Module import BaseModule
-from LMI.File import write_file_exists
 from LMI import OS
+from LMI.Command import return_output
+from LMI.File import write_file_exists
 from LMI.Table import generate_table
+from modules.Module import BaseModule
 
 
 class Module(BaseModule):

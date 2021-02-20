@@ -6,7 +6,7 @@ from urllib import request, error
 from termcolor import colored
 
 from .Utils import normalize_version
-from .. import _JavaInstallsData
+from ..Data import _JavaInstallsData
 from ...Interface import LMI
 
 
@@ -48,8 +48,8 @@ def _download(download_url, verbose=True, vv=False):
                             out_file.write(buf)
                             if verbose:
                                 total_downloaded += len(buf)
-                                percentDone = total_downloaded/fileSize*100
-                                doneBar = int(percentDone/5)
+                                percentDone = total_downloaded / fileSize * 100
+                                doneBar = int(percentDone / 5)
                                 sys.stdout.write(f"\r[{'=' * doneBar + '>'}"
                                                  f"{' ' * (20 - doneBar)}]"
                                                  f" {round(percentDone)}%")

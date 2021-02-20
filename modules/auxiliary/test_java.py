@@ -1,5 +1,5 @@
-from modules.Module import BaseModule
 from LMI import Java
+from modules.Module import BaseModule
 
 
 class Module(BaseModule):
