@@ -1,8 +1,10 @@
 import os
 import re
-import jpype
-from lucifer.Errors import LuciferJavaBinaryNotFound, LuciferJVMPathNotFound, LuciferJavaBinPathNotFound
 import sys
+
+import jpype
+
+from lucifer.Errors import LuciferJavaBinaryNotFound, LuciferJVMPathNotFound, LuciferJavaBinPathNotFound
 
 
 class LuciferJVM:
@@ -140,9 +142,9 @@ class LuciferJVM:
                 print("Already Loaded Lucifer Jar!")
             return
         jarLocation = os.path.abspath(os.path.join(
-                    self.luciferJavaBuildPath,
-                    f"java-{luciferJVM.getJavaMajorVersion()}/{self.luciferJarName}"
-                ))
+            self.luciferJavaBuildPath,
+            f"java-{luciferJVM.getJavaMajorVersion()}/{self.luciferJarName}"
+        ))
         if not os.path.exists(jarLocation):
             print("Jar has not been build, please build jar first")
             return

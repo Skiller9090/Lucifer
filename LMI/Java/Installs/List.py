@@ -1,6 +1,7 @@
-from .. import _JavaInstallsData
-from glob import glob
 import os
+from glob import glob
+
+from ..Data import _JavaInstallsData
 
 
 def get_lucifer_java_versions():
@@ -27,4 +28,3 @@ def get_lucifer_java_versions():
                            for line in rawReleaseData.split("\n")}
             javaVersions[versionFolderName]["releaseData"] = releaseData
     return javaVersions
-

@@ -1,6 +1,6 @@
-from LMI.Java.Installs.List import get_lucifer_java_versions
-from LMI import Utils
 import LMI
+from LMI import Utils
+from LMI.Java.Installs.List import get_lucifer_java_versions
 
 
 def _getVerbose(com_args):
@@ -57,7 +57,7 @@ def setJavaJDK(self, com_args):
         return
     javaVersions = get_lucifer_java_versions()
     javaIndex = abs(int(com_args[1]))
-    if len(javaVersions)-1 < javaIndex:
+    if len(javaVersions) - 1 < javaIndex:
         print("Invalid Java ID!")
         return
     javaVersion = javaVersions[list(javaVersions.keys())[javaIndex]]

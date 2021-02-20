@@ -6,4 +6,5 @@ if isJPypeInstalled:
     print("Jpype is installed enabling LMI.Java extension!")
     from .Compiler import compiler
     from .LuciferJVM import luciferJVM
+
     print("Enabled LMI.Java extension.")

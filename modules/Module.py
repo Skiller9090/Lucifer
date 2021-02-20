@@ -2,8 +2,8 @@ from lucifer.Utils import RetrieveShell
 
 
 class BaseModule(RetrieveShell):
-
     """All Modules should inherit from BaseModule (this class)"""
+
     def __init__(self, luciferManager, ShellRun=False):
         """Module setup, DO NOT EDIT, hook onto the 'setup' instead."""
         self.pre_setup()

@@ -1,9 +1,10 @@
+import os
+import re
+import shutil
+import sys
+
 from .LuciferJVM import luciferJVM
 from ...Command import process_command
-import os
-import sys
-import shutil
-import re
 
 
 class Compiler:

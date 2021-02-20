@@ -1,7 +1,7 @@
 from LMI import Command, OS
+from LMI.File import write_file_exists
 from lucifer.Errors import IncompatibleSystemError
 from modules.Module import BaseModule
-from LMI.File import write_file_exists
 
 
 class Module(BaseModule):

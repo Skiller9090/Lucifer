@@ -2,6 +2,7 @@ class Servers:
     """
     This class keep track of all server Objects and their IDS.
     """
+
     def __init__(self):
         """
         Initializes all variables needed for data storage of servers

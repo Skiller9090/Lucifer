@@ -1,4 +1,5 @@
 from termcolor import colored
+
 from LMI.Java import Run
 
 help_menu = f"""{colored('Help Menu', 'red', attrs=['bold', 'underline'])}

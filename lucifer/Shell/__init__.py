@@ -1,6 +1,6 @@
 """The Shell package contains the code to operate the console."""
-from lucifer.Help import help_menu
 from LMI import Java
+from lucifer.Help import help_menu
 
 
 class Shell:
