@@ -24,21 +24,7 @@ def _extract_files(file, file_ending, destination_folder, verbose=True, vv=False
         if verbose and vv:
             print("Extracting jdk")
         start_listing = set(os.listdir(destination_folder))
-        if file_ending == "tar":
-            with tarfile.open(file, "r:") as tar:
-                tar.extractall(path=destination_folder)
-        elif file_ending == "tar.gz":
-            with tarfile.open(file, "r:gz") as tar:
-                tar.extractall(path=destination_folder)
-        elif file_ending == "zip":
-            with zipfile.ZipFile(file) as z:
-                z.extractall(path=os.path.abspath(destination_folder))
-        elif file_ending == "7z":
-            with lzma.open(file) as z:
-                z.extractall(path=destination_folder)
-        else:
-            if verbose:
-                print(colored("Not a supported archive type!", "red"))
+        _do_extraction(destination_folder, file, file_ending, verbose)
         end_listing = set(os.listdir(destination_folder))
         try:
             jdk_directory = next(iter(end_listing.difference(start_listing)))
@@ -47,6 +33,21 @@ def _extract_files(file, file_ending, destination_folder, verbose=True, vv=False
         if verbose:
             print(colored("Installation of Java JDK Complete!", "green"))
         return os.path.join(destination_folder, jdk_directory)
+
+
+def _do_extraction(destination_folder, file, file_ending, verbose):
+    if file_ending == "tar" or file_ending == "tar.gz":
+        with tarfile.open(file, ("r:" if file_ending == "tar" else "r:gz")) as tar:
+            tar.extractall(path=destination_folder)
+    elif file_ending == "zip":
+        with zipfile.ZipFile(file) as z:
+            z.extractall(path=os.path.abspath(destination_folder))
+    elif file_ending == "7z":
+        with lzma.open(file) as z:
+            z.extractall(path=destination_folder)
+    else:
+        if verbose:
+            print(colored("Not a supported archive type!", "red"))
 
 
 def _path_parse(file_path):
@@ -86,5 +87,5 @@ def _decompress_archive(repo_root, file_ending, destination_folder, verbose=True
         jdk_bin = os.path.join(jdk_directory, "bin")
         _unpack_jars(jdk_directory, jdk_bin)
         return jdk_directory
-    elif os.path.isdir(jdk_file):
+    if os.path.isdir(jdk_file):
         return jdk_file
