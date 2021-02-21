@@ -1,5 +1,4 @@
 import LMI
-from LMI import Utils
 from LMI.Java.Installs.List import get_lucifer_java_versions
 
 
@@ -52,7 +51,7 @@ def setJavaJDK(self, com_args):
         print("Can not set Java JDK for lucifer when JVM is already running!\nPlease restart lucifer to start a "
               "different version of Java JDK")
         return
-    if not Utils.check_int(com_args[1]):
+    if not LMI.Utils.check_int(com_args[1]):
         print("The Java JDK ID needs to be an integer!")
         return
     javaVersions = get_lucifer_java_versions()

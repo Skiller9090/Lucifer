@@ -6,5 +6,6 @@ Modules:
 """
 from . import Java
 from .Interface import LuciferManagerInterface
+from . import Utils
 
 LMI = LuciferManagerInterface.instance  # Late Definition

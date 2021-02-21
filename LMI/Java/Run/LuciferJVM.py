@@ -103,8 +103,9 @@ class LuciferJVM:
     def setSTDOUT(self):
         if self.JavaRootPath is None or not self.isJVMRunning:
             return None
+        # updated to @JImplements
         stdoutPipe = jpype.JProxy("com.github.skiller9090.stdredirect.PythonPipe", inst=sys.stdout)
-        # stderrPipe = jpype.JProxy("com.github.skiller9090.stdredirect.PythonPipe", inst=sys.stderr)  # updated to @JImplements
+        # stderrPipe = jpype.JProxy("com.github.skiller9090.stdredirect.PythonPipe", inst=sys.stderr)
         out_stream = jpype.JClass("com.github.skiller9090.stdredirect.PythonOutputStream")()
         out_stream.setPythonStdout(stdoutPipe)
         # err_stream = jpype.JClass("com.github.skiller9090.stdredirect.PythonOutputStream")()
