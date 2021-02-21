@@ -9,6 +9,11 @@ def getIn(self):
     except EOFError:
         self.shell_in = ""
         return
+    except OSError as e:
+        if e.errno == 5:  # Input/Output Error
+            self.shell_in = ""
+            return
+        raise e
     if self.luciferManager.log_file is not None:
         if self.luciferManager.log_amount == 1:
             self.luciferManager.log_command(self.shell_in)
