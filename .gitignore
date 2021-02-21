@@ -5,5 +5,10 @@
 venv/
 Venv/
 .venv
-settings.yml
 .vscode/
+
+settings.yml
+.lucifer-jdk/
+out/
+.compiledJava/
+javaModules/builds/

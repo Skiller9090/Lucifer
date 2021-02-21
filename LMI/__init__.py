@@ -4,7 +4,8 @@ LMI (Lucifer Module Interface) allows you to easily interface with different par
 Modules:
     - Command: Allows you to run system commands with varying levels of output
 """
+from . import Java
 from .Interface import LuciferManagerInterface
+from . import Utils
 
-
-LMI = LuciferManagerInterface()
+LMI = LuciferManagerInterface.instance  # Late Definition

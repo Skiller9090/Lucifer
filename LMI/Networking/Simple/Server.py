@@ -1,7 +1,8 @@
+import socket
 from threading import Thread
+
 from LMI.Networking.Simple.Handlers import ClientRecvContinuously
 from lucifer.Errors import LuciferAddressInUseError
-import socket
 
 
 class SimpleServer:
@@ -10,6 +11,7 @@ class SimpleServer:
 
      By default the handler is LMI.Networking.Simple.Handlers.ClientRecvContinuously.handle_client
      """
+
     def __init__(self, handler=ClientRecvContinuously.handle_client, trackClients=True):
         """Initializes the handler function, client dictionary and thread list."""
         self.handler = handler

@@ -1,6 +1,6 @@
-from modules.Module import BaseModule
-from LMI.Networking.Simple.Server import SimpleServer
 from LMI.Networking.Simple.Handlers import ClientRecvContinuously
+from LMI.Networking.Simple.Server import SimpleServer
+from modules.Module import BaseModule
 
 
 class Module(BaseModule):

@@ -2,6 +2,7 @@ class Connections:
     """
     This class keeps track of all active connections.
     """
+
     def __init__(self):
         """
         Creates a connections list to store all 'conn's.

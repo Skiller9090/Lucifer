@@ -1,4 +1,5 @@
 import winreg as _winreg
+
 from LMI import OS
 from LMI.Table import generate_table
 from modules.Module import BaseModule

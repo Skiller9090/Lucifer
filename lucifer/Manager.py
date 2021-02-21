@@ -28,7 +28,7 @@ class LuciferManager:
         self.stderr = sys.stderr
         self.isLMI = False
         # MAJOR.MINOR.PATCH.STAGE.BUILD VERSIONING
-        self.numeric_version = (0, 5, 1, 3, 2)
+        self.numeric_version = (0, 6, 2, 3, 5)
         self.numeric_stage = self.numeric_version[3]
         self.stage = ["Alpha", "Beta", "RC", "Release"][self.numeric_version[3]]
         self.shortStage = ["a", "b", "rc", "r"][self.numeric_version[3]]
