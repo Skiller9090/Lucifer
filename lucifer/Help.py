@@ -4,6 +4,8 @@ from LMI.Java import Run
 
 help_menu = f"""{colored('Help Menu', 'red', attrs=['bold', 'underline'])}
 {colored("======================MAIN======================", "magenta")}
+{colored('These are all the core commands of Lucifer', 'grey')}
+
 {colored('help', 'blue')}                - Displays This Menu
 {colored('name', 'blue')}                - Shows name of current shell
 {colored('id', 'blue')}                  - Displays current shell's id
@@ -32,10 +34,21 @@ exploit to do the same
 {colored('reset', 'blue')}               - Resets Everything
 {colored('exit', 'blue')}                - Exits the program, can also use quit to do \
 the same
+
+{colored("--------LMI.Reports Extension--------", "magenta")}
+{colored('These are all the commands to create reports from your command/module output', 'grey')}
+
+{colored('report_new', 'blue')}        - Creates a new report if not exists else opens the report
+{colored('report_open', 'blue')}       - Opens report file if exists else creates new one and opens that one
+{colored('report_start', 'blue')}      - Starts reporting tabled output to the file, aliases: report_on
+{colored('report_stop', 'blue')}       - Stops reporting tabled output to the file, aliases: report_pause, report_off
 """
+
 if Run.isJPypeInstalled:
     help_menu += f"""
 {colored("--------LMI.Java Extension--------", "magenta")}
+{colored('These are all the commands to work with java and python+java modules', 'grey')}
+
 {colored('install_java', 'blue')}        - Install a java version of choice
 {colored('uninstall_java', 'blue')}      - Uninstall a java version of choice
 {colored('get_java_installs', 'blue')}   - List all installed java versions
@@ -43,4 +56,4 @@ if Run.isJPypeInstalled:
 {colored('start_jvm', 'blue')}           - Starts the java jvm for lucifer
 {colored('build_java_modules', 'blue')}  - Builds all of lucifer java files into jar file
 {colored('load_lucifer_jar', 'blue')}    - Loads the created jar from the build_java_modules command
-    """
+"""

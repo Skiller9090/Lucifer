@@ -1,4 +1,4 @@
-from modules.auxiliary.gather.windows import get_users
+from modules.gather.windows import get_users
 
 from LMI.Command import return_output
 from LMI.Table import generate_table, dictionary_max_transformation
