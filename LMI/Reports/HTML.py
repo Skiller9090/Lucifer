@@ -1,3 +1,10 @@
+"""Lucifer's HTML Report System for HTML reporting features.
+
+Contains:
+    - HTMLTable: a class to create a table for the parent HTMLReport object.
+    - HTMLReport: a class that gives an easy interface with an HTML report file.
+
+"""
 import os
 import time
 
@@ -31,19 +38,17 @@ class HTMLReport:
         self.useTable = HTMLTable(self)
         self.defaultReportStyle = """.lucTab {
             background: #ffffff;
-        }
+        }\n
     .lucTab tr:nth-child(even) {
       background-color: #eee;
-    }
-    
+    }\n
     .lucTab tr:nth-child(odd) {
       background-color: #fff;
-    }
+    }\n
     .lucTab th {
       color: white;
       background-color: black;
-    }
-    
+    }\n
     .lucTab caption {
       text-align: center;
       border: 2px solid #cccccc;
@@ -53,21 +58,20 @@ class HTMLReport:
       letter-spacing: 2px;
       font-weight: bold;
       background: #ffffff;
-    }
-    
+    }\n
     .lucTitle {
         font-size: 100%;
         font-weight: bold;
-        color: white;
+        color: black;
         border: 3px solid black;
-        background: darkred;
-        padding: 0em 1.5em;
+        background: #cccccc;
+        padding: 0 1.5em;
         border-radius: 10px;
         line-height: 1em;
-        width: 50%;
-        margin: 0;
-    }
-    
+        width: 30em;
+        text-align: center;
+        margin: 1em auto;
+    }\n
     .lucTitleCap {
        text-align: center;
        color: black;
@@ -76,8 +80,8 @@ class HTMLReport:
        border: 3px solid black;
        border-radius: 10px;
        width: 30em;
-    }
-    
+       margin: 1em auto;
+    }\n
     .accordion {
       background-color: #eee;
       color: #444;
@@ -89,52 +93,43 @@ class HTMLReport:
       outline: none;
       font-size: 15px;
       transition: 0.4s;
-    }
-    
+    }\n
     .active, .accordion:hover {
       background-color: #ccc;
-    }
-    
+    }\n
     .accordion:after {
       content: '\\002B';
       color: #777;
       font-weight: bold;
       float: right;
       margin-left: 5px;
-    }
-    
+    }\n
     .active:after {
       content: "\\2212";
-    }
-    
+    }\n
     .panel {
       padding: 0 18px;
-      background: #E3CD81;
+      background: #EFDCBE;
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.2s ease-out;
-    }
-    
+    }\n
     body {
-        background: #E3CD81;
-    }
-"""
-        self.defaultReportScript = """
-var acc = document.getElementsByClassName("accordion");
-var i;
-
+        background: #EFDCBE;
+    }\n"""
+        self.defaultReportScript = """\nconst acc = document.getElementsByClassName("accordion");
+let i;\n
 for (i = 0; i < acc.length; i++) {
   acc[i].addEventListener("click", function() {
     this.classList.toggle("active");
-    var panel = this.nextElementSibling;
+    const panel = this.nextElementSibling;
     if (panel.style.maxHeight) {
       panel.style.maxHeight = null;
     } else {
       panel.style.maxHeight = panel.scrollHeight + "px";
-    } 
+    }
   });
-}
-"""
+}\n"""
 
     def newReport(self, name):
         self.path = os.path.abspath(self.path)
