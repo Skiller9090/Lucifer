@@ -12,3 +12,4 @@ settings.yml
 out/
 .compiledJava/
 javaModules/builds/
+reports/
