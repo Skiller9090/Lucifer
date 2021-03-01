@@ -1,3 +1,5 @@
+import re
+
 def getIn(self):
     p_name = f"{self.program_name}|"
     m_name = self.module \
@@ -20,6 +22,19 @@ def getIn(self):
 
 
 def parseShellIn(self):
+    data = re.split(r"(\\*)\$(\S*?[^\\])\$", self.shell_in)
+    for itemIndex in range(2, len(data), 3):
+        varName = data[itemIndex].strip().replace("\\\\", "\\").replace("\\$", "$")
+        varValue = self.vars.get(varName)
+        if varValue is not None and data[itemIndex - 1].count("\\") % 2 == 0:
+            data[itemIndex] = varValue
+        else:
+            data[itemIndex] = data[itemIndex].replace("\\\\", "\\")
+            if data[itemIndex].endswith("\\"):
+                data[itemIndex] = data[itemIndex][:-1]
+            data[itemIndex] = "$" + data[itemIndex] + "$"
+        data[itemIndex-1] = "\\" * (data[itemIndex - 1].count("\\") // 2)
+    self.shell_in = "".join(data)
     com_args = self.shell_in.split(" ")
     while "" in com_args:
         com_args.remove("")

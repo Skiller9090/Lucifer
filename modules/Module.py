@@ -6,6 +6,7 @@ class BaseModule(RetrieveShell):
 
     def __init__(self, luciferManager, ShellRun=False):
         """Module setup, DO NOT EDIT, hook onto the 'setup' instead."""
+        super().__init__()
         self.pre_setup()
         self.luciferManager = luciferManager
         self.actions = []
