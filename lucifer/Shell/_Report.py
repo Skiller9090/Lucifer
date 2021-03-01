@@ -1,5 +1,6 @@
-from LMI import Reports
 import os
+
+from LMI import Reports
 
 
 def newReport(self, com_args):

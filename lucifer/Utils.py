@@ -1,10 +1,11 @@
+"""
+Utils contains a few utility function and classes.
+
+Classes:
+    RetrieveShell -  A class to inherit from if you want the child class to be able to get and store the current
+                     lucifer shell in the self.shell variable, NOTE: needs to have access to self.luciferManager!
+"""
 from lucifer.Errors import NoShellError
-
-
-def check_int(s):
-    if s[0] in ('-', '+'):
-        return s[1:].isdigit()
-    return s.isdigit()
 
 
 class RetrieveShell:

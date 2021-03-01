@@ -1,5 +1,6 @@
 import re
 
+
 def getIn(self):
     p_name = f"{self.program_name}|"
     m_name = self.module \
@@ -33,7 +34,7 @@ def parseShellIn(self):
             if data[itemIndex].endswith("\\"):
                 data[itemIndex] = data[itemIndex][:-1]
             data[itemIndex] = "$" + data[itemIndex] + "$"
-        data[itemIndex-1] = "\\" * (data[itemIndex - 1].count("\\") // 2)
+        data[itemIndex - 1] = "\\" * (data[itemIndex - 1].count("\\") // 2)
     self.shell_in = "".join(data)
     com_args = self.shell_in.split(" ")
     while "" in com_args:
