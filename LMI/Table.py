@@ -1,4 +1,5 @@
 from termcolor import colored
+
 from LMI import Reports
 
 

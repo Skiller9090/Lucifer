@@ -5,7 +5,7 @@ Modules:
     - Command: Allows you to run system commands with varying levels of output
 """
 from . import Java
-from .Interface import LuciferManagerInterface
 from . import Utils
+from .Interface import LuciferManagerInterface
 
 LMI = LuciferManagerInterface.instance  # Late Definition

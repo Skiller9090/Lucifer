@@ -1,4 +1,5 @@
-"""Lucifer's HTML Report System for HTML reporting features.
+"""
+Lucifer's HTML Report System for HTML reporting features.
 
 Contains:
     - HTMLTable: a class to create a table for the parent HTMLReport object.
@@ -11,23 +12,59 @@ import time
 
 class HTMLTable:
     def __init__(self, parent):
+        """This class allows for an easier syntax to creating the table in the
+        HTMLReport class.
+
+        @param parent: This is the parent object which is used to update currentHtml
+        @type parent: HTMLReport
+        """
         self.parent = parent
         self.tableID = "lucTab"
 
     def __enter__(self):
+        """This sets up the table HTML top headings and adds it to the
+        self.parent.currentHtml variable when entering a the with statement.
+
+        @return: HTMLReport
+        """
         self.parent.currentHtml += '<table style="width:100%" class="' + self.tableID + '">\n'
         return self.parent
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """This closes the table off in the self.parent.currentHtml when exiting
+        the with statement.
+
+        @param exc_type: default for __exit__ function
+        @type exc_type: Any
+        @param exc_val: default for __exit__ function
+        @type exc_val: Any
+        @param exc_tb: default for __exit__ function
+        @type exc_tb: Any
+        """
         self.parent.currentHtml += '</table>\n<br/><br/>'
 
     def __call__(self, tableID):
+        """This initialises a table via a string argument for its id to allow
+        for dynamic table class setting.
+
+        @rtype: HTMLTable
+
+        Args:
+            tableID:
+        """
         self.tableID = tableID
         return self
 
 
 class HTMLReport:
     def __init__(self, name=str(time.time()), path="./reports/"):
+        """This sets up an interface between LMI and a HTML report file.
+
+        @param name: Name of the report file.
+        @type name: str
+        @param path: path to the directory where to store the report files.
+        @type path: str
+        """
         self.path = os.path.abspath(path)
         if not os.path.exists(self.path):
             os.makedirs(self.path, exist_ok=True)
@@ -132,6 +169,12 @@ for (i = 0; i < acc.length; i++) {
 }\n"""
 
     def newReport(self, name):
+        """Creates or opens a file to be interfaced with by this class, takes
+        name of file as the argument.
+
+        @param name: The name of the report file.
+        @type name: str
+        """
         self.path = os.path.abspath(self.path)
         if not os.path.exists(self.path):
             os.makedirs(self.path, exist_ok=True)
@@ -141,6 +184,7 @@ for (i = 0; i < acc.length; i++) {
         self.loadFile()
 
     def loadFile(self):
+        """Loads HTML from file and stores it into self.fileHTML"""
         if not os.path.exists(self.fullPath):
             self.createNewReport(self.fullPath)
         with open(self.fullPath, "r") as file:
@@ -148,6 +192,12 @@ for (i = 0; i < acc.length; i++) {
         self.removeStyle()
 
     def createNewReport(self, path):
+        """Takes path to the file as its argument and creates a new HTML report
+        file with the default lucifer report header.
+
+        @param path: the relative or absolute path to the new report file.
+        @type path: str
+        """
         os.makedirs((os.sep.join(path.split(os.sep)[:-1]) + os.sep), exist_ok=True)
         with open(path, "a+") as f:
             f.write(
@@ -161,6 +211,9 @@ for (i = 0; i < acc.length; i++) {
             f.write("\n\n<style>\n" + self.defaultReportStyle + "</style>\n")
 
     def saveFile(self):
+        """Saves the files HTML already loaded in this class, then appends
+        default CSS and JavaScript to the end.
+        """
         if not os.path.exists(self.fullPath):
             self.createNewReport(self.fullPath)
         with open(self.fullPath, "w") as f:
@@ -169,17 +222,27 @@ for (i = 0; i < acc.length; i++) {
                      "\n<script>" + self.defaultReportScript + "</script>\n"))
 
     def removeStyle(self):
+        """Removes everything after <style> to only get the pure HTML, the CSS
+        and JavaScript is added back and refreshed after save. This system
+        allows for automatically updating CSS and JavaScript through different
+        version too.
+        """
         if "<style>" in self.fileHTML:
             self.fileHTML = self.fileHTML[:self.fileHTML.index("<style>")]
 
     def addTable(self, data):
+        """Adds a table to the report by passing through the data of the table.
+
+        @param data: this contains a tuple, first argument being title, the second being a 2d array of rows.
+        @type data: (str, list)
+        """
         title = data[0]
         array2d = data[1]
         headings = array2d.pop(0)
         self.currentHtml = ""
         self.currentHtml += "<button class='accordion'> " + str(title) + " </button>"
         self.currentHtml += "<div class='panel'>\n"
-        with self.useTable("lucTab") as _:
+        with self.useTable("lucTab"):
             if title != "":
                 self.currentHtml += "<caption class='collapsible'>" + str(title) + "</caption>\n"
             self.currentHtml += "<tr>\n"
