@@ -8,6 +8,9 @@ def check_int(s):
 
 
 class RetrieveShell:
+    def __init__(self):
+        self.shell = None
+
     def get_shell(self):
         self.shell = self.luciferManager.main_shell \
             if self.luciferManager.current_shell_id == 0 else None
