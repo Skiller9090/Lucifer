@@ -1,14 +1,17 @@
 from termcolor import colored
 
+from LMI import Reports
+
 
 def generate_table(array2d, title="", headings=None):
     if headings is None:
         headings = []
+    array2d.insert(0, headings)
+    if Reports.isReporting:
+        Reports.HTMLReport.addTable((title, array2d))
     out = ""
     max_char = -1
     max_cols = -1
-    if len(headings) > 0:
-        array2d.insert(0, headings)
     a_title, b_title, max_char, max_cols = calculate_formatting(array2d, max_char, max_cols, title)
     dash_column = "—" * max_char
     out = generate_title(a_title, b_title, dash_column, max_char, max_cols, out, title)

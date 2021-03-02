@@ -1,5 +1,5 @@
 from LMI.Table import generate_table
-from lucifer.Utils import check_int
+from LMI.Utils import check_int
 
 
 def listServers(self, *args, **kwargs):
