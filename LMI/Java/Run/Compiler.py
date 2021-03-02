@@ -27,7 +27,7 @@ class Compiler:
                 print(f"Compiling: {file}")
         else:
             print(f"Compiling : {relativePath}")
-        command = f'"{self.luciferJVM.JavaJavacPath}" '
+        command = f'"{self.luciferJVM.JavaJavacPath}" ' if os.name == "nt" else f'{self.luciferJVM.JavaJavacPath} '
         if multi:
             for file in filePath:
                 command += f'"{os.path.abspath(os.path.join(topDirectory, file))}" '

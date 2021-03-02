@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import os
 
 
 def return_output(command):
@@ -13,7 +14,10 @@ def tee_output(command, stdout=sys.stdout):
 
 
 def process_command(command, stdout, tee=False):
-    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+    extraArgs = {}
+    if os.name != "nt":
+        extraArgs["shell"] = True
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, **extraArgs)
     all_output = ""
     while True:
         output = process.stdout.readline().decode(sys.getfilesystemencoding(), "ignore")
