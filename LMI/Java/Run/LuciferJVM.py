@@ -106,7 +106,7 @@ class LuciferJVM:
         # updated to @JImplements
         stdoutPipe = jpype.JProxy("com.github.skiller9090.stdredirect.PythonPipe", inst=sys.stdout)
         # stderrPipe = jpype.JProxy("com.github.skiller9090.stdredirect.PythonPipe", inst=sys.stderr)
-        out_stream = jpype.JClass("com.github.skiller9090.stdredirect.PythonOutputStream")()
+        out_stream = jpype.JClass("com.github.skiller9090.stdredirect.PythonPrintStream")()
         out_stream.setPythonStdout(stdoutPipe)
         # err_stream = jpype.JClass("com.github.skiller9090.stdredirect.PythonOutputStream")()
         # err_stream.setPythonStdout(stderrPipe)
