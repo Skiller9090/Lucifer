@@ -2,11 +2,14 @@ package com.github.skiller9090.stdredirect;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+
 import com.github.skiller9090.stdredirect.PythonPipe;
 
 
 public class PythonOutputStream extends OutputStream {
     private PythonPipe stdoutPythonPipe;
+    private String buffer = "";
 
     public void setPythonStdout(PythonPipe pythonPipe){
         stdoutPythonPipe = pythonPipe;
@@ -16,7 +19,7 @@ public class PythonOutputStream extends OutputStream {
         if (arg0 == 13){  // Disallow carriage returns for now
             return;
         }
-        stdoutPythonPipe.write(String.valueOf((char) arg0));
+        buffer += Character.toString((char) arg0);
     }
 
     @Override
@@ -36,6 +39,8 @@ public class PythonOutputStream extends OutputStream {
 
     @Override
     public void flush(){
-        System.out.println("Flush Called!");
+        String toWrite = buffer;
+        buffer = "";
+        stdoutPythonPipe.write(toWrite);
     }
 }

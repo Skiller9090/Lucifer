@@ -6,6 +6,7 @@ venv/
 Venv/
 .venv
 .vscode/
+*.iml
 
 settings.yml
 .lucifer-jdk/
