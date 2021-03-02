@@ -17,12 +17,13 @@ def getIn(self):
             self.shell_in = ""
             return
         raise e
+    self.parsePlaceholders()
     if self.luciferManager.log_file is not None:
         if self.luciferManager.log_amount == 1:
             self.luciferManager.log_command(self.shell_in)
 
 
-def parseShellIn(self):
+def parsePlaceholders(self):
     data = re.split(r"(\\*)\$(\S*?[^\\])\$", self.shell_in)
     for itemIndex in range(2, len(data), 3):
         varName = data[itemIndex].strip().replace("\\\\", "\\").replace("\\$", "$")
@@ -30,12 +31,15 @@ def parseShellIn(self):
         if varValue is not None and data[itemIndex - 1].count("\\") % 2 == 0:
             data[itemIndex] = varValue
         else:
-            data[itemIndex] = data[itemIndex].replace("\\\\", "\\")
+            data[itemIndex] = data[itemIndex].replace("\\\\", "\\").replace("\\$", "$")
             if data[itemIndex].endswith("\\"):
                 data[itemIndex] = data[itemIndex][:-1]
             data[itemIndex] = "$" + data[itemIndex] + "$"
         data[itemIndex - 1] = "\\" * (data[itemIndex - 1].count("\\") // 2)
     self.shell_in = "".join(data)
+
+
+def parseShellIn(self):
     com_args = self.shell_in.split(" ")
     while "" in com_args:
         com_args.remove("")

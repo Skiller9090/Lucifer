@@ -186,9 +186,9 @@ class LuciferConsole(tk.Frame, RetrieveShell):
             self.command_index = None
             self.command_history.append(self.shell.shell_in)
             self.luciferManager.gui.statusFrame.status.set(f"Running Command: {self.shell.shell_in}")
-            self.shell.parseShellIn()
-            print(self.shell.shell_in)
             self.console_in.set("")
+            print(self.shell.shell_in)
+            self.shell.parseShellIn()
             self.get_shell()
             print(f"{self.shell.program_name}|" +
                   f"{self.shell.module if '.py' not in self.shell.module else self.shell.module.replace('.py', '')}" +
