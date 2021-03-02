@@ -4,7 +4,7 @@ from lucifer.Help import help_menu
 
 
 class Shell:
-    from ._In import parseShellIn, getIn
+    from ._In import parseShellIn, getIn, parsePlaceholders
     from ._Info import display_help, print_name, print_id, print_auto_vars
     from ._Spawn import spawn_shell, spawn
     from ._Options import show, show_options, command_set, change_auto_set_vars
@@ -14,6 +14,7 @@ class Shell:
     from ._Networking import listServers, killServer
     from ._Java import installJava, reinstallJava, uninstallJava, getJavaInstalls, setJavaJDK, startJavaJVM, \
         buildJar, loadLuciferJar
+    from ._Report import newReport, startReporting, pauseReporting
 
     def __init__(self, ID, lucifer_manager):
         """Per Shell Setup."""
@@ -59,6 +60,14 @@ class Shell:
             "reindex": self.reindex_modules,
             "show_servers": self.listServers,
             "kill_sever": self.killServer,
+            "report_new": self.newReport,
+            "report_open": self.newReport,
+            "report_start": self.startReporting,
+            "report_on": self.startReporting,
+            "report_pause": self.pauseReporting,
+            "report_stop": self.pauseReporting,
+            "report_off": self.pauseReporting,
+
         }
         self.luciferManager.shell_recur += 1
 
