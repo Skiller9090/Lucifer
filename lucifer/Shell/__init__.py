@@ -4,7 +4,7 @@ from lucifer.Help import help_menu
 
 
 class Shell:
-    from ._In import parseShellIn, getIn
+    from ._In import parseShellIn, getIn, parsePlaceholders
     from ._Info import display_help, print_name, print_id, print_auto_vars
     from ._Spawn import spawn_shell, spawn
     from ._Options import show, show_options, command_set, change_auto_set_vars
