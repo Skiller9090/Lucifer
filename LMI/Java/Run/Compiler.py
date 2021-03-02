@@ -37,10 +37,10 @@ class Compiler:
         if verbose:
             command += " -verbose"
         if not silent:
-            output = process_command(command, stdout=sys.stdout, tee=verbose)
+            output = process_command(command, stdout=sys.stdout, tee=verbose, shell=(os.name != "nt"))
         else:
             devNull = open(os.devnull, "w")
-            output = process_command(command, stdout=devNull, tee=False)
+            output = process_command(command, stdout=devNull, tee=False, shell=(os.name != "nt"))
             devNull.close()
         if "file not found" in output.lower():
             print(f"Can't find {filePath} to compile!")
@@ -62,14 +62,14 @@ class Compiler:
         if os.path.exists(outputPath):
             os.remove(outputPath)
         args = "-cvf" if verbose else "-cf"
-        command = f'"{self.luciferJVM.JavaJarPath}" '
+        command = f'"{self.luciferJVM.JavaJarPath}" ' if os.name == "nt" else f'{self.luciferJVM.JavaJarPath} '
         command += f'{args} {outputPath} '
         command += f'-C "{buildPath}" .'
         if not silent:
-            process_command(command, stdout=sys.stdout, tee=verbose)
+            process_command(command, stdout=sys.stdout, tee=verbose, shell=(os.name != "nt"))
         else:
             devNull = open(os.devnull, "w")
-            process_command(command, stdout=devNull, tee=False)
+            process_command(command, stdout=devNull, tee=False, shell=(os.name != "nt"))
             devNull.close()
         print(f"Jar Created: {outputName}")
 
