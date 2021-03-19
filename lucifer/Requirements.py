@@ -1,7 +1,11 @@
 from pkg_resources import DistributionNotFound, VersionConflict, require
+import sys
 
 
 def check_requirements():
+    if any(i in {"--skip-requirements-check", "-S"} for i in set(sys.argv)):
+        print("Skipping Requirements Check!")
+        return
     with open("requirements.txt", "r") as f:
         packages = f.read().split("\n")
     not_installed = []
