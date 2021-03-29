@@ -1,4 +1,4 @@
-from lucifer import uniglobal
+from lucifer import Uniglobal
 
 
 class LuciferManagerInterface:
@@ -11,7 +11,7 @@ class LuciferManagerInterface:
             self.luciferManager = None
 
     def init(self):
-        self.luciferManager = uniglobal.luciferManager
+        self.luciferManager = Uniglobal.luciferManager
         self.luciferManager.isLMI = True
         print("LMI Loaded!")
 
