@@ -64,7 +64,7 @@ def _unpack_jars(fs_path, java_bin_path):
                 current_path = os.path.join(fs_path, f)
                 _unpack_jars(current_path, java_bin_path)
         else:
-            file_name, file_ext = os.path.splitext(fs_path)
+            _, file_ext = os.path.splitext(fs_path)
             if file_ext.endswith("pack"):
                 p = _path_parse(fs_path)
                 name = os.path.join(p.dir, p.name)
