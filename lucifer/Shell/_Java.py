@@ -40,7 +40,7 @@ def uninstallJava(self, com_args):
 
 
 def getJavaInstalls(self, com_args):
-    print(LMI.Java.Installs.getVersions())
+    print(LMI.Java.Installs.getVersionsTable())
 
 
 def setJavaJDK(self, com_args):

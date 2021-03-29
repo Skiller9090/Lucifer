@@ -70,7 +70,7 @@ def reinstall(version, operating_system=_JavaInstallsData.OS, arch=_JavaInstalls
             verbose=verbose, vv=vv)
 
 
-def getVersions():
+def getVersionsTable():
     table = Table.generate_table(
         [[str(i),
           x[0],
@@ -88,3 +88,7 @@ def getVersions():
         ]
     )
     return table
+
+
+def getVersions():
+    return get_lucifer_java_versions()
