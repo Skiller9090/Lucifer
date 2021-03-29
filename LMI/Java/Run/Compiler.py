@@ -102,7 +102,7 @@ class Compiler:
             self.luciferJVM.luciferJavaSrcPath, "",
             out=f"../builds/java-{self.luciferJVM.getJavaMajorVersion()}/classes", silent=True
         )
-        compiler.jarBuild(f"./javaModules/builds/java-{self.luciferJVM.getJavaMajorVersion()}",
+        compiler.jarBuild(f"{self.luciferJVM.luciferJavaBuildPath}/java-{self.luciferJVM.getJavaMajorVersion()}",
                           buildDirectory="classes", silent=True)
 
     def createLoadLuciferModuleJar(self):
