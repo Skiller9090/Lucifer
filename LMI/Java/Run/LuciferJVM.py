@@ -15,7 +15,7 @@ class LuciferJVM:
         self.JavaJavacPath = None
         self.JavaJarPath = None
         self.luciferJarName = "luciferJavaModules.jar"
-        self.luciferJavaModulesPath = "javaModules/"
+        self.luciferJavaModulesPath = "external-modules/java/"
         self.luciferJavaBuildPath = os.path.abspath(os.path.join(self.luciferJavaModulesPath, "builds/"))
         self.luciferJavaSrcPath = os.path.abspath(os.path.join(self.luciferJavaModulesPath, "java/"))
         self.isLuciferJarLoaded = False
@@ -48,7 +48,7 @@ class LuciferJVM:
 
     def findJVM(self):
         found = None
-        for dirPath, dirs, files in os.walk(self.JavaRootPath):
+        for dirPath, _, files in os.walk(self.JavaRootPath):
             for filename in files:
                 fName = os.path.join(dirPath, filename)
                 if re.match('.*jvm.*(dll|so|dylib)', fName):
@@ -67,7 +67,7 @@ class LuciferJVM:
         for dirPath, dirs, files in os.walk(self.JavaRootPath):
             for dirName in dirs:
                 dName = os.path.join(dirPath, dirName)
-                if re.match(f'.*bin$', dName):
+                if re.match('.*bin$', dName):
                     found = dName
                     break
             else:
