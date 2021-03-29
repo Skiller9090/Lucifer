@@ -65,12 +65,8 @@ class HTMLReport:
         @param path: path to the directory where to store the report files.
         @type path: str
         """
-        self.path = os.path.abspath(path)
-        if not os.path.exists(self.path):
-            os.makedirs(self.path, exist_ok=True)
-        self.name = name if name.lower().endswith(".html") else (name + ".html")
-        self.fullPath = os.path.abspath(os.path.join(path, self.name))
         self.fileHTML = ""
+        self._setup_file(name, path)
         self.currentHtml = ""
         self.useTable = HTMLTable(self)
         self.defaultReportStyle = """.lucTab {
@@ -168,6 +164,14 @@ for (i = 0; i < acc.length; i++) {
   });
 }\n"""
 
+    def _setup_file(self, name, path):
+        self.path = os.path.abspath(path)
+        if not os.path.exists(self.path):
+            os.makedirs(self.path, exist_ok=True)
+        self.name = name if name.lower().endswith(".html") else (name + ".html")
+        self.fullPath = os.path.abspath(os.path.join(path, self.name))
+        self.fileHTML = ""
+
     def newReport(self, name):
         """Creates or opens a file to be interfaced with by this class, takes
         name of file as the argument.
@@ -175,12 +179,7 @@ for (i = 0; i < acc.length; i++) {
         @param name: The name of the report file.
         @type name: str
         """
-        self.path = os.path.abspath(self.path)
-        if not os.path.exists(self.path):
-            os.makedirs(self.path, exist_ok=True)
-        self.name = name if name.lower().endswith(".html") else (name + ".html")
-        self.fullPath = os.path.abspath(os.path.join(self.path, self.name))
-        self.fileHTML = ""
+        self._setup_file(name, self.path)
         self.loadFile()
 
     def loadFile(self):
