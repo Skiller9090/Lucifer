@@ -5,9 +5,7 @@ from modules.Module import BaseModule
 class Module(BaseModule):
     def run(self):
         if not Java.Run.isJPypeInstalled:
-            print(
-                "You do not have 'jpype1' installed so you can not use lucifer java extensions!"
-            )
+            print("You do not have 'jpype1' installed so you can not use lucifer java extensions!")
             return
 
         target_version_var = self.shell.vars.get("version", None)
