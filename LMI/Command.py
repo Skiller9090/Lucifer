@@ -1,19 +1,24 @@
 import subprocess
 import sys
+import os
 
 
-def return_output(command):
-    all_output = process_command(command, stdout=subprocess.PIPE)
+def return_output(command, shell=False):
+    all_output = process_command(command, stdout=subprocess.PIPE, shell=shell)
     return all_output
 
 
-def tee_output(command, stdout=sys.stdout):
-    tee_out = process_command(command, stdout, tee=True)
+def tee_output(command, stdout=None, shell=False):
+    if stdout is None:
+        stdout = sys.stdout
+    tee_out = process_command(command, stdout, tee=True, shell=shell)
     return tee_out
 
 
-def process_command(command, stdout, tee=False):
-    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+def process_command(command, stdout, tee=False, shell=False):
+    if not shell and isinstance(command, str) and os.name != "nt":
+        command = command.split(" ")
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=shell)
     all_output = ""
     while True:
         output = process.stdout.readline().decode(sys.getfilesystemencoding(), "ignore")

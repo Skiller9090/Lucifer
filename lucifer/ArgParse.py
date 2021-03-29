@@ -168,3 +168,6 @@ class LuciferParser(argparse.ArgumentParser):
         self.add_argument("-a", "--auto-set-vars", dest="auto_set_vars",
                           help="Enables Auto Setting of Vars On Module Load",
                           action="store_true", required=False)
+        self.add_argument("-S", "--skip-requirements-check", dest="skip_requirements",
+                          help="Skips the checking of requirements within lucifer",
+                          action="store_true", required=False)

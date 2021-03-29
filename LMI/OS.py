@@ -2,7 +2,7 @@ import os
 import platform
 
 from lucifer.Errors import IncompatibleSystemError
-from . import LMI
+from .Interface import LMI
 
 
 def getLMAddress():
