@@ -36,7 +36,7 @@ def _download(download_url, verbose=True, vv=False):
         if verbose and vv:
             print(colored(f"\nDownloaded jdk to {jdk_file}", "green"))
         elif verbose:
-            print(colored(f"\nDownload Complete", "green"))
+            print(colored("\nDownload Complete", "green"))
         else:
             sys.stdout.write("\n")
             sys.stdout.flush()
