@@ -1,6 +1,6 @@
 Pillow~=8.1.1
 pybrake~=0.4.6
-pyyaml~=5.3.1
+pyyaml~=5.4.0
 termcolor~=1.1.0
 colorama~=0.4.3
 ttkthemes~=3.1.1
