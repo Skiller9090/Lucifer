@@ -15,7 +15,7 @@ class LuciferJVM:
         self.JavaJavacPath = None
         self.JavaJarPath = None
         self.luciferJarName = "luciferJavaModules.jar"
-        self.luciferJavaModulesPath = "javaModules/"
+        self.luciferJavaModulesPath = "external-modules/java/"
         self.luciferJavaBuildPath = os.path.abspath(os.path.join(self.luciferJavaModulesPath, "builds/"))
         self.luciferJavaSrcPath = os.path.abspath(os.path.join(self.luciferJavaModulesPath, "java/"))
         self.isLuciferJarLoaded = False
