@@ -2,7 +2,6 @@ package com.github.skiller9090.stdredirect;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 
 import com.github.skiller9090.stdredirect.PythonPipe;
 

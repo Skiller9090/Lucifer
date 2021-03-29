@@ -1,7 +1,6 @@
 package com.github.skiller9090.stdredirect;
 
 import java.io.PrintStream;
-import java.io.OutputStream;
 
 
 public class PythonPrintStream extends PrintStream {
