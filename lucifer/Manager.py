@@ -7,6 +7,7 @@ import termcolor
 import lucifer.Indexing as Indexing
 from lucifer.Networking.Connections import Connections
 from lucifer.Networking.Servers import Servers
+from lucifer.Help import HelpMenu, registerDefaultHelpMenu
 
 
 class LuciferManager:
@@ -45,6 +46,8 @@ class LuciferManager:
         self.index_modules()
         self.connections = Connections()
         self.servers = Servers()
+        self.helpMenu = HelpMenu()
+        registerDefaultHelpMenu(self)
 
     def end(self, *args, **kwargs):
         sys.stderr = sys.__stderr__

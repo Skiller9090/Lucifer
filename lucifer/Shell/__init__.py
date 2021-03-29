@@ -1,6 +1,5 @@
 """The Shell package contains the code to operate the console."""
 from LMI import Java
-from lucifer.Help import help_menu
 
 
 class Shell:
@@ -29,7 +28,6 @@ class Shell:
         self.shell_in = ""
         self.vars = {}
         self.auto_vars = lucifer_manager.auto_vars
-        self.help_menu = help_menu
         self.name = "Shell " if not self.is_main else "Main Shell"
         self.alias = {
             "help": self.display_help,
