@@ -7,7 +7,7 @@ notifier = pybrake.Notifier(project_id=297340,
                             environment='production')
 
 
-class PrintableErrors:
+class PrintableError(Exception):
     pass
 
 
@@ -17,25 +17,25 @@ class BaseLuciferError(Exception):
         self.message = message
 
 
-class IncompatibleSystemError(BaseLuciferError, PrintableErrors):
+class IncompatibleSystemError(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return "Incompatible System Error: " + str(self.message)
 
 
-class NoShellError(BaseLuciferError, PrintableErrors):
+class NoShellError(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return "No Shell Error Error: " + str(self.message)
 
 
-class ArgumentUndefinedError(BaseLuciferError, PrintableErrors):
+class ArgumentUndefinedError(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return "Argument Undefined: " + str(self.message)
 
 
-class LuciferFileNotFound(BaseLuciferError, PrintableErrors):
+class LuciferFileNotFound(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return "File Does Not Exist: " + str(self.message)
@@ -47,49 +47,49 @@ class LuciferSettingNotFound(BaseLuciferError):
         return "Lucifer Setting Not Found: " + str(self.message)
 
 
-class LuciferAddressInUseError(BaseLuciferError, PrintableErrors):
+class LuciferAddressInUseError(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return "Address already in use, so cannot bind to ip and port"
 
 
-class LuciferJVMPathNotFound(BaseLuciferError, PrintableErrors):
+class LuciferJVMPathNotFound(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return f"Could not find find JVM in: {str(self.message)}"
 
 
-class LuciferJavaBinPathNotFound(BaseLuciferError, PrintableErrors):
+class LuciferJavaBinPathNotFound(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return f"Could not find find Bin Directory in: {str(self.message)}"
 
 
-class LuciferJavaBinaryNotFound(BaseLuciferError, PrintableErrors):
+class LuciferJavaBinaryNotFound(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return f"Could not find find Binary: {str(self.message)}"
 
 
-class LuciferCCompilerNotFound(BaseLuciferError, PrintableErrors):
+class LuciferCCompilerNotFound(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return f"Could not find a c compiler: {str(self.message)}"
 
 
-class LuciferCPPCompilerNotFound(BaseLuciferError, PrintableErrors):
+class LuciferCPPCompilerNotFound(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return f"Could not find a c++ compiler: {str(self.message)}"
 
 
-class LuciferFailedToCompile(BaseLuciferError, PrintableErrors):
+class LuciferFailedToCompile(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return f"Failed to compile: {str(self.message)}"
 
 
-class LuciferFailedToFind(BaseLuciferError, PrintableErrors):
+class LuciferFailedToFind(BaseLuciferError, PrintableError):
     def __str__(self):
         """Error Output"""
         return f"Failed to find: {str(self.message)}"
@@ -98,7 +98,7 @@ class LuciferFailedToFind(BaseLuciferError, PrintableErrors):
 def checkErrors(e, ModuleError=False):
     try:
         raise e
-    except PrintableErrors:
+    except PrintableError:
         print(e)
     except CalledProcessError:
         pass
