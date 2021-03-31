@@ -33,7 +33,7 @@ class Module(BaseModule):
             Java.Run.luciferJVM.startJVM()
 
         if not Java.Run.luciferJVM.isLuciferJarLoaded:
-            Java.Run.compiler.createLuciferModuleJar()
+            Java.Run.javaCompiler.createLuciferModuleJar()
             print("Lucifer Module Jar Build Complete!")
             Java.Run.luciferJVM.addLuciferJar()
             Java.Run.luciferJVM.setSTDOUT()

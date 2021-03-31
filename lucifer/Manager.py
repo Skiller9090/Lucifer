@@ -7,6 +7,7 @@ import termcolor
 import lucifer.Indexing as Indexing
 from lucifer.Networking.Connections import Connections
 from lucifer.Networking.Servers import Servers
+from lucifer.Help import HelpMenu, registerDefaultHelpMenu
 
 
 class LuciferManager:
@@ -28,7 +29,7 @@ class LuciferManager:
         self.stderr = sys.stderr
         self.isLMI = False
         # MAJOR.MINOR.PATCH.STAGE.BUILD VERSIONING
-        self.numeric_version = (0, 6, 6, 3, 1)
+        self.numeric_version = (0, 7, 0, 3, 3)
         self.numeric_stage = self.numeric_version[3]
         self.stage = ["Alpha", "Beta", "RC", "Release"][self.numeric_version[3]]
         self.shortStage = ["a", "b", "rc", "r"][self.numeric_version[3]]
@@ -45,6 +46,8 @@ class LuciferManager:
         self.index_modules()
         self.connections = Connections()
         self.servers = Servers()
+        self.helpMenu = HelpMenu()
+        registerDefaultHelpMenu(self)
 
     def end(self, *args, **kwargs):
         sys.stderr = sys.__stderr__

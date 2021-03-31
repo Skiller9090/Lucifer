@@ -6,7 +6,7 @@ import zipfile
 
 from termcolor import colored
 
-from ..Data import _JavaInstallsData
+from ..JavaData import _JavaInstallsData
 
 
 def getFileExt(fileName):
@@ -54,7 +54,7 @@ def _path_parse(file_path):
     dirname = os.path.dirname(file_path)
     base = os.path.basename(file_path)
     name, ext = os.path.splitext(base)
-    return _JavaInstallsData.Path(dir=dirname, base=base, name=name, ext=ext)
+    return _JavaInstallsData.getInstance().Path(dir=dirname, base=base, name=name, ext=ext)
 
 
 def _unpack_jars(fs_path, java_bin_path):
@@ -68,8 +68,9 @@ def _unpack_jars(fs_path, java_bin_path):
             if file_ext.endswith("pack"):
                 p = _path_parse(fs_path)
                 name = os.path.join(p.dir, p.name)
-                tool_path = os.path.join(java_bin_path, _JavaInstallsData.UNPACK200)
-                subprocess.run([tool_path, _JavaInstallsData.UNPACK200_ARGS, f"{name}.pack", f"{name}.jar"])
+                javaInstallsData = _JavaInstallsData.getInstance()
+                tool_path = os.path.join(java_bin_path, javaInstallsData.UNPACK200)
+                subprocess.run([tool_path, javaInstallsData.UNPACK200_ARGS, f"{name}.pack", f"{name}.jar"])
 
 
 def _decompress_archive(repo_root, file_ending, destination_folder, verbose=True, vv=False):

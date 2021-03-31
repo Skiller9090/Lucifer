@@ -12,5 +12,5 @@ settings.yml
 .lucifer-jdk/
 out/
 .compiledJava/
-external-modules/java/builds
+external-modules/*/builds
 reports/

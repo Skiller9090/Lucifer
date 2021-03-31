@@ -13,9 +13,9 @@ Modules:
     - Utils: //
 """
 from . import Java, Networking, Reports, Command, File, Interface, OS, Table, Utils
-from .Interface import LuciferManagerInterface
+from .Interface import LuciferModuleInterfaceManager
 
 
 __all__ = ["Java", "Networking", "Reports", "Command", "File", "Interface", "OS", "Table", "Utils", "LMI"]
 
-LMI = LuciferManagerInterface.instance  # Late Definition
+LMI = LuciferModuleInterfaceManager.instance  # Late Definition

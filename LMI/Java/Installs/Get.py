@@ -6,7 +6,7 @@ from urllib import request, error
 from termcolor import colored
 
 from .Utils import normalize_version
-from ..Data import _JavaInstallsData
+from ..JavaData import _JavaInstallsData
 from ...Interface import LMI
 
 
@@ -30,7 +30,7 @@ def _download(download_url, verbose=True, vv=False):
                     jdk_file = params["filename"]
                     if verbose:
                         print(f"Downloading: {jdk_file} from {download_url}")
-                    jdk_file = os.path.join(_JavaInstallsData.LUCIFER_JDK_DIR, jdk_file)
+                    jdk_file = os.path.join(_JavaInstallsData.getInstance().LUCIFER_JDK_DIR, jdk_file)
                     fileSize = int(info["Content-Length"])
                     downloadFileWProgressBar(open_request, jdk_file, fileSize, verbose=verbose)
         if verbose and vv:
@@ -47,7 +47,7 @@ def _download(download_url, verbose=True, vv=False):
 
 def downloadFileWProgressBar(open_request, file_name, fileSize, verbose=False):
     with open(file_name, "wb") as out_file:
-        copy_bufferSize = 1024 * 1024 if _JavaInstallsData.IS_WINDOWS else 64 * 1024
+        copy_bufferSize = (1024 * 1024) if _JavaInstallsData.getInstance().IS_WINDOWS else (64 * 1024)
         total_downloaded = 0
         updateGUI = False
         if LMI.luciferManager is not None and LMI.luciferManager.gui is not None:

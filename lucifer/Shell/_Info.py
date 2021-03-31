@@ -7,7 +7,7 @@ def print_name(self, *args, **kwargs):
 
 
 def display_help(self, *args, **kwargs):
-    print(self.help_menu)
+    self.luciferManager.helpMenu.showAllHelpMenus()
 
 
 def print_auto_vars(self, *args, **kwargs):
