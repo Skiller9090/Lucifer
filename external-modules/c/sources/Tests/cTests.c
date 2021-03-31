@@ -4,9 +4,9 @@
 
 int runSimpleMathTest(){
     int doMultiply = 20 * 2;
-    int doDivide = 20 / 10;
+    int doDivide = 40 / 2;
     int doSub = doMultiply - doDivide;
-    int doAddition = addMagic(doMultiply, 20);
+    int doAddition = addMagic(doMultiply, doSub);
     return doAddition;
 }
 

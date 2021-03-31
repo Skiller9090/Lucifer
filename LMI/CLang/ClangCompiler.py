@@ -48,7 +48,7 @@ class ClangCompiler:
         filesString = " ".join(list(map(os.path.abspath, [mainFile, *extern_files])))
         outfile = os.path.abspath(os.path.abspath(mainFile).replace(
             self.topSrcDirectory, self.topDirectory + os.sep + out))
-        pre, ext = os.path.splitext(outfile)
+        pre, _ = os.path.splitext(outfile)
         outfile = pre + self.compiledExtension
         if not os.path.exists(os.path.dirname(outfile)):
             try:
@@ -81,7 +81,7 @@ class ClangCompiler:
         return ".so"
 
     def compileAuto(self, mainFile, extern_files=None, out="builds/", verbose=False, silent=False):
-        pre, ext = os.path.splitext(mainFile)
+        _, ext = os.path.splitext(mainFile)
         if ext.lower() in [".c", ".cc", "c", "cc"]:
             return self.cToShared(mainFile, extern_files=extern_files, out=out, verbose=verbose, silent=silent)
         if ext.lower() in [".cpp", "cpp"]:

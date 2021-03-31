@@ -1,5 +1,4 @@
 from termcolor import colored
-import sys
 
 
 class HelpMenu:

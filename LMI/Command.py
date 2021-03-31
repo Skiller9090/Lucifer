@@ -70,5 +70,5 @@ def checkCommandExists(command):
     try:
         autoSilenceCommand(command, silent=True, verbose=False)
         return True
-    except FileNotFoundError as _:
+    except FileNotFoundError:
         return False
