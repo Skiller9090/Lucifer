@@ -4,9 +4,8 @@ from LMI import Reports
 
 
 def generate_table(array2d, title="", headings=None):
-    if headings is None:
-        headings = []
-    array2d.insert(0, headings)
+    if headings is not None:
+        array2d.insert(0, headings)
     if Reports.isReporting:
         Reports.HTMLReport.addTable((title, array2d))
     out = ""
@@ -39,7 +38,7 @@ def generate_row(array2d, dash_column, headings, i, line, max_char, max_cols, ou
         for cell in cellsLine:
             total = max_char - len(str(cell))
             before, after = total // 2, total - (total // 2)
-            if len(headings) > 0 and i == 0:
+            if headings is not None and i == 0:
                 cell = colored(cell, "blue", attrs=[])
             out += f"{' ' * before}{cell}{' ' * after}│"
     out += f'\n├{"┼".join(([dash_column] * max_cols))}┤\n' \
