@@ -10,7 +10,7 @@ from .Utils import normalize_version
 from ..JavaData import _JavaInstallsData
 from ... import Table
 
-_JavaInstallsData = _JavaInstallsData.instance
+_JavaInstallsData = _JavaInstallsData.getInstance()
 
 
 def install(version, operating_system=_JavaInstallsData.OS, arch=_JavaInstallsData.ARCH,

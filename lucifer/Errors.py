@@ -7,31 +7,35 @@ notifier = pybrake.Notifier(project_id=297340,
                             environment='production')
 
 
+class PrintableErrors:
+    pass
+
+
 class BaseLuciferError(Exception):
     def __init__(self, message):
         """Store Error Details"""
         self.message = message
 
 
-class IncompatibleSystemError(BaseLuciferError):
+class IncompatibleSystemError(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return "Incompatible System Error: " + str(self.message)
 
 
-class NoShellError(BaseLuciferError):
+class NoShellError(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return "No Shell Error Error: " + str(self.message)
 
 
-class ArgumentUndefinedError(BaseLuciferError):
+class ArgumentUndefinedError(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return "Argument Undefined: " + str(self.message)
 
 
-class LuciferFileNotFound(BaseLuciferError):
+class LuciferFileNotFound(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return "File Does Not Exist: " + str(self.message)
@@ -43,49 +47,49 @@ class LuciferSettingNotFound(BaseLuciferError):
         return "Lucifer Setting Not Found: " + str(self.message)
 
 
-class LuciferAddressInUseError(BaseLuciferError):
+class LuciferAddressInUseError(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return "Address already in use, so cannot bind to ip and port"
 
 
-class LuciferJVMPathNotFound(BaseLuciferError):
+class LuciferJVMPathNotFound(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return f"Could not find find JVM in: {str(self.message)}"
 
 
-class LuciferJavaBinPathNotFound(BaseLuciferError):
+class LuciferJavaBinPathNotFound(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return f"Could not find find Bin Directory in: {str(self.message)}"
 
 
-class LuciferJavaBinaryNotFound(BaseLuciferError):
+class LuciferJavaBinaryNotFound(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return f"Could not find find Binary: {str(self.message)}"
 
 
-class LuciferCCompilerNotFound(BaseLuciferError):
+class LuciferCCompilerNotFound(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return f"Could not find a c compiler: {str(self.message)}"
 
 
-class LuciferCPPCompilerNotFound(BaseLuciferError):
+class LuciferCPPCompilerNotFound(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return f"Could not find a c++ compiler: {str(self.message)}"
 
 
-class LuciferFailedToCompile(BaseLuciferError):
+class LuciferFailedToCompile(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return f"Failed to compile: {str(self.message)}"
 
 
-class LuciferFailedToFind(BaseLuciferError):
+class LuciferFailedToFind(BaseLuciferError, PrintableErrors):
     def __str__(self):
         """Error Output"""
         return f"Failed to find: {str(self.message)}"
@@ -94,33 +98,13 @@ class LuciferFailedToFind(BaseLuciferError):
 def checkErrors(e, ModuleError=False):
     try:
         raise e
-    except IncompatibleSystemError:
-        print(e)
-    except NoShellError:
+    except PrintableErrors:
         print(e)
     except CalledProcessError:
         pass
-    except ArgumentUndefinedError:
-        print(e)
-    except LuciferFileNotFound:
-        print(e)
     except LuciferSettingNotFound:
         print(e)
         print("If Error Continues Try Removing 'settings.yml'")
-    except LuciferAddressInUseError:
-        print(e)
-    except LuciferJVMPathNotFound:
-        print(e)
-    except LuciferJavaBinPathNotFound:
-        print(e)
-    except LuciferJavaBinaryNotFound:
-        print(e)
-    except LuciferCCompilerNotFound:
-        print(e)
-    except LuciferFailedToCompile:
-        print(e)
-    except LuciferFailedToFind:
-        print(e)
     except Exception as err:
         notifier.notify(err)
         if not ModuleError:
