@@ -1,7 +1,7 @@
 import os
 from glob import glob
 
-from ..Data import _JavaInstallsData
+from ..JavaData import _JavaInstallsData
 
 
 def get_lucifer_java_versions():

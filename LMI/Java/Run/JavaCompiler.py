@@ -1,13 +1,12 @@
 import os
 import re
 import shutil
-import sys
 
 from .LuciferJVM import luciferJVM
-from ...Command import process_command
+from ...Command import autoSilenceCommand
 
 
-class Compiler:
+class JavaCompiler:
     def __init__(self):
         self.luciferJVM = luciferJVM
 
@@ -36,12 +35,8 @@ class Compiler:
         command += f'-d "{outPath}"'
         if verbose:
             command += " -verbose"
-        if not silent:
-            output = process_command(command, stdout=sys.stdout, tee=verbose, shell=(os.name != "nt"))
-        else:
-            devNull = open(os.devnull, "w")
-            output = process_command(command, stdout=devNull, tee=False, shell=(os.name != "nt"))
-            devNull.close()
+        output = autoSilenceCommand(command, silent=silent, verbose=verbose)
+
         if "file not found" in output.lower():
             print(f"Can't find {filePath} to compile!")
             return
@@ -65,12 +60,7 @@ class Compiler:
         command = f'"{self.luciferJVM.JavaJarPath}" ' if os.name == "nt" else f'{self.luciferJVM.JavaJarPath} '
         command += f'{args} {outputPath} '
         command += f'-C "{buildPath}" .'
-        if not silent:
-            process_command(command, stdout=sys.stdout, tee=verbose, shell=(os.name != "nt"))
-        else:
-            devNull = open(os.devnull, "w")
-            process_command(command, stdout=devNull, tee=False, shell=(os.name != "nt"))
-            devNull.close()
+        autoSilenceCommand(command, silent=silent, verbose=verbose)
         print(f"Jar Created: {outputName}")
 
     @staticmethod
@@ -102,12 +92,12 @@ class Compiler:
             self.luciferJVM.luciferJavaSrcPath, "",
             out=f"../builds/java-{self.luciferJVM.getJavaMajorVersion()}/classes", silent=True
         )
-        compiler.jarBuild(f"{self.luciferJVM.luciferJavaBuildPath}/java-{self.luciferJVM.getJavaMajorVersion()}",
-                          buildDirectory="classes", silent=True)
+        javaCompiler.jarBuild(f"{self.luciferJVM.luciferJavaBuildPath}/java-{self.luciferJVM.getJavaMajorVersion()}",
+                              buildDirectory="classes", silent=True)
 
     def createLoadLuciferModuleJar(self):
         self.createLuciferModuleJar()
         self.luciferJVM.addLuciferJar()
 
 
-compiler = Compiler()
+javaCompiler = JavaCompiler()

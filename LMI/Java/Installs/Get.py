@@ -6,7 +6,7 @@ from urllib import request, error
 from termcolor import colored
 
 from .Utils import normalize_version
-from ..Data import _JavaInstallsData
+from ..JavaData import _JavaInstallsData
 from ...Interface import LMI
 
 

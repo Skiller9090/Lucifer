@@ -74,7 +74,7 @@ def startJavaJVM(self, com_args):
 
 
 def buildJar(self, com_args):
-    LMI.Java.Run.compiler.createLuciferModuleJar()
+    LMI.Java.Run.javaCompiler.createLuciferModuleJar()
     print("Lucifer Module Jar Build Complete!")
 
 
