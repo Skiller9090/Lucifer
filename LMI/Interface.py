@@ -1,14 +1,16 @@
 from lucifer import Uniglobal
+from ._SystemData import _SystemData
 
 
-class LuciferManagerInterface:
+class LuciferModuleInterfaceManager:
     instance = None
 
     def __init__(self):
-        if LuciferManagerInterface.instance is None:
-            LuciferManagerInterface.instance = self
+        if LuciferModuleInterfaceManager.instance is None:
+            LuciferModuleInterfaceManager.instance = self
             self.cache = {}
             self.luciferManager = None
+            self._systemData = _SystemData.getInstance()
 
     def init(self):
         self.luciferManager = Uniglobal.luciferManager
@@ -16,5 +18,5 @@ class LuciferManagerInterface:
         print("LMI Loaded!")
 
 
-LuciferManagerInterface()
-LMI = LuciferManagerInterface.instance  # Earliest Definition
+LuciferModuleInterfaceManager()
+LMI = LuciferModuleInterfaceManager.instance  # Earliest Definition

@@ -7,7 +7,7 @@ from .Extract import getFileExt, _decompress_archive
 from .Get import get_download, _download
 from .List import get_lucifer_java_versions
 from .Utils import normalize_version
-from ..Data import _JavaInstallsData
+from ..JavaData import _JavaInstallsData
 from ... import Table
 
 _JavaInstallsData = _JavaInstallsData.instance

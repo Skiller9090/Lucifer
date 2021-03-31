@@ -6,7 +6,7 @@ import zipfile
 
 from termcolor import colored
 
-from ..Data import _JavaInstallsData
+from ..JavaData import _JavaInstallsData
 
 
 def getFileExt(fileName):
