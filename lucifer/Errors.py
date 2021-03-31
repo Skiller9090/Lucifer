@@ -67,6 +67,30 @@ class LuciferJavaBinaryNotFound(BaseLuciferError):
         return f"Could not find find Binary: {str(self.message)}"
 
 
+class LuciferCCompilerNotFound(BaseLuciferError):
+    def __str__(self):
+        """Error Output"""
+        return f"Could not find a c compiler: {str(self.message)}"
+
+
+class LuciferCPPCompilerNotFound(BaseLuciferError):
+    def __str__(self):
+        """Error Output"""
+        return f"Could not find a c++ compiler: {str(self.message)}"
+
+
+class LuciferFailedToCompile(BaseLuciferError):
+    def __str__(self):
+        """Error Output"""
+        return f"Failed to compile: {str(self.message)}"
+
+
+class LuciferFailedToFind(BaseLuciferError):
+    def __str__(self):
+        """Error Output"""
+        return f"Failed to find: {str(self.message)}"
+
+
 def checkErrors(e, ModuleError=False):
     try:
         raise e
@@ -90,6 +114,12 @@ def checkErrors(e, ModuleError=False):
     except LuciferJavaBinPathNotFound:
         print(e)
     except LuciferJavaBinaryNotFound:
+        print(e)
+    except LuciferCCompilerNotFound:
+        print(e)
+    except LuciferFailedToCompile:
+        print(e)
+    except LuciferFailedToFind:
         print(e)
     except Exception as err:
         notifier.notify(err)
