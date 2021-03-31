@@ -5,9 +5,9 @@ from ..JavaData import _JavaInstallsData
 
 
 def get_lucifer_java_versions():
-    directories = glob(_JavaInstallsData.LUCIFER_JDK_DIR + f"{os.sep}*{os.sep}", recursive=False)
+    directories = glob(_JavaInstallsData.getInstance().LUCIFER_JDK_DIR + f"{os.sep}*{os.sep}", recursive=False)
     versionFolderNames = list(map(
-        lambda x: x.replace(_JavaInstallsData.LUCIFER_JDK_DIR, "").replace(os.sep, ""), directories
+        lambda x: x.replace(_JavaInstallsData.getInstance().LUCIFER_JDK_DIR, "").replace(os.sep, ""), directories
     ))
     javaVersions = {}
     for javaDirectory, versionFolderName in zip(directories, versionFolderNames):
@@ -16,7 +16,7 @@ def get_lucifer_java_versions():
             "folderPath": javaDirectory,
             "variant": "Unknown",
             "version": versionFolderName.replace("jdk", ""),
-            "location": _JavaInstallsData.LUCIFER_RELATIVE_JDK_DIR,
+            "location": _JavaInstallsData.getInstance().LUCIFER_RELATIVE_JDK_DIR,
             "releaseData": {}
         }
         if javaVersions[versionFolderName]["version"].startswith("-"):

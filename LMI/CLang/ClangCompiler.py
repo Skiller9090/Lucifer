@@ -76,15 +76,14 @@ class ClangCompiler:
     def fetchExtension(self):
         if self._systemData.IS_WINDOWS:
             return ".dll"
-        elif self._systemData.IS_DARWIN:
+        if self._systemData.IS_DARWIN:
             return ".dylib"
-        else:
-            return ".so"
+        return ".so"
 
     def compileAuto(self, mainFile, extern_files=None, out="builds/", verbose=False, silent=False):
         pre, ext = os.path.splitext(mainFile)
         if ext.lower() in [".c", ".cc", "c", "cc"]:
             return self.cToShared(mainFile, extern_files=extern_files, out=out, verbose=verbose, silent=silent)
-        elif ext.lower() in [".cpp", "cpp"]:
+        if ext.lower() in [".cpp", "cpp"]:
             return self.cppToShared(mainFile, extern_files=extern_files, out=out, verbose=verbose, silent=silent)
         return None
