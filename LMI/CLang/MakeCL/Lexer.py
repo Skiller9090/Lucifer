@@ -35,7 +35,7 @@ class MakeCLLexer:
             error = MakeCLInvalidFileError("Invalid extension for MakeCL file: " + ext)
             if not ignoreFileName:
                 error.raiseError()
-        pre, fileName = os.path.split(absPath)
+        _, fileName = os.path.split(absPath)
         if fileName != "make.clucifer":
             error = MakeCLInvalidFileError("Invalid file name for MakeCL file")
             if not ignoreFileName:
@@ -76,7 +76,7 @@ class MakeCLLexer:
             self.finished = True
             self.file.close()
             return True
-        elif self.current in string.ascii_letters:
+        if self.current in string.ascii_letters:
             self.state = States.Keyword
             self.currentToken = KeywordToken()
             self.currentToken.add(self.current)
