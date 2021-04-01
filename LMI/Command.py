@@ -17,7 +17,7 @@ def tee_output(command, stdout=None, stderr=None, shell=False):
     return tee_out
 
 
-def process_command(command, stdout=None, stderr=None, tee=False, shell=False):
+def process_command(command, stdout=None, stderr=None, tee=False, shell=False, returnExit=False):
     if stdout is None:
         stdout = sys.stdout
     if stderr is None:
@@ -28,12 +28,14 @@ def process_command(command, stdout=None, stderr=None, tee=False, shell=False):
     all_output = ""
     while True:
         output = process.stdout.readline().decode(sys.getfilesystemencoding(), "ignore")
-        if output == '' and process.poll() is not None:
-            break
         if output:
             all_output += output
             if tee:
                 stdout.write(output)
+        if output == '' and process.poll() is not None:
+            break
+    if returnExit:
+        return process.returncode, all_output
     return all_output
 
 
@@ -47,12 +49,15 @@ def async_run_command(command):
     return interface
 
 
-def autoSilenceCommand(command, silent=False, verbose=False):
+def autoSilenceCommand(command, silent=False, verbose=False, shell=None, returnExit=False):
+    if shell is None:
+        shell = (os.name != "nt")
     if not silent:
-        output = process_command(command, stdout=sys.stdout, stderr=sys.stderr, tee=verbose, shell=(os.name != "nt"))
+        output = process_command(command, stdout=sys.stdout, stderr=sys.stderr, tee=verbose, shell=shell,
+                                 returnExit=returnExit)
     else:
         devNull = open(os.devnull, "w")
-        output = process_command(command, stdout=devNull, stderr=devNull, tee=False, shell=(os.name != "nt"))
+        output = process_command(command, stdout=devNull, stderr=devNull, tee=False, shell=shell, returnExit=returnExit)
         devNull.close()
     return output
 

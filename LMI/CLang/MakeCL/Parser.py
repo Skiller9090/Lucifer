@@ -19,7 +19,8 @@ class MakeCLParser:
             States.Root: self.handleRoot,
             States.InFileDirectiveInitializer: self.handleFDI,
             States.InFileDirective: self.handleFD,
-            States.InFileDirectiveAndLink: self.handleFDAL
+            States.InFileDirectiveAndLink: self.handleFDAL,
+            States.InFileDirectiveAndArg: self.handleFDAA
         }
 
     def loadFromContext(self, context):
@@ -63,6 +64,9 @@ class MakeCLParser:
         if self.currentToken.type == TokenEnum.Link:
             self.state = States.InFileDirectiveAndLink
             self.stack.append(self.currentToken)
+        elif self.currentToken.type == TokenEnum.Arg:
+            self.state = States.InFileDirectiveAndArg
+            self.stack.append(self.currentToken)
         elif self.currentToken.type == TokenEnum.RBrace:
             self.state = States.Root
             self.emitToken()
@@ -86,6 +90,16 @@ class MakeCLParser:
             LToken = self.stack.pop(-1)
             FDToken = self.stack[-1]
             FDToken.addLink(LToken)
+            self.state = States.InFileDirective
+
+    def handleFDAA(self):
+        if self.currentToken.type == TokenEnum.String:
+            self.stack[-1].addArg(self.currentToken.value)
+        elif self.currentToken.type == TokenEnum.SemiColon:
+            ArgToken = self.stack.pop(-1)
+            FDToken = self.stack[-1]
+            for link in ArgToken.value:
+                FDToken.addArg(link)
             self.state = States.InFileDirective
 
     def emitToken(self):

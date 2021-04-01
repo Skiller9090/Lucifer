@@ -6,3 +6,4 @@ class States(Enum):
     InFileDirectiveInitializer = 1
     InFileDirective = 2
     InFileDirectiveAndLink = 3
+    InFileDirectiveAndArg = 4

@@ -29,6 +29,7 @@ class MakeCLFile:
         fileDirectives = {}
         for fd in rawFileDirectives:
             fileDirectives[fd.value['file']] = {
-                'links': {x.value["file"]: x.value["path"] for x in fd.value["links"]}
+                'links': {x.value["file"]: x.value["path"] for x in fd.value["links"]},
+                'args': fd.value["args"]
             }
         return fileDirectives

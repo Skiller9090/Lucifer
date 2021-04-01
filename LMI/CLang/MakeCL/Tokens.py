@@ -13,6 +13,7 @@ class TokenEnum(Enum):
     SemiColon = 8
     Keyword = 9
     EOF = 10
+    Arg = 11
     Unknown = 99
 
 
@@ -103,13 +104,25 @@ class LinkToken(Token):
 class FileDirectiveToken(Token):
     def __init__(self):
         super(FileDirectiveToken, self).__init__(TokenEnum.FileDirective)
-        self.value = {"file": "", "links": []}
+        self.value = {"file": "", "links": [], "args": []}
 
     def setFile(self, file: str):
         self.value["file"] = file
 
     def addLink(self, linkToken: LinkToken):
         self.value["links"].append(linkToken)
+
+    def addArg(self, arg):
+        self.value["args"].append(arg)
+
+
+class ArgToken(Token):
+    def __init__(self):
+        super(ArgToken, self).__init__(TokenEnum.Arg)
+        self.value = []
+
+    def addArg(self, arg):
+        self.value.append(arg)
 
 
 class EOFToken(Token):
@@ -122,5 +135,8 @@ keywordMap = {
     "FD": FileDirectiveToken,
     "FileDirective": FileDirectiveToken,
     "L": LinkToken,
-    "Link": LinkToken
+    "Link": LinkToken,
+    "A": ArgToken,
+    "Arg": ArgToken,
+    "Args": ArgToken
 }
