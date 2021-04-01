@@ -1,3 +1,4 @@
+from .MakeCL.MakeCLFile import MakeCLFile
 from ..Command import autoSilenceCommand, checkCommandExists
 from .._SystemData import _SystemData
 from lucifer.Errors import LuciferFailedToCompile
@@ -81,6 +82,19 @@ class ClangCompiler:
         return ".so"
 
     def compileAuto(self, mainFile, extern_files=None, out="builds/", verbose=False, silent=False):
+        if extern_files is None:
+            extern_files = []
+        directory, _ = os.path.split(mainFile)
+        if "make.clucifer" in os.listdir(directory):
+            makeCLFile = MakeCLFile(os.path.join(directory, "make.clucifer"))
+            fileDirectives = makeCLFile.getFileDirectives()
+            if mainFile in fileDirectives.keys():
+                instructions = fileDirectives[mainFile]
+                if verbose:
+                    print("Found compile instructions in make.clucifer!")
+                links = instructions["links"]
+                for link in links.keys():
+                    extern_files.append(os.path.join(links[link], link))
         _, ext = os.path.splitext(mainFile)
         if ext.lower() in [".c", ".cc", "c", "cc"]:
             return self.cToShared(mainFile, extern_files=extern_files, out=out, verbose=verbose, silent=silent)

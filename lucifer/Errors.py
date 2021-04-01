@@ -1,4 +1,5 @@
 from subprocess import CalledProcessError
+from termcolor import colored
 
 import pybrake
 
@@ -15,6 +16,17 @@ class BaseLuciferError(Exception):
     def __init__(self, message):
         """Store Error Details"""
         self.message = message
+
+
+class MakeCLError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return self.__class__.__name__ + ": " + str(self.message)
+
+    def raiseError(self):
+        raise self
 
 
 class IncompatibleSystemError(BaseLuciferError, PrintableError):
@@ -99,11 +111,13 @@ def checkErrors(e, ModuleError=False):
     try:
         raise e
     except PrintableError:
-        print(e)
+        print(colored(e, "red"))
+    except MakeCLError:
+        print(colored(e, "red"))
     except CalledProcessError:
         pass
     except LuciferSettingNotFound:
-        print(e)
+        print(colored(e, "red"))
         print("If Error Continues Try Removing 'settings.yml'")
     except Exception as err:
         notifier.notify(err)
