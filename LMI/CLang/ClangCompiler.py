@@ -50,6 +50,18 @@ class ClangCompiler:
             if not silent:
                 print(f"{'CC++' if useCPP else 'CC'}: {str(os.path.relpath(os.path.abspath(file), self.topDirectory))}")
         filesString = " ".join(list(map(os.path.abspath, [mainFile, *extern_files])))
+        command, outfile = self.generate_compile_command(extra_args, filesString, mainFile, out, useCPP, verbose)
+        if verbose and not silent:
+            print(f"Command: {command}")
+        procReturn, _ = autoSilenceCommand(command, silent=silent, verbose=verbose, shell=True, returnExit=True)
+        if not silent and procReturn == 0:
+            print("Compiled!")
+        if procReturn != 0:
+            raise FailedToCompileError("c++" if useCPP else 'c', f"Failed to compile {mainFile}, check permissions,"
+                                                                 f"files and arguments")
+        return outfile
+
+    def generate_compile_command(self, extra_args, filesString, mainFile, out, useCPP, verbose):
         outfile = os.path.abspath(os.path.abspath(mainFile).replace(
             self.topSrcDirectory, self.topDirectory + os.sep + out))
         pre, _ = os.path.splitext(outfile)
@@ -68,15 +80,7 @@ class ClangCompiler:
             command += f" {arg}"
             if verbose:
                 print(f"Argument added: {arg}")
-        if verbose and not silent:
-            print(f"Command: {command}")
-        procReturn, _ = autoSilenceCommand(command, silent=silent, verbose=verbose, shell=True, returnExit=True)
-        if not silent and procReturn == 0:
-            print("Compiled!")
-        if procReturn != 0:
-            raise FailedToCompileError("c++" if useCPP else 'c', f"Failed to compile {mainFile}, check permissions,"
-                                                                 f"files and arguments")
-        return outfile
+        return command, outfile
 
     def cppToShared(self, mainFile, extern_files=None, extra_args=None, out="builds/", verbose=False, silent=False):
         outfile = self.cToShared(
