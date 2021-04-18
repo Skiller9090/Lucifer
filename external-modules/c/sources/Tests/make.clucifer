@@ -1,0 +1,8 @@
+FileDirective("cTests.c"){  # Note: FileDirective can be short handed as: FD
+    Link("importTest" | "importTestAdd.c");  # Note: Link can be short handed as: L
+    Link("importTest" | "importTestSub.c");  # Note: Link(relativeDirectoryFromHere, fileToLink)
+    Args("--verbose");  # add custom arguments
+}
+
+FileDirective("cppTests.cpp"){
+}

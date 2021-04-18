@@ -1,4 +1,5 @@
 from subprocess import CalledProcessError
+from termcolor import colored
 
 import pybrake
 
@@ -15,6 +16,26 @@ class BaseLuciferError(Exception):
     def __init__(self, message):
         """Store Error Details"""
         self.message = message
+
+
+class MakeCLError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return self.__class__.__name__ + ": " + str(self.message)
+
+    def raiseError(self):
+        raise self
+
+
+class CompilerError(Exception):
+    def __init__(self, compiler, message):
+        self.message = message
+        self.compiler = compiler
+
+    def __str__(self):
+        return self.__class__.__name__ + ": " + str(self.message) + " with the " + self.compiler + " compiler"
 
 
 class IncompatibleSystemError(BaseLuciferError, PrintableError):
@@ -71,22 +92,16 @@ class LuciferJavaBinaryNotFound(BaseLuciferError, PrintableError):
         return f"Could not find find Binary: {str(self.message)}"
 
 
-class LuciferCCompilerNotFound(BaseLuciferError, PrintableError):
-    def __str__(self):
-        """Error Output"""
-        return f"Could not find a c compiler: {str(self.message)}"
+class CCompilerNotFound(CompilerError):
+    pass
 
 
-class LuciferCPPCompilerNotFound(BaseLuciferError, PrintableError):
-    def __str__(self):
-        """Error Output"""
-        return f"Could not find a c++ compiler: {str(self.message)}"
+class CPPCompilerNotFound(CompilerError):
+    pass
 
 
-class LuciferFailedToCompile(BaseLuciferError, PrintableError):
-    def __str__(self):
-        """Error Output"""
-        return f"Failed to compile: {str(self.message)}"
+class FailedToCompileError(CompilerError):
+    pass
 
 
 class LuciferFailedToFind(BaseLuciferError, PrintableError):
@@ -99,11 +114,15 @@ def checkErrors(e, ModuleError=False):
     try:
         raise e
     except PrintableError:
-        print(e)
+        print(colored(e, "red"))
+    except MakeCLError:
+        print(colored(e, "red"))
+    except CompilerError:
+        print(colored(e, "red"))
     except CalledProcessError:
         pass
     except LuciferSettingNotFound:
-        print(e)
+        print(colored(e, "red"))
         print("If Error Continues Try Removing 'settings.yml'")
     except Exception as err:
         notifier.notify(err)
