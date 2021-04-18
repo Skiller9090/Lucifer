@@ -9,7 +9,4 @@ class FontFind:
                 return font.actual()['family']
             elif name.lower() in (x.lower()
                                   for x in tk_fonts.families(root=self)):
-                break
-        else:
-            return None
-        return name
+                return name
