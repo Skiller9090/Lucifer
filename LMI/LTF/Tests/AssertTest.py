@@ -1,5 +1,4 @@
 from .LTFTest import LTFTest
-import timeit
 
 
 class AssertTest(LTFTest):
@@ -9,22 +8,14 @@ class AssertTest(LTFTest):
             self.extra_tests.append(test_func)
 
     def run(self):
-        self.find_functions()
+        self.findFunctions()
         self.satisfyRequirements()
-        for functionName in self.all_functions:
-            function = self.all_functions[functionName]
-            self.test_mappings[functionName] = {
-                "time": None,
-                "has_run": False,
-                "errors": [],
-                "failed": False
-            }
+        for functionName, function in zip(self.all_functions.keys(), self.all_functions.values()):
+            self.setDefaultTestValues(functionName)
             try:
-                timeTaken = timeit.timeit(lambda: function(self), number=1)
+                timeTaken = self.timeFunction(function)
                 self.test_mappings[functionName]["time"] = timeTaken
-            except AssertionError as e:
-                self.test_mappings[functionName]["errors"].append(e)
-                self.test_mappings[functionName]["failed"] = True
+            except Exception as e:
+                self.addError(functionName, e)
             self.test_mappings[functionName]["has_run"] = True
         self.has_run = True
-

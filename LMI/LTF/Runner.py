@@ -1,5 +1,5 @@
-from .Tests import AssertTest, LTFTest
 from .Errors import NotLTFTestError
+from .Tests import AssertTest, LTFTest
 
 
 class TestsRunner:

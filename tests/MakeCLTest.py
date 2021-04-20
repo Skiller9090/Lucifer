@@ -1,5 +1,5 @@
-from LMI.CLang.MakeCL.MakeCLFile import MakeCLFile
 from LMI import LTF
+from LMI.CLang.MakeCL.MakeCLFile import MakeCLFile
 
 
 class CLMakeTests(LTF.Tests.BooleanTest):

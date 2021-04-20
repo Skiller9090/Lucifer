@@ -1,4 +1,7 @@
 import abc
+import timeit
+
+from ...Utils import RunTimeReturn
 
 
 class LTFTest(metaclass=abc.ABCMeta):
@@ -14,10 +17,10 @@ class LTFTest(metaclass=abc.ABCMeta):
             for requirement in requirements:
                 self.requirements.append(requirement(self))
 
-    def find_functions(self):
+    def findFunctions(self):
         self.all_functions = {}
         for function in self.extra_tests:
-            self.all_functions["extra-"+function.__name__] = function
+            self.all_functions["extra-" + function.__name__] = function
         for functionName in self.__class__.__dict__.keys():
             for identifier in LTFTest.testIdentifiers:
                 if functionName.startswith(identifier):
@@ -29,7 +32,35 @@ class LTFTest(metaclass=abc.ABCMeta):
             if not requirement.check_satisfied():
                 requirement.satisfyRequirement()
 
+    def timeWithReturnFunction(self, function):
+        with RunTimeReturn() as RTR:
+            function = function.__get__(self)
+            timeTaken, outValue = RTR.run(
+                lambda: function(),
+                number=1
+            )
+        return timeTaken, outValue
+
+    def timeFunction(self, function):
+        function = function.__get__(self)
+        timeTaken = timeit.timeit(
+            lambda: function(),
+            number=1
+        )
+        return timeTaken
+
+    def addError(self, functionName, error, failed=True):
+        self.test_mappings[functionName]["errors"].append(error)
+        self.test_mappings[functionName]["failed"] = failed
+
+    def setDefaultTestValues(self, functionName):
+        self.test_mappings[functionName] = {
+            "time": None,
+            "has_run": False,
+            "errors": [],
+            "failed": False
+        }
+
     @abc.abstractmethod
     def run(self):
         pass
-
