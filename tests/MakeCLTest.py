@@ -15,7 +15,7 @@ class CLMakeTests(LTF.Tests.BooleanTest):
             _ = e
             return False
 
-    def test_MakeCL_Lexed_Parse(self):
+    def test_MakeCL_lexed_parse(self):
         try:
             self.makeCLFIle.getFileDirectives()
             return True

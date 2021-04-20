@@ -7,7 +7,7 @@ class AssertTests(LTF.Tests.AssertTest):
         self.luciferManager = None
 
     @staticmethod
-    def test_Assert_Test():
+    def test_Assert():
         assert 1 == 1
 
 
@@ -16,5 +16,5 @@ class BooleanTests(LTF.Tests.BooleanTest):
         super().__init__(*args, requirements=[])
 
     @staticmethod
-    def test_Boolean_Tests():
+    def test_Boolean():
         return True

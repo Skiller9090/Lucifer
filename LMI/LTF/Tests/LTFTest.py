@@ -35,18 +35,12 @@ class LTFTest(metaclass=abc.ABCMeta):
     def timeWithReturnFunction(self, function):
         with RunTimeReturn() as RTR:
             function = function.__get__(self)
-            timeTaken, outValue = RTR.run(
-                lambda: function(),
-                number=1
-            )
+            timeTaken, outValue = RTR.run(function, number=1)
         return timeTaken, outValue
 
     def timeFunction(self, function):
         function = function.__get__(self)
-        timeTaken = timeit.timeit(
-            lambda: function(),
-            number=1
-        )
+        timeTaken = timeit.timeit(function, number=1)
         return timeTaken
 
     def addError(self, functionName, error, failed=True):

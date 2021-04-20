@@ -177,7 +177,7 @@ class LuciferParser(argparse.ArgumentParser):
                          module.replace(".py", "").replace("/", ".").replace("\\", "."))
             importlib.invalidate_caches()
             imported_module = importlib.import_module(to_import)
-            for name, obj in inspect.getmembers(imported_module):
+            for _, obj in inspect.getmembers(imported_module):
                 if inspect.isclass(obj) and obj.__module__ == to_import:
                     if issubclass(obj, LTF.Tests.LTFTest):
                         test_runner.add_LTF_test(obj)
