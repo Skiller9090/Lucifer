@@ -1,12 +1,12 @@
 import os
 
 
-def recursive_scan_dir(dirname):
+def recursive_scan_dir(dirname, base_path):
     sub_folders = [f.path for f in os.scandir(dirname)
                    if f.is_dir() and "__pycache__" not in f.path]
     for dirname in list(sub_folders):
-        sub_folders.extend(recursive_scan_dir(dirname))
-    return [fo.replace("modules/", "").replace("\\", "/")
+        sub_folders.extend(recursive_scan_dir(dirname, base_path))
+    return [fo.replace(base_path, "").replace("\\", "/")
             for fo in sub_folders]
 
 
@@ -18,7 +18,13 @@ def scan_modules(dirname):
 
 def index_modules():
     base_path = "modules/"
-    sub_folders = recursive_scan_dir(base_path)
+    return index_python_files(base_path)
+
+
+def index_python_files(base_path, full=False):
+    sub_folders = recursive_scan_dir(base_path, base_path)
+    if full:
+        sub_folders.insert(0, "")
     # {"file_name": {"folders": {}# , "modules": {}}}
     tree = {}
     modules = {}
