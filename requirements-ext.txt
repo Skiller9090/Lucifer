@@ -4,3 +4,5 @@ pyyaml~=5.4.0
 termcolor~=1.1.0
 colorama~=0.4.3
 ttkthemes~=3.2.2
+jpype1~=1.2.1
+js2py~=0.71

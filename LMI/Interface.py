@@ -17,6 +17,10 @@ class LuciferModuleInterfaceManager:
         self.luciferManager.isLMI = True
         print("LMI Loaded!")
 
+    @property
+    def systemData(self):
+        return self._systemData
+
 
 LuciferModuleInterfaceManager()
 LMI = LuciferModuleInterfaceManager.instance  # Earliest Definition

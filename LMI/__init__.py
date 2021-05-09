@@ -12,10 +12,9 @@ Modules:
     - Table: //
     - Utils: //
 """
-from . import Java, Networking, Reports, Command, File, Interface, OS, Table, Utils
+from . import Java, Networking, Reports, Command, File, Interface, OS, Table, Utils, Javascript
 from .Interface import LuciferModuleInterfaceManager
 
-
-__all__ = ["Java", "Networking", "Reports", "Command", "File", "Interface", "OS", "Table", "Utils", "LMI"]
+__all__ = ["Java", "Javascript", "Networking", "Reports", "Command", "File", "Interface", "OS", "Table", "Utils", "LMI"]
 
 LMI = LuciferModuleInterfaceManager.instance  # Late Definition

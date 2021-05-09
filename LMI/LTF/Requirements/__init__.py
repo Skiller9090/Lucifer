@@ -1,1 +1,2 @@
+from .RequireJavascriptEnabled import RequireJavascriptEnabled
 from .RequireLuciferManager import RequireLuciferManager
