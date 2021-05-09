@@ -1,8 +1,9 @@
-from .ClangCompiler import ClangCompiler
-from lucifer.Errors import LuciferFailedToFind
-import os
 import ctypes
+import os
 import re
+
+from lucifer.Errors import LuciferFailedToFind
+from .ClangCompiler import ClangCompiler
 
 
 class Clang:

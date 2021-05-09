@@ -1,9 +1,10 @@
+import os
+import string
+
 from .Error import MakeCLInvalidFileError, MakeCLInvalidKeywordError, MakeCLInvalidCharacterError
 from .LexerStates import States
 from .Tokens import KeywordToken, LBracketToken, RBracketToken, LBraceToken, \
     RBraceToken, StringToken, ArgSepToken, SemiColonToken, EOFToken, keywordMap
-import string
-import os
 
 
 class MakeCLLexer:

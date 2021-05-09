@@ -1,6 +1,7 @@
-from .Parser import MakeCLParser
-from .Lexer import MakeCLLexer
 import os
+
+from .Lexer import MakeCLLexer
+from .Parser import MakeCLParser
 
 
 class MakeCLFile:

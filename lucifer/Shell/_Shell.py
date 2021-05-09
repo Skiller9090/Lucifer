@@ -1,5 +1,5 @@
-from lucifer.Errors import checkErrors
 from LMI.Utils import check_int
+from lucifer.Errors import checkErrors
 
 
 def show_shells(self, *args, **kwargs):

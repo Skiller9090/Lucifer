@@ -1,9 +1,10 @@
+import errno
+import os
+
+from lucifer.Errors import FailedToCompileError
 from .MakeCL.MakeCLFile import MakeCLFile
 from ..Command import autoSilenceCommand, checkCommandExists
 from .._SystemData import _SystemData
-from lucifer.Errors import FailedToCompileError
-import os
-import errno
 
 
 class ClangCompiler:

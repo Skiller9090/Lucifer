@@ -14,3 +14,4 @@ out/
 .compiledJava/
 external-modules/*/builds
 reports/
+external-modules/c/cmake-build-debug

@@ -1,2 +1,2 @@
-from .Help import HelpMenu
 from .DefaultHelpMenu import registerDefaultHelpMenu
+from .Help import HelpMenu

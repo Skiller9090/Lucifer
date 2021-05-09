@@ -1,7 +1,7 @@
 from subprocess import CalledProcessError
-from termcolor import colored
 
 import pybrake
+from termcolor import colored
 
 notifier = pybrake.Notifier(project_id=297340,
                             project_key='bc600da5fe7ba7a73119a2d84519793d',

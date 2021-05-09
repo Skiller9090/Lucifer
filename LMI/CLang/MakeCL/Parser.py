@@ -1,7 +1,8 @@
-from .Tokens import TokenEnum
-from .ParserStates import States
-from .Error import MakeCLInvalidTooManyArgsError, MakeCLInvalidStateError
 import os
+
+from .Error import MakeCLInvalidTooManyArgsError, MakeCLInvalidStateError
+from .ParserStates import States
+from .Tokens import TokenEnum
 
 
 class MakeCLParser:

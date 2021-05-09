@@ -54,7 +54,7 @@ class HelpMenu:
     def displayMenu(self, menu):
         max_len_key = menu["max_len_key"]
         toDisplay = ""
-        toDisplay += f"{colored('='*5 + menu['name'] + '='*5, 'magenta')}\n"
+        toDisplay += f"{colored('=' * 5 + menu['name'] + '=' * 5, 'magenta')}\n"
         toDisplay += f"{colored(menu['desc'], 'grey')}\n\n"
         for key, value in zip(menu["help-lines"].keys(), menu["help-lines"].values()):
             spaceLeft = (max_len_key + self.padding) - len(key)
