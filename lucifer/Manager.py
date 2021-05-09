@@ -5,9 +5,9 @@ import colorama
 import termcolor
 
 import lucifer.Indexing as Indexing
+from lucifer.Help import HelpMenu, registerDefaultHelpMenu
 from lucifer.Networking.Connections import Connections
 from lucifer.Networking.Servers import Servers
-from lucifer.Help import HelpMenu, registerDefaultHelpMenu
 
 
 class LuciferManager:
@@ -30,7 +30,7 @@ class LuciferManager:
         self.isLMI = False
         self.runTests = False
         # MAJOR.MINOR.PATCH.STAGE.BUILD VERSIONING
-        self.numeric_version = (0, 8, 6, 3, 1)
+        self.numeric_version = (0, 8, 7, 3, 1)
         self.numeric_stage = self.numeric_version[3]
         self.stage = ["Alpha", "Beta", "RC", "Release"][self.numeric_version[3]]
         self.shortStage = ["a", "b", "rc", "r"][self.numeric_version[3]]
