@@ -23,6 +23,7 @@ def registerDefaultHelpMenu(luciferManager):
             "show_shells": "Show all shell ids and attached name",
             "set_name": "Sets current shells name EX: set_name <name>",
             "set_name_id": "Set a shells name by id EX: set_name_id <id> <name>",
+            "run_tests": "Runs all lucifer tests",
             "clear": "Clear screen",
             "close": "Kills current input into opened shell",
             "reset": "Resets Everything",

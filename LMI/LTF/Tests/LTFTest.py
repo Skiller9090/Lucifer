@@ -28,9 +28,13 @@ class LTFTest(metaclass=abc.ABCMeta):
                     break
 
     def satisfyRequirements(self):
+        allSatisfied = True
         for requirement in self.requirements:
             if not requirement.check_satisfied():
                 requirement.satisfyRequirement()
+            if not requirement.check_satisfied():
+                allSatisfied = False
+        return allSatisfied
 
     def timeWithReturnFunction(self, function):
         with RunTimeReturn() as RTR:

@@ -5,10 +5,10 @@ import sys
 
 from ttkthemes import themed_tk
 
+from .Tests import run_all_tests
 from .GUI.GUI import LuciferGui
 from .Manager import LuciferManager
 from .Shell import Shell
-from .Indexing import index_python_files
 
 
 def get_lines(parts, indent, text_width, prefix=None):
@@ -163,27 +163,7 @@ class LuciferParser(argparse.ArgumentParser):
 
     @staticmethod
     def runTests():
-        from LMI import LTF
-        import importlib
-        import inspect
-
-        test_runner = LTF.TestsRunner()
-        _, modules, _ = index_python_files("tests/", full=True)
-        for module in modules:
-            module = modules[module]["path"]
-            module = os.path.normpath(module)
-            to_import = (module.replace("/", ".").replace("\\", ".")
-                         if ".py" not in module else
-                         module.replace(".py", "").replace("/", ".").replace("\\", "."))
-            importlib.invalidate_caches()
-            imported_module = importlib.import_module(to_import)
-            for _, obj in inspect.getmembers(imported_module):
-                if inspect.isclass(obj) and obj.__module__ == to_import:
-                    if issubclass(obj, LTF.Tests.LTFTest):
-                        test_runner.add_LTF_test(obj)
-        test_runner.runAll()
-        breakdown = LTF.Formatters.PercentageShort(test_runner.statistics)
-        breakdown.show()
+        run_all_tests()
 
     def run(self):
         self.check_logging()

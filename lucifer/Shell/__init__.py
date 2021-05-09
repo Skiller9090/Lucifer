@@ -14,6 +14,7 @@ class Shell:
     from ._Java import installJava, reinstallJava, uninstallJava, getJavaInstalls, setJavaJDK, startJavaJVM, \
         buildJar, loadLuciferJar
     from ._Report import newReport, startReporting, pauseReporting
+    from ._Test import runTests
 
     def __init__(self, ID, lucifer_manager):
         """Per Shell Setup."""
@@ -65,7 +66,7 @@ class Shell:
             "report_pause": self.pauseReporting,
             "report_stop": self.pauseReporting,
             "report_off": self.pauseReporting,
-
+            "run_tests": self.runTests
         }
         self.luciferManager.shell_recur += 1
 

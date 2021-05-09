@@ -9,9 +9,13 @@ class BooleanTest(LTFTest):
 
     def run(self):
         self.findFunctions()
-        self.satisfyRequirements()
+        allSatisfied = self.satisfyRequirements()
         for functionName, function in zip(self.all_functions.keys(), self.all_functions.values()):
             self.setDefaultTestValues(functionName)
+            if not allSatisfied:
+                self.test_mappings[functionName]["failed"] = None
+                self.addError(functionName, Exception("Failed to satisfy requirements for the test set!"))
+                continue
             try:
                 timeTaken, outValue = self.timeWithReturnFunction(function)
                 self.test_mappings[functionName]["time"] = timeTaken
