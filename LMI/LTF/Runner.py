@@ -1,5 +1,5 @@
 from .Errors import NotLTFTestError
-from .Tests import AssertTest, LTFTest
+from .Tests import AssertTest, LTFTest, BooleanTest, LTFSkippedTest
 
 
 class TestsRunner:
@@ -23,10 +23,26 @@ class TestsRunner:
             "Error": None
         }
 
+    def add_function_boolean_test(self, testFunction):
+        self.tests[BooleanTest(testFunction)] = {
+            "hasRun": False,
+            "Failed": False,
+            "Time": None,
+            "Error": None
+        }
+
     def add_LTF_test(self, LTFClass):
         if isinstance(LTFClass, type):
             LTFClass = LTFClass()
         self.tests[LTFClass] = {
+            "hasRun": False,
+            "Failed": False,
+            "Time": None,
+            "Error": None
+        }
+
+    def add_skipped_test(self, name, reason):
+        self.tests[LTFSkippedTest(name, reason)] = {
             "hasRun": False,
             "Failed": False,
             "Time": None,
