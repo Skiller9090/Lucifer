@@ -4,7 +4,7 @@ from modules.Module import BaseModule
 
 class Module(BaseModule):
     def run(self):
-        jsFile = JsFile("external-modules/javascript/lucifer/tests/testConsole.js")
+        jsFile = JsFile("external-modules/javascript/sources/lucifer/tests/testConsole.js")
         jsFile.runFile()
         return True
 
